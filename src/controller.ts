@@ -30,6 +30,7 @@ export class Controller {
     public errorHandler: ErrorHandler;
     public baseUrl: string;
     public mode: ControllerMode = getDefaultControllerMode();
+    public routes: Route[];
 
     constructor(options: ControllerOptions) {
         this.throwOnError = options.throwOnError;
@@ -69,6 +70,10 @@ export class Controller {
                 throw error;
             }
         }
+    }
+
+    public addRoute(route: Route) {
+        this.routes.push(route);
     }
 }
 
