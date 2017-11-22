@@ -5,26 +5,44 @@ import { Parameters } from "./parameters";
 import { ApiError } from "./api-error";
 import { compile } from "path-to-regexp";
 import { ApiSuccessResponse, ApiFailResponse } from "./api-response";
+import { isBrowser } from "./is-browser";
 
-export interface ControllerOptions {
+export enum ControllerMode {
+    SERVER = "server",
+    CLIENT = "client",
+}
 
+function getDefaultControllerMode() {
+    return isBrowser() ? ControllerMode.CLIENT : ControllerMode.SERVER;
 }
 
 export type ErrorHandler = (error: ApiError) => void;
 
-export class Controller {
-    private throwOnError = false;
-    private errorHandler: ErrorHandler;
+export interface ControllerOptions {
+    readonly throwOnError: boolean;
+    readonly errorHandler: ErrorHandler;
+    readonly baseUrl: string;
+    readonly mode: ControllerMode;
+}
 
-    public configure(options: ControllerOptions): Controller {
-        return this;
+export class Controller {
+    public throwOnError = false;
+    public errorHandler: ErrorHandler;
+    public baseUrl: string;
+    public mode: ControllerMode = getDefaultControllerMode();
+
+    constructor(options: ControllerOptions) {
+        this.throwOnError = options.throwOnError;
+        this.errorHandler = options.errorHandler;
+        this.baseUrl = options.baseUrl;
+        this.mode = options.mode;
     }
 
-    public async wrappedFetch<ReturnType>(route: Route, parameters: Parameters, body: any): ReturnType {
-        const url = compile(route.url)(parameters);
-        const headers = new Headers();
-        headers.append("content-type", "application/json");
+    public async wrappedFetch<ReturnType>(route: Route, parameters: Parameters, body: any): Promise<ReturnType> {
         try {
+            const url = compile(route.url)(parameters);
+            const headers = new Headers();
+            headers.append("content-type", "application/json");
             const response = await fetch(url, {
                 body: JSON.stringify(body),
                 headers,
@@ -43,8 +61,7 @@ export class Controller {
             if (this.throwOnError) {
                 throw error;
             }
-            return;
-        } catch(error) {
+        } catch (error) {
             if (this.errorHandler) {
                 this.errorHandler(error);
             }
@@ -53,4 +70,11 @@ export class Controller {
             }
         }
     }
+}
+
+export function controller<Decorated extends Function>(options?: ControllerOptions): ClassDecorator {
+    return function(target: Decorated): Decorated {
+        Reflect.defineMetadata("api:controller", new Controller(options), target);
+        return target;
+    } as ClassDecorator;
 }

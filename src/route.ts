@@ -1,7 +1,6 @@
-import { isBrowser } from "./is-browser";
 import { HTTPMethod } from "./http-method";
 import { Parameters } from "./parameters";
-import { Controller } from "./controller";
+import { ControllerMode, Controller } from "./controller";
 
 export interface RouteOptions {
 
@@ -26,16 +25,18 @@ function getRoutes(target: Object): Route[] {
 
 export function route(method: HTTPMethod, url: string, options: RouteOptions): MethodDecorator {
     return (target: Object, property: string, descriptor: PropertyDescriptor) => {
-        if (!(target instanceof Controller)) {
-            throw new Error("Can only decorate methods of a class extending `Controller` as routes.");
+        const controller: Controller = Reflect.getMetadata("api:controller", target);
+        if (!controller) {
+            const name = target.constructor.name;
+            throw new Error(`Found @route on a class without @controller. Take a look at ${name}.`);
         }
         const routes = getRoutes(target);
         const routeMeta = { target, property, method, url, options };
         routes.push(routeMeta);
 
-        if (isBrowser()) {
+        if (controller.mode === ControllerMode.CLIENT) {
             descriptor.value = function (parameters: Parameters, body: any) {
-                return target.wrappedFetch(routeMeta, parameters, body);
+                return controller.wrappedFetch(routeMeta, parameters, body);
             };
             return descriptor;
         }
