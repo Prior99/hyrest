@@ -1,1 +1,3 @@
-console.log("hello");
+import "reflect-metadata";
+
+export * from "./route";

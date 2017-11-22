@@ -1,21 +1,20 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es5",
         "module": "commonjs",
-        "declaration": false,
-        "noImplicitAny": false,
-        "removeComments": true,
+        "declaration": true,
+        "noImplicitAny": true,
+        "removeComments": false,
         "experimentalDecorators": true,
-        "noLib": false,
         "jsx": "react",
         "outDir": "dist",
         "lib": ["es2016", "dom"],
         "baseUrl": "./src",
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
     },
-    "include": [
-        "typings/*",
-        "src/**/*.ts?",
-        "src/**/*.ts"
+    "exclude": [
+        "node_modules",
+        "dist",
+        "**/__tests__/*"
     ]
 }
