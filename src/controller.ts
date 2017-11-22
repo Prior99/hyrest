@@ -1,11 +1,13 @@
 import "isomorphic-fetch";
+import "reflect-metadata";
+
 import { HTTPMethod } from "./http-method";
 import { Route } from "./route";
-import { Parameters } from "./parameters";
+import { Params } from "./parameters";
 import { ApiError } from "./api-error";
 import { compile } from "path-to-regexp";
-import { ApiSuccessResponse, ApiFailResponse } from "./api-response";
 import { isBrowser } from "./is-browser";
+import { Answer } from "./answers";
 
 export enum ControllerMode {
     SERVER = "server",
@@ -19,29 +21,38 @@ function getDefaultControllerMode() {
 export type ErrorHandler = (error: ApiError) => void;
 
 export interface ControllerOptions {
-    readonly throwOnError: boolean;
-    readonly errorHandler: ErrorHandler;
-    readonly baseUrl: string;
-    readonly mode: ControllerMode;
+    readonly throwOnError?: boolean;
+    readonly errorHandler?: ErrorHandler;
+    readonly baseUrl?: string;
+    readonly mode?: ControllerMode;
 }
 
 export class Controller {
-    public throwOnError = false;
+    public throwOnError = true;
     public errorHandler: ErrorHandler;
     public baseUrl: string;
     public mode: ControllerMode = getDefaultControllerMode();
-    public routes: Route[];
 
     constructor(options: ControllerOptions) {
-        this.throwOnError = options.throwOnError;
-        this.errorHandler = options.errorHandler;
-        this.baseUrl = options.baseUrl;
-        this.mode = options.mode;
+        if (options) {
+            this.configure(options);
+        }
     }
 
-    public async wrappedFetch<ReturnType>(route: Route, parameters: Parameters, body: any): Promise<ReturnType> {
+    public configure(options: ControllerOptions) {
+        const { throwOnError, errorHandler, baseUrl, mode } = options;
+        if (typeof throwOnError !== "undefined") { this.throwOnError = throwOnError; }
+        if (typeof errorHandler !== "undefined") { this.errorHandler = errorHandler; }
+        if (typeof baseUrl !== "undefined") { this.baseUrl = baseUrl; }
+        if (typeof mode !== "undefined") { this.mode = mode; }
+    }
+
+    public async wrappedFetch<T>(route: Route, parameters: Params, body: any, query: Params): Promise<T> {
         try {
-            const url = compile(route.url)(parameters);
+            const queryString = Object.keys(query).reduce((result, key) => {
+                return `${result}&${key}=${query[key]}`;
+            }, "?");
+            const url = `${this.baseUrl}${compile(route.url)(parameters)}${queryString}`;
             const headers = new Headers();
             headers.append("content-type", "application/json");
             const response = await fetch(url, {
@@ -49,13 +60,11 @@ export class Controller {
                 headers,
                 method: route.method,
             });
-            const json = await response.json();
+            const answer: Answer<T> = await response.json();
             if (response.ok) {
-                const successResponse: ApiSuccessResponse<ReturnType> = json;
-                return successResponse.data;
+                return answer.data;
             }
-            const failResponse: ApiFailResponse = json;
-            const error = new ApiError(response.status, failResponse);
+            const error = new ApiError(response.status, answer);
             if (this.errorHandler) {
                 this.errorHandler(error);
             }
@@ -70,10 +79,6 @@ export class Controller {
                 throw error;
             }
         }
-    }
-
-    public addRoute(route: Route) {
-        this.routes.push(route);
     }
 }
 

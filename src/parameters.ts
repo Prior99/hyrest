@@ -1,5 +1,3 @@
-export type Primitive = string | number | boolean;
-
-export interface Parameters {
-    [key: string]: Primitive;
+export interface Params {
+    [key: string]: string;
 }
