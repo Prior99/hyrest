@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "experimentalDecorators": true,
+        "noLib": false,
+        "jsx": "react",
+        "outDir": "dist",
+        "lib": ["es2016", "dom"],
+        "baseUrl": "./src",
+        "emitDecoratorMetadata": true
+    },
+    "include": [
+        "typings/*",
+        "src/**/*.ts?",
+        "src/**/*.ts"
+    ]
+}
