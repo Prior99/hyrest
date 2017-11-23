@@ -20,14 +20,6 @@ export interface ExampleResult {
     name: string;
 }
 
-export interface PostExampleUrlParams {
-    id: string;
-}
-
-export interface PostExampleQueryParams {
-    age: string;
-}
-
 @controller({ baseUrl: "http://localhost:9000" })
 export class ExampleController {
     @route("POST", "/example/:id")
@@ -40,7 +32,7 @@ export class ExampleController {
             return badRequest(undefined, "Cannot create example with age > 10.");
         }
         return created({
-            name: "9",
+            name: `${id}-${example.name}-${age} (${kind})`,
         });
     }
 }

@@ -52,7 +52,12 @@ export class Controller {
             const queryString = Object.keys(query).reduce((result, key) => {
                 return `${result}&${key}=${query[key]}`;
             }, "?");
-            const url = `${this.baseUrl}${compile(route.url)(parameters)}${queryString}`;
+            const stringifiedParameters = Object.keys(parameters).reduce((result, key) => {
+                result[key] = `${parameters[key]}`;
+                return result;
+            }, {} as any);
+            const routeString = compile(route.url)(stringifiedParameters);
+            const url = `${this.baseUrl}${routeString}${queryString}`;
             const headers = new Headers();
             headers.append("content-type", "application/json");
             const response = await fetch(url, {
