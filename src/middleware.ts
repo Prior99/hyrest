@@ -2,16 +2,36 @@ import { Request, Response, NextFunction, Router } from "express";
 import { Controller } from "./controller";
 import { Route } from "./route";
 import { WrappedAnswer, internalServerError } from "./answers";
+import {
+    QueryParameter,
+    BodyParameter,
+    UrlParameter,
+    getBodyParameters,
+    getQueryParameters,
+    getUrlParameters,
+} from "./parameter-decorators";
+
+interface RouteConfiguration {
+    readonly route: Route;
+    readonly queryParameters: QueryParameter[];
+    readonly bodyParameters: BodyParameter[];
+    readonly urlParameters: UrlParameter[];
+}
 
 export function restRpc(...controllerObjects: Object[]): Router {
-    const routes: Route[] = controllerObjects
-        .reduce((result: Route[], controllerObject): Route[] => {
-            const controllerRoutes = Reflect.getMetadata("api:routes", controllerObject);
+    const routes: RouteConfiguration[] = controllerObjects
+        .reduce((result: RouteConfiguration[], controllerObject) => {
+            const controllerRoutes: Route[] = Reflect.getMetadata("api:routes", controllerObject);
             if (controllerRoutes) {
-                result.push(...controllerRoutes);
+                result.push(...controllerRoutes.map(route => ({
+                    route,
+                    queryParameters: getQueryParameters(controllerObject, route.property),
+                    bodyParameters: getBodyParameters(controllerObject, route.property),
+                    urlParameters: getUrlParameters(controllerObject, route.property),
+                })));
             }
             return result;
-        }, [] as Route[]) as Route[];
+        }, []) as RouteConfiguration[];
     const controllers = controllerObjects.map(controllerObject => {
         const controller: Controller = Reflect.getMetadata("api:controller", controllerObject.constructor);
         if (!controller) {
@@ -22,12 +42,16 @@ export function restRpc(...controllerObjects: Object[]): Router {
     });
 
     const router = Router();
-    routes.forEach(route => {
+    routes.forEach(({ route, queryParameters, bodyParameters, urlParameters }) => {
         const routeMethod = (route.target as any)[route.property];
         const handler = async (request: Request, response: Response) => {
             let answer: WrappedAnswer<any>;
             try {
-                answer = await routeMethod(request.params, request.body, request.query);
+                const args: any[] = [];
+                queryParameters.forEach(({ index, name }) => { args[index] = request.query[name]; });
+                bodyParameters.forEach(({ index }) => { args[index] = request.body; });
+                urlParameters.forEach(({ index, name }) => { args[index] = request.params[name]; });
+                answer = await routeMethod(...args);
             } catch (err) {
                 console.error(err);
                 answer = internalServerError();
