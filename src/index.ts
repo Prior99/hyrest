@@ -4,3 +4,4 @@ export * from "./middleware";
 export * from "./answers";
 export * from "./parameter-decorators";
 export * from "./configure";
+export * from "./conversion";
