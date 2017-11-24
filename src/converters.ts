@@ -1,9 +1,22 @@
 import "reflect-metadata";
 
-export type Converter = (input: any) => any;
+export interface Converted<T> {
+    error?: string;
+    value?: T;
+}
 
-export interface ConverterOptions {
-    readonly converter: Converter;
+export type Converter<T> = (input: any) => Converted<T> | Promise<Converted<T>>;
+
+export interface ConverterOptions<T> {
+    readonly converter: Converter<T>;
+}
+
+export interface Schema {
+
+}
+
+function validateSchema<T extends Object>(validationSchema: Schema, value: T): T {
+    return value;
 }
 
 /**
@@ -20,16 +33,16 @@ export interface ConverterOptions {
  * @return An array of existing converters to which new converters can be appended. Is always guaranteed to return
  *         an array.
  */
-export function getConverters(target: Object, propertyKey: string | symbol, index: number): ConverterOptions[] {
+export function getConverters(target: Object, propertyKey: string | symbol, index: number): ConverterOptions<any>[] {
     // Try to retrieve the `Map` of all converters with the keys being the parameter index and the value being
     // an array containing all converters.
-    const map: Map<number, ConverterOptions[]> = Reflect.getMetadata("api:route:converters", target, propertyKey);
+    const map: Map<number, ConverterOptions<any>[]> = Reflect.getMetadata("api:route:converters", target, propertyKey);
 
     // If no map has been found then this function has never been called for this method before. A new map needs
     // to be created and an empty array needs to be attached.
     if (!map) {
-        const newMap = new Map<number, ConverterOptions[]>();
-        const newConverters: ConverterOptions[] = [];
+        const newMap = new Map<number, ConverterOptions<any>[]>();
+        const newConverters: ConverterOptions<any>[] = [];
         newMap.set(index, newConverters);
 
         // Define the new key on the reflection metadatas.
@@ -43,7 +56,7 @@ export function getConverters(target: Object, propertyKey: string | symbol, inde
 
     // If no array is present, a new one needs to be created and inserted into the map.
     if (!converters) {
-        const newConverters: ConverterOptions[] = [];
+        const newConverters: ConverterOptions<any>[] = [];
         map.set(index, newConverters);
         return newConverters;
     }
@@ -58,11 +71,11 @@ export function getConverters(target: Object, propertyKey: string | symbol, inde
  *
  * @return A decorator for a parameter in a @route method.
  */
-export function is(converter: Converter): ParameterDecorator {
+export function is(converter: Converter<any>): ParameterDecorator {
     return (target: Object, propertyKey: string | symbol, index: number) => {
         const converters = getConverters(target, propertyKey, index);
         converters.push({
-            converter: (input: any) => Boolean(converter(input)),
+            converter: (input: any) => converter(input),
         });
     };
 }
@@ -72,14 +85,14 @@ export function is(converter: Converter): ParameterDecorator {
  *
  * @param input The input to convert to an integer. Can be anything in any form.
  *
- * @return An integer if the conversion succeeded or `undefined` if the input was not a valid
+ * @return An integer if the conversion succeeded or an error if the input was not a valid
  *         integer.
  */
-export function integer(input: any): number {
-    const asInteger = parseInt(input);
-    if (isNaN(asInteger)) { return; }
-    if (parseFloat(input) !== asInteger) { return; }
-    return asInteger;
+export function integer(input: any): Converted<number> {
+    if (typeof input === "undefined") { return { value: input }; }
+    const value = parseInt(input);
+    if (isNaN(value) || parseFloat(input) !== value) { return { error: "Not a valid integer." }; }
+    return { value };
 }
 
 /**
@@ -87,13 +100,14 @@ export function integer(input: any): number {
  *
  * @param input The input to convert to a float. Can be anything in any form.
  *
- * @return A float if the conversion succeeded or `undefined` if the input was not a valid
+ * @return A float if the conversion succeeded or an error if the input was not a valid
  *         float.
  */
-export function float(input: any): number {
-    const asFloat = parseFloat(input);
-    if (isNaN(asFloat)) { return; }
-    return asFloat;
+export function float(input: any): Converted<number> {
+    if (typeof input === "undefined") { return { value: input }; }
+    const value = parseFloat(input);
+    if (isNaN(value)) { return { error: "Not a valid float." }; }
+    return { value} ;
 }
 
 /**
@@ -101,11 +115,12 @@ export function float(input: any): number {
  *
  * @param input The input to check.
  *
- * @return The tring in `input` if it was a string and `undefined` otherwise.
+ * @return The string in `input` if it was a string and an error otherwise.
  */
-export function string(input: any): string {
-    if (typeof input !== "string") { return; }
-    return input;
+export function string(value: any): Converted<string> {
+    if (typeof value === "undefined") { return { value }; }
+    if (typeof value !== "string") { return { error: "Not a valid string." }; }
+    return { value };
 }
 
 /**
@@ -113,12 +128,42 @@ export function string(input: any): string {
  *
  * @param options The options of which `input` needs to be.
  *
- * @return A Converter which checks if the input is one of `options` and returns `undefined` if that was
+ * @return A Converter which checks if the input is one of `options` and returns an error if that was
  *         not the case and the `input` itself otherwise.
  */
-export function oneOf<T>(...options: T[]): (input: any) => T {
-    return (input: any) => {
-        if (!options.includes(input)) { return; }
-        return input;
+export function oneOf<T>(...options: T[]): (value: any) => Converted<T> {
+    return (value: any) => {
+        if (typeof value === "undefined") { return { value }; }
+        if (!options.includes(value)) { return { error: `Not one of (${options.join(", ")}).` }; }
+        return { value };
+    };
+}
+
+/**
+ * Makes sure the given input is not `null` or `undefined`.
+ *
+ * @param input The input to check.
+ *
+ * @return The input if it was not `undefined` or `null`, otherwise an error will be returned.
+ */
+export function required<T>(value: T): Converted<T> {
+    if (typeof value === "undefined" || value === null) { return { error: "Is required." }; }
+    return { value };
+}
+
+/**
+ * Makes sure the given input object matches the providedschema.
+ *
+ * @param input The input to check.
+ *
+ * @return The input if it matched the schema and an error otherwise.
+ */
+export function schema<T extends Object>(validationSchema: Schema): (value: T) => Converted<T> {
+    return (value: T) => {
+        if (typeof value === "undefined") { return { value }; }
+        else if (!validateSchema(validationSchema, value)) {
+            return { error: "Schema validation failed." };
+        }
+        return { value };
     };
 }

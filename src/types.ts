@@ -1,4 +1,7 @@
-import { Answer } from "./answers";
+export interface Answer<T> {
+    readonly message?: string;
+    readonly data: T;
+}
 
 export interface Params {
     [key: string]: string;

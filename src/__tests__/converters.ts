@@ -100,16 +100,15 @@ import { is, getConverters, integer, float, string, oneOf } from "../converters"
         options: [],
         values: ["a"],
     },
-
 ].forEach(({ options, values }) => {
     values.forEach(value => {
         test(`oneOf detects "${value}" as invalid`, () => {
-            expect(oneOf(...options)(value)).toBeUndefined();
+            expect(oneOf(...options)(value)).toMatchSnapshot();
         });
     });
     test("oneOf detects each option as valid", () => {
         options.forEach(option => {
-            expect(oneOf(...options)(option)).toEqual(option);
+            expect(oneOf(...options)(option)).toEqual({ value: option });
         });
     });
 });
@@ -125,5 +124,5 @@ test("@is", () => {
 
     const converters = Reflect.getMetadata("api:route:converters", controller, "method");
     expect(converters).toMatchSnapshot();
-    expect(converters.get(0)[0].converter("20")).toEqual(true);
+    expect(converters.get(0)[0].converter("20")).toEqual({ value: 20 });
 });

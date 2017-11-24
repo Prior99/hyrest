@@ -23,90 +23,380 @@ Map {
 }
 `;
 
-exports[`float handles "" correctly 1`] = `undefined`;
+exports[`float handles "" correctly 1`] = `
+Object {
+  "error": "Not a valid float.",
+}
+`;
 
-exports[`float handles "[object Object]" correctly 1`] = `undefined`;
+exports[`float handles "[object Object]" correctly 1`] = `
+Object {
+  "error": "Not a valid float.",
+}
+`;
 
-exports[`float handles "-9.2" correctly 1`] = `-9.2`;
+exports[`float handles "-9.2" correctly 1`] = `
+Object {
+  "value": -9.2,
+}
+`;
 
-exports[`float handles "-10" correctly 1`] = `-10`;
+exports[`float handles "-10" correctly 1`] = `
+Object {
+  "value": -10,
+}
+`;
 
-exports[`float handles "1.0" correctly 1`] = `1`;
+exports[`float handles "1.0" correctly 1`] = `
+Object {
+  "value": 1,
+}
+`;
 
-exports[`float handles "1.1" correctly 1`] = `1.1`;
+exports[`float handles "1.1" correctly 1`] = `
+Object {
+  "value": 1.1,
+}
+`;
 
-exports[`float handles "2.17319823987124e+26" correctly 1`] = `2.17319823987124e+26`;
+exports[`float handles "2.17319823987124e+26" correctly 1`] = `
+Object {
+  "value": 2.17319823987124e+26,
+}
+`;
 
-exports[`float handles "8" correctly 1`] = `8`;
+exports[`float handles "8" correctly 1`] = `
+Object {
+  "value": 8,
+}
+`;
 
-exports[`float handles "10" correctly 1`] = `10`;
+exports[`float handles "10" correctly 1`] = `
+Object {
+  "value": 10,
+}
+`;
 
-exports[`float handles "10.0" correctly 1`] = `10`;
+exports[`float handles "10.0" correctly 1`] = `
+Object {
+  "value": 10,
+}
+`;
 
-exports[`float handles "10.9" correctly 1`] = `10.9`;
+exports[`float handles "10.9" correctly 1`] = `
+Object {
+  "value": 10.9,
+}
+`;
 
-exports[`float handles "10foo" correctly 1`] = `10`;
+exports[`float handles "10foo" correctly 1`] = `
+Object {
+  "value": 10,
+}
+`;
 
-exports[`float handles "foobar" correctly 1`] = `undefined`;
+exports[`float handles "foobar" correctly 1`] = `
+Object {
+  "error": "Not a valid float.",
+}
+`;
 
-exports[`float handles "null" correctly 1`] = `undefined`;
+exports[`float handles "null" correctly 1`] = `
+Object {
+  "error": "Not a valid float.",
+}
+`;
 
-exports[`float handles "undefined" correctly 1`] = `undefined`;
+exports[`float handles "undefined" correctly 1`] = `
+Object {
+  "value": undefined,
+}
+`;
 
-exports[`integer handles "" correctly 1`] = `undefined`;
+exports[`integer handles "" correctly 1`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "" correctly 2`] = `undefined`;
+exports[`integer handles "" correctly 2`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "[object Object]" correctly 1`] = `undefined`;
+exports[`integer handles "[object Object]" correctly 1`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "-1213" correctly 1`] = `-1213`;
+exports[`integer handles "-1213" correctly 1`] = `
+Object {
+  "value": -1213,
+}
+`;
 
-exports[`integer handles "-1234.2" correctly 1`] = `undefined`;
+exports[`integer handles "-1234.2" correctly 1`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "0" correctly 1`] = `0`;
+exports[`integer handles "0" correctly 1`] = `
+Object {
+  "value": 0,
+}
+`;
 
-exports[`integer handles "0.3" correctly 1`] = `undefined`;
+exports[`integer handles "0.3" correctly 1`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "0.5" correctly 1`] = `undefined`;
+exports[`integer handles "0.5" correctly 1`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "1" correctly 1`] = `1`;
+exports[`integer handles "1" correctly 1`] = `
+Object {
+  "value": 1,
+}
+`;
 
-exports[`integer handles "1.2397891239817987e+28" correctly 1`] = `undefined`;
+exports[`integer handles "1.2397891239817987e+28" correctly 1`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "8" correctly 1`] = `8`;
+exports[`integer handles "8" correctly 1`] = `
+Object {
+  "value": 8,
+}
+`;
 
-exports[`integer handles "10" correctly 1`] = `10`;
+exports[`integer handles "10" correctly 1`] = `
+Object {
+  "value": 10,
+}
+`;
 
-exports[`integer handles "10.0" correctly 1`] = `10`;
+exports[`integer handles "10.0" correctly 1`] = `
+Object {
+  "value": 10,
+}
+`;
 
-exports[`integer handles "10.4" correctly 1`] = `undefined`;
+exports[`integer handles "10.4" correctly 1`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "10.4" correctly 2`] = `undefined`;
+exports[`integer handles "10.4" correctly 2`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "10foo" correctly 1`] = `10`;
+exports[`integer handles "10foo" correctly 1`] = `
+Object {
+  "value": 10,
+}
+`;
 
-exports[`integer handles "1000" correctly 1`] = `1000`;
+exports[`integer handles "1000" correctly 1`] = `
+Object {
+  "value": 1000,
+}
+`;
 
-exports[`integer handles "1237832" correctly 1`] = `1237832`;
+exports[`integer handles "1237832" correctly 1`] = `
+Object {
+  "value": 1237832,
+}
+`;
 
-exports[`integer handles "hello" correctly 1`] = `undefined`;
+exports[`integer handles "hello" correctly 1`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "null" correctly 1`] = `undefined`;
+exports[`integer handles "null" correctly 1`] = `
+Object {
+  "error": "Not a valid integer.",
+}
+`;
 
-exports[`integer handles "undefined" correctly 1`] = `undefined`;
+exports[`integer handles "undefined" correctly 1`] = `
+Object {
+  "value": undefined,
+}
+`;
 
-exports[`string handles "", correctly 1`] = `""`;
+exports[`oneOf detects "" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
 
-exports[`string handles "", correctly 2`] = `undefined`;
+exports[`oneOf detects "" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
 
-exports[`string handles "[object Object]", correctly 1`] = `undefined`;
+exports[`oneOf detects "[object Object]" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
 
-exports[`string handles "10", correctly 1`] = `undefined`;
+exports[`oneOf detects "[object Object]" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
 
-exports[`string handles "10", correctly 2`] = `"10"`;
+exports[`oneOf detects "-1" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
 
-exports[`string handles "null", correctly 1`] = `undefined`;
+exports[`oneOf detects "-1" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
 
-exports[`string handles "test", correctly 1`] = `"test"`;
+exports[`oneOf detects "0" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
 
-exports[`string handles "undefined", correctly 1`] = `undefined`;
+exports[`oneOf detects "0" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "1" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "1" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "27" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "27" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "a" as invalid 1`] = `
+Object {
+  "error": "Not one of ().",
+}
+`;
+
+exports[`oneOf detects "null" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "null" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "test" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "test" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "undefined" as invalid 1`] = `
+Object {
+  "value": undefined,
+}
+`;
+
+exports[`oneOf detects "undefined" as invalid 2`] = `
+Object {
+  "value": undefined,
+}
+`;
+
+exports[`string handles "", correctly 1`] = `
+Object {
+  "value": "",
+}
+`;
+
+exports[`string handles "", correctly 2`] = `
+Object {
+  "error": "Not a valid string.",
+}
+`;
+
+exports[`string handles "[object Object]", correctly 1`] = `
+Object {
+  "error": "Not a valid string.",
+}
+`;
+
+exports[`string handles "10", correctly 1`] = `
+Object {
+  "error": "Not a valid string.",
+}
+`;
+
+exports[`string handles "10", correctly 2`] = `
+Object {
+  "value": "10",
+}
+`;
+
+exports[`string handles "null", correctly 1`] = `
+Object {
+  "error": "Not a valid string.",
+}
+`;
+
+exports[`string handles "test", correctly 1`] = `
+Object {
+  "value": "test",
+}
+`;
+
+exports[`string handles "undefined", correctly 1`] = `
+Object {
+  "value": undefined,
+}
+`;

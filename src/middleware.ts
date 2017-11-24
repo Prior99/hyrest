@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 import { Controller } from "./controller";
 import { Route, getRoutes } from "./route";
-import { internalServerError } from "./answers";
+import { internalServerError, unprocessableEntity } from "./answers";
 import { consumeLastCall } from "./last-call";
 import {
     QueryParameter,
@@ -11,6 +11,7 @@ import {
     getQueryParameters,
     getUrlParameters,
 } from "./parameters";
+import { getConverters, Converter } from "./converters";
 
 /**
  * A wrapper around a `Route` which also carries the Route's parameter injections.
@@ -41,6 +42,20 @@ function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
         result.push(...routes);
         return result;
     }, []);
+}
+
+async function convert<T>(arg: any, converters: Converter<T>[]) {
+    const conversionResults = await Promise.all(converters.map(converter => converter(arg)));
+    const error = conversionResults
+        .map(result => result.error)
+        .find(conversionError => Boolean(conversionError));
+    if (error) {
+        return { error };
+    }
+    if (converters.length > 0) {
+        return conversionResults[0].value;
+    }
+    return undefined;
 }
 
 /**
@@ -85,12 +100,29 @@ export function restRpc(...controllerObjects: any[]): Router {
             urlParameters.forEach(({ index, name }) => { args[index] = request.params[name]; });
 
             let data: any;
-            try {
-                data = await routeMethod(...args);
-            } catch (err) {
-                console.error(err);
-                data = internalServerError();
+
+            // Validate and convert all values;
+            const converted = await Promise.all(args.map((arg, index) => {
+                const converters = getConverters(route.target, route.property, index)
+                    .map(converterOptions => converterOptions.converter);
+                return convert(arg, converters);
+            }));
+
+            // If an error occured, answer with `unprocessableEntity`.
+            const error = converted
+                .map(result => result && result.error)
+                .find(conversionError => Boolean(conversionError));
+            if (error) {
+                data = unprocessableEntity(error);
+            } else {
+                try {
+                    data = await routeMethod(...args);
+                } catch (err) {
+                    console.error(err);
+                    data = internalServerError();
+                }
             }
+
             // Respond to the request with the given status code and body.
             const { statusCode, message } = consumeLastCall();
             response.status(statusCode).send({ data, message });
