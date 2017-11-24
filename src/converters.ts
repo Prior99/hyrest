@@ -12,11 +12,32 @@ export interface ConverterOptions<T> {
 }
 
 export interface Schema {
-
+    [key: string]: Schema | Converter<any> | Converter<any>[];
 }
 
-function validateSchema<T extends Object>(validationSchema: Schema, value: T): T {
-    return value;
+async function validateSchema<T extends Object>(validationSchema: Schema, input: T): Promise<boolean> {
+    const result = await Promise.all(Object.keys(validationSchema).map(async key => {
+        const schemaValue = validationSchema[key];
+        const inputValue = (input as any)[key];
+        // The `validatorSchema` can contain an array of validators, a nested schema or a
+        // single validator per key.
+
+        // The schema contained an array of validators for this key. All validators have to succeed.
+        if (Array.isArray(schemaValue)) {
+            const validationResults = await Promise.all(schemaValue.map(converter => converter(inputValue)));
+            return !validationResults.some(({ error }) => Boolean(error));
+        }
+
+        // The schema contained a single validator.
+        if (typeof schemaValue === "function") {
+            return !Boolean((await schemaValue(inputValue)).error);
+        }
+
+        // The schema contained a nested schema.
+        return validateSchema(schemaValue, inputValue);
+    }));
+    const noAdditionalKeys = Object.keys(input).every(key => Object.keys(validationSchema).includes(key));
+    return result.every(keyResult => keyResult) && noAdditionalKeys;
 }
 
 /**
@@ -147,7 +168,7 @@ export function oneOf<T>(...options: T[]): (value: any) => Converted<T> {
  * @return The input if it was not `undefined` or `null`, otherwise an error will be returned.
  */
 export function required<T>(value: T): Converted<T> {
-    if (typeof value === "undefined" || value === null) { return { error: "Is required." }; }
+    if (typeof value === "undefined" || value === null) { return { error: "Missing required field." }; }
     return { value };
 }
 
@@ -158,10 +179,10 @@ export function required<T>(value: T): Converted<T> {
  *
  * @return The input if it matched the schema and an error otherwise.
  */
-export function schema<T extends Object>(validationSchema: Schema): (value: T) => Converted<T> {
-    return (value: T) => {
+export function schema<T extends Object>(validationSchema: Schema): (value: T) => Promise<Converted<T>> {
+    return async (value: T) => {
         if (typeof value === "undefined") { return { value }; }
-        else if (!validateSchema(validationSchema, value)) {
+        else if (!await validateSchema(validationSchema, value)) {
             return { error: "Schema validation failed." };
         }
         return { value };

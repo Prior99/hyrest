@@ -2,6 +2,7 @@ import { restRpc } from "../middleware";
 import { controller, ControllerMode } from "../controller";
 import { route } from "../route";
 import { body, param, query } from "../parameters";
+import { is, float, integer, schema, required } from "../converters";
 import { ok, created } from "../answers";
 import * as request from "supertest";
 import * as Express from "express";
@@ -129,4 +130,50 @@ test("The `restRpc` middleware throws with an invalid HTTP method", () => {
     }
 
     expect(() => restRpc(new TestController())).toThrow();
+});
+
+test("The `restRpc` middleware handles invalid requests correctly", async () => {
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController { //tslint:disable-line
+        @route("GET", "/user/:id")
+        public getTest(
+                @is(integer) @param("id") id: number,
+                @is(float) @is(required) @query("search") search: number) {
+            return ok("Everything is okay.");
+        }
+
+        @route("POST", "/user/:id")
+        public postTest(@is(schema({})) @body() search: user) {
+            return ok("Everything is okay.");
+        }
+    }
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(restRpc(new TestController()));
+
+    const responseA = await request(http)
+        .get("/user/some-id?search=test")
+        .expect(422)
+        .set("content-type", "application/json");
+    expect(responseA.text).toBe(JSON.stringify({
+        message: "Not a valid integer.",
+    }));
+
+    const responseB = await request(http)
+        .get("/user/27")
+        .expect(422)
+        .set("content-type", "application/json");
+    expect(responseB.text).toBe(JSON.stringify({
+        message: "Missing required field.",
+    }));
+
+    const responseC = await request(http)
+        .post("/user/27")
+        .expect(200)
+        .set("content-type", "application/json")
+        .send({});
+    expect(responseC.text).toBe(JSON.stringify({
+        message: "Everything is okay.",
+    }));
 });

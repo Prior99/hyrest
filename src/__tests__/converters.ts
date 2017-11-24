@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { is, getConverters, integer, float, string, oneOf } from "../converters";
+import { is, getConverters, integer, float, string, oneOf, schema } from "../converters";
 
 [
     "10",
@@ -125,4 +125,76 @@ test("@is", () => {
     const converters = Reflect.getMetadata("api:route:converters", controller, "method");
     expect(converters).toMatchSnapshot();
     expect(converters.get(0)[0].converter("20")).toEqual({ value: 20 });
+});
+
+[
+    {
+        testSchema: {
+            a: integer,
+            b: float,
+            c: string,
+        },
+        valid: [
+            {
+                a: 10,
+                b: 23.5,
+                c: "test",
+            },
+            {
+                a: 10120,
+                b: 123.5,
+                c: "another string",
+            },
+        ],
+        invalid: [
+            {
+                a: false,
+                b: 123.5,
+                c: "another string",
+                d: "invalid",
+            },
+            {
+                a: false,
+            },
+        ],
+    },
+    {
+        testSchema: {
+            a: [integer, oneOf(1, 2, 3, 4)],
+            b: {
+                c: integer,
+            },
+        },
+        valid: [
+            {
+                a: 3,
+                b: {
+                    c: 19,
+                },
+            },
+            undefined,
+        ],
+        invalid: [
+            {
+                a: 19,
+                b: {
+                    c: {
+                        d: "test",
+                    }
+                }
+            },
+        ],
+    },
+
+].forEach(({ testSchema, valid, invalid }) => {
+    valid.forEach(input => {
+        test("The test schema detects a valid input as valid", async () => {
+            expect(await schema(testSchema)(input)).toEqual({ value: input });
+        });
+    });
+    invalid.forEach(input => {
+        test("The test schema detects a invalid input as invalid", async () => {
+            expect(await schema(testSchema)(input)).toEqual({ error: "Schema validation failed." });
+        });
+    });
 });
