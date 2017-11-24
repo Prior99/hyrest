@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction, Router } from "express";
 import { Controller } from "./controller";
 import { Route, getRoutes } from "./route";
-import { WrappedAnswer, internalServerError, consumeLastCall } from "./answers";
+import { internalServerError } from "./answers";
+import { consumeLastCall } from "./last-call";
 import {
     QueryParameter,
     BodyParameter,

@@ -1,4 +1,5 @@
 import * as Answers from "../answers";
+import { consumeLastCall } from "../last-call";
 
 [
     {
@@ -46,7 +47,7 @@ import * as Answers from "../answers";
             test(`${answerFunction.name} returns the expected result with ${testName}`, () => {
                 const body = answerFunction(...args);
                 expect(body).toMatchSnapshot();
-                const { message, statusCode } = Answers.consumeLastCall();
+                const { message, statusCode } = consumeLastCall();
                 expect(statusCode).toMatchSnapshot();
                 expect(message).toMatchSnapshot();
             });
