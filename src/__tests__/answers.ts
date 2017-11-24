@@ -1,4 +1,4 @@
-import * as Answers from "..";
+import * as Answers from "../answers";
 
 [
     {
