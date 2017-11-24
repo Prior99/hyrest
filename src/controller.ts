@@ -19,9 +19,12 @@ function getDefaultControllerMode() {
 }
 
 function buildQueryString(query: Params) {
-    return Object.keys(query).reduce((result, key) => {
-        return `${result}&${key}=${query[key]}`;
-    }, "?");
+    const queryString = Object.keys(query).reduce((result, key) => {
+        const value = encodeURIComponent(query[key]);
+        return `${result}&${key}=${value}`;
+    }, "");
+    // Remove first `&`.
+    return queryString.substr(1, queryString.length);
 }
 
 /**
@@ -48,7 +51,7 @@ export function buildUrl(urlParameters: Params, query: Params, baseUrl: string, 
     const routeString = compile(subUrl)(stringifiedParameters);
 
     // Assemble the full url.
-    return `${baseUrl}${routeString}${queryString}`;
+    return `${baseUrl}${routeString}?${queryString}`;
 }
 
 /**

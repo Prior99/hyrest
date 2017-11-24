@@ -32,7 +32,8 @@
     "moduleDirectories": [
       "node_modules",
       "src"
-    ]
+    ],
+    "mapCoverage": true
   },
   "devDependencies": {
     "@types/jest": "^21.1.7",
