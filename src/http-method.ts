@@ -1,3 +1,6 @@
+/**
+ * This type represents all possible HTTP methods.
+ */
 export type HTTPMethod =
     "GET" |
     "POST" |

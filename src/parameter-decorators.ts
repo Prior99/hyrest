@@ -1,9 +1,26 @@
 import "reflect-metadata";
 
+/**
+ * A parameter decorated to receive the injected body.
+ */
 export interface BodyParameter {
+    /**
+     * The index of the parameter that was decorated.
+     */
     readonly index: number;
 }
 
+/**
+ * Returns a list of parameters decorated to receive a reference to the body.
+ * This function is always guaranteed to return an array. If the body has not been injected for this
+ * method yet, a new reflection metadata key is created and the new array is returned.
+ * The array can be used to append new parameters.
+ *
+ * @param target The class on which the method for which the decorated parameters should be retrieved exists.
+ * @param propertyKey The name of the method on `target` for which the decorated parameters should be retrieved.
+ *
+ * @return An array of all decorated parameters.
+ */
 export function getBodyParameters(target: Object, propertyKey: string | symbol): BodyParameter[] {
     const bodyParameters = Reflect.getMetadata("api:route:bodyparameters", target, propertyKey);
     if (bodyParameters) {
@@ -14,6 +31,20 @@ export function getBodyParameters(target: Object, propertyKey: string | symbol):
     return newBodyParameters;
 }
 
+/**
+ * A decorator to mark a specific parameter to receive the request's body.
+ *
+ * **Example:**
+ * ```
+ * @route(...)
+ * public postSomething(@body() body: SomeBody): SomeAnswer {
+ * ```
+ *
+ * If the parameter is decorated with this decorator, the body of each request will be injected
+ * into that particular parameter.
+ *
+ * @return A parameter decorator to inject the body.
+ */
 export function body(): ParameterDecorator {
     return (target: Object, propertyKey: string, index: number) => {
         const bodyParameters = getBodyParameters(target, propertyKey);
@@ -23,11 +54,31 @@ export function body(): ParameterDecorator {
     };
 }
 
+/**
+ * A parameter decorated to receive the injected values from the Url's query parameters.
+ */
 export interface QueryParameter {
+    /**
+     * The index of the parameter that was decorated.
+     */
     readonly index: number;
+    /**
+     * The name of the query parameter.
+     */
     readonly name: string;
 }
 
+/**
+ * Returns a list of query parameters for the given route method.
+ * This function is always guaranteed to return an array. If no query parameters have been injected for this
+ * method yet, a new reflection metadata key is created and the new array is returned.
+ * The array can be used to append new parameters.
+ *
+ * @param target The class on which the method for which the decorated parameters should be retrieved exists.
+ * @param propertyKey The name of the method on `target` for which the decorated parameters should be retrieved.
+ *
+ * @return An array of all decorated parameters.
+ */
 export function getQueryParameters(target: Object, propertyKey: string | symbol): QueryParameter[] {
     const queryParameters = Reflect.getMetadata("api:route:queryparameters", target, propertyKey);
     if (queryParameters) {
@@ -38,6 +89,22 @@ export function getQueryParameters(target: Object, propertyKey: string | symbol)
     return newQueryParameters;
 }
 
+/**
+ * A decorator to mark a specific parameter to receive the given query parameter.
+ *
+ * **Example:**
+ * ```
+ * @route(...)
+ * public postSomething(@query("search") search: string): SomeAnswer {
+ * ```
+ *
+ * If the parameter is decorated with this decorator, the query parameter named `name` will be injected
+ * into this parameter.
+ *
+ * If the route had been called with `?search=foo`, then the value of `search` will be `foo`.
+ *
+ * @return A parameter decorator to inject the given query parameter.
+ */
 export function query(name: string): ParameterDecorator {
     return (target: Object, propertyKey: string | symbol, index: number) => {
         const queryParameters = getQueryParameters(target, propertyKey);
@@ -48,11 +115,31 @@ export function query(name: string): ParameterDecorator {
     };
 }
 
+/**
+ * A parameter decorated to receive the injected values from the Url pattern.
+ */
 export interface UrlParameter {
+    /**
+     * The index of the parameter that was decorated.
+     */
     readonly index: number;
+    /**
+     * The name of the Url pattern parameter.
+     */
     readonly name: string;
 }
 
+/**
+ * Returns a list of Url parameters for the given route method.
+ * This function is always guaranteed to return an array. If no Url parameters have been injected for this
+ * method yet, a new reflection metadata key is created and the new array is returned.
+ * The array can be used to append new parameters.
+ *
+ * @param target The class on which the method for which the decorated parameters should be retrieved exists.
+ * @param propertyKey The name of the method on `target` for which the decorated parameters should be retrieved.
+ *
+ * @return An array of all decorated parameters.
+ */
 export function getUrlParameters(target: Object, propertyKey: string | symbol): UrlParameter[] {
     const urlParameters = Reflect.getMetadata("api:route:urlparameters", target, propertyKey);
     if (urlParameters) {
@@ -63,6 +150,22 @@ export function getUrlParameters(target: Object, propertyKey: string | symbol): 
     return newUrlParameters;
 }
 
+/**
+ * A decorator to mark a specific parameter to receive the given Url parameter.
+ *
+ * **Example:**
+ * ```
+ * @route("GET", "/user/:id)
+ * public postSomething(@param("id") id: string): SomeAnswer {
+ * ```
+ *
+ * If the parameter is decorated with this decorator, the Url parameter named `name` will be injected
+ * into this parameter.
+ *
+ * If the route had been called with `/user/some-uuid-here`, then the value of `id` will be `some-uuid-id-here`.
+ *
+ * @return A parameter decorator to inject the given Url parameter.
+ */
 export function param(name: string): ParameterDecorator {
     return (target: Object, propertyKey: string, index: number) => {
         const urlParameters = getUrlParameters(target, propertyKey);

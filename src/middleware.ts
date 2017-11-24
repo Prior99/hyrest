@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, Router } from "express";
 import { Controller } from "./controller";
-import { Route } from "./route";
+import { Route, getRoutes } from "./route";
 import { WrappedAnswer, internalServerError } from "./answers";
 import {
     QueryParameter,
@@ -11,6 +11,9 @@ import {
     getUrlParameters,
 } from "./parameter-decorators";
 
+/**
+ * A wrapper around a `Route` which also carries the Route's parameter injections.
+ */
 interface RouteConfiguration {
     readonly route: Route;
     readonly queryParameters: QueryParameter[];
@@ -18,20 +21,43 @@ interface RouteConfiguration {
     readonly urlParameters: UrlParameter[];
 }
 
-export function restRpc(...controllerObjects: Object[]): Router {
-    const routes: RouteConfiguration[] = controllerObjects
-        .reduce((result: RouteConfiguration[], controllerObject) => {
-            const controllerRoutes: Route[] = Reflect.getMetadata("api:routes", controllerObject);
-            if (controllerRoutes) {
-                result.push(...controllerRoutes.map(route => ({
-                    route,
-                    queryParameters: getQueryParameters(controllerObject, route.property),
-                    bodyParameters: getBodyParameters(controllerObject, route.property),
-                    urlParameters: getUrlParameters(controllerObject, route.property),
-                })));
-            }
-            return result;
-        }, []) as RouteConfiguration[];
+/**
+ * Assembles a list of all routes of all specified controllers with their parameter injections.
+ *
+ * @param controllerObjects A list of all controllers to assemble the list of routes from.
+ *
+ * @return An array of all routes present on all supplied controllers.
+ */
+function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
+    return controllerObjects.reduce((result, controllerObject) => {
+        // Fetch all routes from this particular controller and put the parameter injections next to tehm.
+        const routes = getRoutes(controllerObject).map(route => ({
+            route,
+            queryParameters: getQueryParameters(controllerObject, route.property),
+            bodyParameters: getBodyParameters(controllerObject, route.property),
+            urlParameters: getUrlParameters(controllerObject, route.property),
+        }));
+        result.push(...routes);
+        return result;
+    }, []);
+}
+
+/**
+ * A middleware to use with express. Takes a list of controllers as arguments. All controllers will be attached
+ * to react and will receive requests.
+ *
+ * **Example:**
+ * ```
+ * app.use(resRpc(new ControllerOne(), new ControllerTwo(), ...));
+ * ```
+ *
+ * @param controllerObjects The instances of controllers to pass express's requests to.
+ *
+ * @return An express router.
+ */
+export function restRpc(...controllerObjects: any[]): Router {
+    // Get the actual `Controller` instances for each @controller decorated object.
+    // Throws an error if an instance of a class not decorated with @controller has been passed.
     const controllers = controllerObjects.map(controllerObject => {
         const controller: Controller = Reflect.getMetadata("api:controller", controllerObject.constructor);
         if (!controller) {
@@ -41,25 +67,37 @@ export function restRpc(...controllerObjects: Object[]): Router {
         return controller;
     });
 
+    // Get a flat list of all routes present on all controllers.
+    const routes: RouteConfiguration[] = listRoutes(controllerObjects);
+
     const router = Router();
     routes.forEach(({ route, queryParameters, bodyParameters, urlParameters }) => {
+        // Grab the actual method from the instance and the route's property name.
         const routeMethod = (route.target as any)[route.property];
+
+        // This handler will be called for every request passing through this middleware.
         const handler = async (request: Request, response: Response) => {
+            // Prepare the arguments to pass into the call to the route based on the parameter inejctions.
+            const args: any[] = [];
+            queryParameters.forEach(({ index, name }) => { args[index] = request.query[name]; });
+            bodyParameters.forEach(({ index }) => { args[index] = request.body; });
+            urlParameters.forEach(({ index, name }) => { args[index] = request.params[name]; });
+
             let answer: WrappedAnswer<any>;
             try {
-                const args: any[] = [];
-                queryParameters.forEach(({ index, name }) => { args[index] = request.query[name]; });
-                bodyParameters.forEach(({ index }) => { args[index] = request.body; });
-                urlParameters.forEach(({ index, name }) => { args[index] = request.params[name]; });
                 answer = await routeMethod(...args);
             } catch (err) {
                 console.error(err);
                 answer = internalServerError();
             }
+            // Respond to the request with the given status code and body.
             const { statusCode, result } = answer;
             response.status(statusCode).send(result);
             return;
         };
+
+        // Depending on the HTTP method of the route, make the router listen to the given url and have it
+        // call `handler` for each request.
         switch (route.method) {
             case "GET": router.get(route.url, handler); break;
             case "POST": router.post(route.url, handler); break;

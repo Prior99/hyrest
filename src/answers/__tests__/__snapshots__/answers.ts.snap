@@ -1,0 +1,2601 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`accepted returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 202,
+}
+`;
+
+exports[`accepted returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 202,
+}
+`;
+
+exports[`accepted returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 202,
+}
+`;
+
+exports[`accepted returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 202,
+}
+`;
+
+exports[`accepted returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 202,
+}
+`;
+
+exports[`badGateway returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 502,
+}
+`;
+
+exports[`badGateway returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 502,
+}
+`;
+
+exports[`badGateway returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 502,
+}
+`;
+
+exports[`badGateway returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 502,
+}
+`;
+
+exports[`badGateway returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 502,
+}
+`;
+
+exports[`badRequest returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 400,
+}
+`;
+
+exports[`badRequest returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 400,
+}
+`;
+
+exports[`badRequest returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 400,
+}
+`;
+
+exports[`badRequest returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 400,
+}
+`;
+
+exports[`badRequest returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 400,
+}
+`;
+
+exports[`conflict returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 409,
+}
+`;
+
+exports[`conflict returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 409,
+}
+`;
+
+exports[`conflict returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 409,
+}
+`;
+
+exports[`conflict returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 409,
+}
+`;
+
+exports[`conflict returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 409,
+}
+`;
+
+exports[`created returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 201,
+}
+`;
+
+exports[`created returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 201,
+}
+`;
+
+exports[`created returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 201,
+}
+`;
+
+exports[`created returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 201,
+}
+`;
+
+exports[`created returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 201,
+}
+`;
+
+exports[`expectationFailed returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 417,
+}
+`;
+
+exports[`expectationFailed returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 417,
+}
+`;
+
+exports[`expectationFailed returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 417,
+}
+`;
+
+exports[`expectationFailed returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 417,
+}
+`;
+
+exports[`expectationFailed returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 417,
+}
+`;
+
+exports[`failedDependency returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 424,
+}
+`;
+
+exports[`failedDependency returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 424,
+}
+`;
+
+exports[`failedDependency returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 424,
+}
+`;
+
+exports[`failedDependency returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 424,
+}
+`;
+
+exports[`failedDependency returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 424,
+}
+`;
+
+exports[`forbidden returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 403,
+}
+`;
+
+exports[`forbidden returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 403,
+}
+`;
+
+exports[`forbidden returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 403,
+}
+`;
+
+exports[`forbidden returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 403,
+}
+`;
+
+exports[`forbidden returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 403,
+}
+`;
+
+exports[`gatewayTimeout returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 504,
+}
+`;
+
+exports[`gatewayTimeout returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 504,
+}
+`;
+
+exports[`gatewayTimeout returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 504,
+}
+`;
+
+exports[`gatewayTimeout returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 504,
+}
+`;
+
+exports[`gatewayTimeout returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 504,
+}
+`;
+
+exports[`gone returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 410,
+}
+`;
+
+exports[`gone returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 410,
+}
+`;
+
+exports[`gone returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 410,
+}
+`;
+
+exports[`gone returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 410,
+}
+`;
+
+exports[`gone returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 410,
+}
+`;
+
+exports[`httpContinue returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 100,
+}
+`;
+
+exports[`httpContinue returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 100,
+}
+`;
+
+exports[`httpContinue returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 100,
+}
+`;
+
+exports[`httpContinue returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 100,
+}
+`;
+
+exports[`httpContinue returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 100,
+}
+`;
+
+exports[`httpVersionNotSupported returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 505,
+}
+`;
+
+exports[`httpVersionNotSupported returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 505,
+}
+`;
+
+exports[`httpVersionNotSupported returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 505,
+}
+`;
+
+exports[`httpVersionNotSupported returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 505,
+}
+`;
+
+exports[`httpVersionNotSupported returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 505,
+}
+`;
+
+exports[`insufficientSpaceOnResource returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 419,
+}
+`;
+
+exports[`insufficientSpaceOnResource returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 419,
+}
+`;
+
+exports[`insufficientSpaceOnResource returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 419,
+}
+`;
+
+exports[`insufficientSpaceOnResource returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 419,
+}
+`;
+
+exports[`insufficientSpaceOnResource returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 419,
+}
+`;
+
+exports[`insufficientStorage returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 507,
+}
+`;
+
+exports[`insufficientStorage returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 507,
+}
+`;
+
+exports[`insufficientStorage returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 507,
+}
+`;
+
+exports[`insufficientStorage returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 507,
+}
+`;
+
+exports[`insufficientStorage returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 507,
+}
+`;
+
+exports[`internalServerError returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 500,
+}
+`;
+
+exports[`internalServerError returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 500,
+}
+`;
+
+exports[`internalServerError returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 500,
+}
+`;
+
+exports[`internalServerError returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 500,
+}
+`;
+
+exports[`internalServerError returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 500,
+}
+`;
+
+exports[`lengthRequired returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 411,
+}
+`;
+
+exports[`lengthRequired returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 411,
+}
+`;
+
+exports[`lengthRequired returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 411,
+}
+`;
+
+exports[`lengthRequired returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 411,
+}
+`;
+
+exports[`lengthRequired returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 411,
+}
+`;
+
+exports[`locked returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 423,
+}
+`;
+
+exports[`locked returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 423,
+}
+`;
+
+exports[`locked returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 423,
+}
+`;
+
+exports[`locked returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 423,
+}
+`;
+
+exports[`locked returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 423,
+}
+`;
+
+exports[`methodFailure returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 420,
+}
+`;
+
+exports[`methodFailure returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 420,
+}
+`;
+
+exports[`methodFailure returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 420,
+}
+`;
+
+exports[`methodFailure returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 420,
+}
+`;
+
+exports[`methodFailure returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 420,
+}
+`;
+
+exports[`methodNotAllowed returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 405,
+}
+`;
+
+exports[`methodNotAllowed returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 405,
+}
+`;
+
+exports[`methodNotAllowed returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 405,
+}
+`;
+
+exports[`methodNotAllowed returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 405,
+}
+`;
+
+exports[`methodNotAllowed returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 405,
+}
+`;
+
+exports[`movedPermanently returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 301,
+}
+`;
+
+exports[`movedPermanently returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 301,
+}
+`;
+
+exports[`movedPermanently returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 301,
+}
+`;
+
+exports[`movedPermanently returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 301,
+}
+`;
+
+exports[`movedPermanently returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 301,
+}
+`;
+
+exports[`movedTemporarily returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 302,
+}
+`;
+
+exports[`movedTemporarily returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 302,
+}
+`;
+
+exports[`movedTemporarily returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 302,
+}
+`;
+
+exports[`movedTemporarily returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 302,
+}
+`;
+
+exports[`movedTemporarily returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 302,
+}
+`;
+
+exports[`multiStatus returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 207,
+}
+`;
+
+exports[`multiStatus returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 207,
+}
+`;
+
+exports[`multiStatus returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 207,
+}
+`;
+
+exports[`multiStatus returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 207,
+}
+`;
+
+exports[`multiStatus returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 207,
+}
+`;
+
+exports[`multipleChoices returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 300,
+}
+`;
+
+exports[`multipleChoices returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 300,
+}
+`;
+
+exports[`multipleChoices returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 300,
+}
+`;
+
+exports[`multipleChoices returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 300,
+}
+`;
+
+exports[`multipleChoices returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 300,
+}
+`;
+
+exports[`networkAuthenticationRequired returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 511,
+}
+`;
+
+exports[`networkAuthenticationRequired returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 511,
+}
+`;
+
+exports[`networkAuthenticationRequired returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 511,
+}
+`;
+
+exports[`networkAuthenticationRequired returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 511,
+}
+`;
+
+exports[`networkAuthenticationRequired returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 511,
+}
+`;
+
+exports[`noContent returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 204,
+}
+`;
+
+exports[`noContent returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 204,
+}
+`;
+
+exports[`noContent returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 204,
+}
+`;
+
+exports[`noContent returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 204,
+}
+`;
+
+exports[`noContent returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 204,
+}
+`;
+
+exports[`nonAuthoritativeInformation returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 203,
+}
+`;
+
+exports[`nonAuthoritativeInformation returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 203,
+}
+`;
+
+exports[`nonAuthoritativeInformation returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 203,
+}
+`;
+
+exports[`nonAuthoritativeInformation returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 203,
+}
+`;
+
+exports[`nonAuthoritativeInformation returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 203,
+}
+`;
+
+exports[`notAcceptable returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 406,
+}
+`;
+
+exports[`notAcceptable returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 406,
+}
+`;
+
+exports[`notAcceptable returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 406,
+}
+`;
+
+exports[`notAcceptable returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 406,
+}
+`;
+
+exports[`notAcceptable returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 406,
+}
+`;
+
+exports[`notFound returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 404,
+}
+`;
+
+exports[`notFound returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 404,
+}
+`;
+
+exports[`notFound returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 404,
+}
+`;
+
+exports[`notFound returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 404,
+}
+`;
+
+exports[`notFound returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 404,
+}
+`;
+
+exports[`notImplemented returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 501,
+}
+`;
+
+exports[`notImplemented returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 501,
+}
+`;
+
+exports[`notImplemented returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 501,
+}
+`;
+
+exports[`notImplemented returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 501,
+}
+`;
+
+exports[`notImplemented returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 501,
+}
+`;
+
+exports[`notModified returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 304,
+}
+`;
+
+exports[`notModified returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 304,
+}
+`;
+
+exports[`notModified returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 304,
+}
+`;
+
+exports[`notModified returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 304,
+}
+`;
+
+exports[`notModified returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 304,
+}
+`;
+
+exports[`ok returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 200,
+}
+`;
+
+exports[`ok returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 200,
+}
+`;
+
+exports[`ok returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 200,
+}
+`;
+
+exports[`ok returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 200,
+}
+`;
+
+exports[`ok returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 200,
+}
+`;
+
+exports[`partialContent returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 206,
+}
+`;
+
+exports[`partialContent returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 206,
+}
+`;
+
+exports[`partialContent returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 206,
+}
+`;
+
+exports[`partialContent returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 206,
+}
+`;
+
+exports[`partialContent returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 206,
+}
+`;
+
+exports[`paymentRequired returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 402,
+}
+`;
+
+exports[`paymentRequired returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 402,
+}
+`;
+
+exports[`paymentRequired returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 402,
+}
+`;
+
+exports[`paymentRequired returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 402,
+}
+`;
+
+exports[`paymentRequired returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 402,
+}
+`;
+
+exports[`preconditionFailed returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 412,
+}
+`;
+
+exports[`preconditionFailed returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 412,
+}
+`;
+
+exports[`preconditionFailed returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 412,
+}
+`;
+
+exports[`preconditionFailed returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 412,
+}
+`;
+
+exports[`preconditionFailed returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 412,
+}
+`;
+
+exports[`preconditionRequired returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 428,
+}
+`;
+
+exports[`preconditionRequired returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 428,
+}
+`;
+
+exports[`preconditionRequired returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 428,
+}
+`;
+
+exports[`preconditionRequired returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 428,
+}
+`;
+
+exports[`preconditionRequired returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 428,
+}
+`;
+
+exports[`processing returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 102,
+}
+`;
+
+exports[`processing returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 102,
+}
+`;
+
+exports[`processing returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 102,
+}
+`;
+
+exports[`processing returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 102,
+}
+`;
+
+exports[`processing returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 102,
+}
+`;
+
+exports[`proxyAuthenticationRequired returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 407,
+}
+`;
+
+exports[`proxyAuthenticationRequired returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 407,
+}
+`;
+
+exports[`proxyAuthenticationRequired returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 407,
+}
+`;
+
+exports[`proxyAuthenticationRequired returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 407,
+}
+`;
+
+exports[`proxyAuthenticationRequired returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 407,
+}
+`;
+
+exports[`requestHeaderFieldsTooLarge returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 431,
+}
+`;
+
+exports[`requestHeaderFieldsTooLarge returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 431,
+}
+`;
+
+exports[`requestHeaderFieldsTooLarge returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 431,
+}
+`;
+
+exports[`requestHeaderFieldsTooLarge returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 431,
+}
+`;
+
+exports[`requestHeaderFieldsTooLarge returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 431,
+}
+`;
+
+exports[`requestTimeout returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 408,
+}
+`;
+
+exports[`requestTimeout returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 408,
+}
+`;
+
+exports[`requestTimeout returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 408,
+}
+`;
+
+exports[`requestTimeout returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 408,
+}
+`;
+
+exports[`requestTimeout returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 408,
+}
+`;
+
+exports[`requestTooLong returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 413,
+}
+`;
+
+exports[`requestTooLong returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 413,
+}
+`;
+
+exports[`requestTooLong returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 413,
+}
+`;
+
+exports[`requestTooLong returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 413,
+}
+`;
+
+exports[`requestTooLong returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 413,
+}
+`;
+
+exports[`requestUriTooLong returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 414,
+}
+`;
+
+exports[`requestUriTooLong returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 414,
+}
+`;
+
+exports[`requestUriTooLong returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 414,
+}
+`;
+
+exports[`requestUriTooLong returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 414,
+}
+`;
+
+exports[`requestUriTooLong returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 414,
+}
+`;
+
+exports[`requestedRangeNotSatisfiable returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 416,
+}
+`;
+
+exports[`requestedRangeNotSatisfiable returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 416,
+}
+`;
+
+exports[`requestedRangeNotSatisfiable returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 416,
+}
+`;
+
+exports[`requestedRangeNotSatisfiable returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 416,
+}
+`;
+
+exports[`requestedRangeNotSatisfiable returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 416,
+}
+`;
+
+exports[`resetContent returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 205,
+}
+`;
+
+exports[`resetContent returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 205,
+}
+`;
+
+exports[`resetContent returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 205,
+}
+`;
+
+exports[`resetContent returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 205,
+}
+`;
+
+exports[`resetContent returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 205,
+}
+`;
+
+exports[`seeOther returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 303,
+}
+`;
+
+exports[`seeOther returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 303,
+}
+`;
+
+exports[`seeOther returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 303,
+}
+`;
+
+exports[`seeOther returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 303,
+}
+`;
+
+exports[`seeOther returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 303,
+}
+`;
+
+exports[`serviceUnavailable returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 503,
+}
+`;
+
+exports[`serviceUnavailable returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 503,
+}
+`;
+
+exports[`serviceUnavailable returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 503,
+}
+`;
+
+exports[`serviceUnavailable returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 503,
+}
+`;
+
+exports[`serviceUnavailable returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 503,
+}
+`;
+
+exports[`switchingProtocols returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 101,
+}
+`;
+
+exports[`switchingProtocols returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 101,
+}
+`;
+
+exports[`switchingProtocols returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 101,
+}
+`;
+
+exports[`switchingProtocols returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 101,
+}
+`;
+
+exports[`switchingProtocols returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 101,
+}
+`;
+
+exports[`temporaryRedirect returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 307,
+}
+`;
+
+exports[`temporaryRedirect returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 307,
+}
+`;
+
+exports[`temporaryRedirect returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 307,
+}
+`;
+
+exports[`temporaryRedirect returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 307,
+}
+`;
+
+exports[`temporaryRedirect returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 307,
+}
+`;
+
+exports[`tooManyRequests returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 429,
+}
+`;
+
+exports[`tooManyRequests returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 429,
+}
+`;
+
+exports[`tooManyRequests returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 429,
+}
+`;
+
+exports[`tooManyRequests returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 429,
+}
+`;
+
+exports[`tooManyRequests returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 429,
+}
+`;
+
+exports[`unauthorized returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 401,
+}
+`;
+
+exports[`unauthorized returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 401,
+}
+`;
+
+exports[`unauthorized returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 401,
+}
+`;
+
+exports[`unauthorized returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 401,
+}
+`;
+
+exports[`unauthorized returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 401,
+}
+`;
+
+exports[`unprocessableEntity returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 422,
+}
+`;
+
+exports[`unprocessableEntity returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 422,
+}
+`;
+
+exports[`unprocessableEntity returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 422,
+}
+`;
+
+exports[`unprocessableEntity returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 422,
+}
+`;
+
+exports[`unprocessableEntity returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 422,
+}
+`;
+
+exports[`unsupportedMediaType returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 415,
+}
+`;
+
+exports[`unsupportedMediaType returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 415,
+}
+`;
+
+exports[`unsupportedMediaType returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 415,
+}
+`;
+
+exports[`unsupportedMediaType returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 415,
+}
+`;
+
+exports[`unsupportedMediaType returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 415,
+}
+`;
+
+exports[`useProxy returns the expected result with a body and a message 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 305,
+}
+`;
+
+exports[`useProxy returns the expected result with a wrapper 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+    "message": "Some message.",
+  },
+  "statusCode": 305,
+}
+`;
+
+exports[`useProxy returns the expected result with no parameters 1`] = `
+Object {
+  "statusCode": 305,
+}
+`;
+
+exports[`useProxy returns the expected result with only a body 1`] = `
+Object {
+  "result": Object {
+    "data": Object {
+      "someKey": "some value",
+    },
+  },
+  "statusCode": 305,
+}
+`;
+
+exports[`useProxy returns the expected result with only a message 1`] = `
+Object {
+  "result": Object {
+    "message": "Some message.",
+  },
+  "statusCode": 305,
+}
+`;

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The \`ApiError\` class is constructed as expected 1`] = `400`;
+
+exports[`The \`ApiError\` class is constructed as expected 2`] = `
+Object {
+  "message": "Some message.",
+}
+`;
