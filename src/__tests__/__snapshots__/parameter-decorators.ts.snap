@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@body() 1`] = `
+Array [
+  Object {
+    "index": 2,
+  },
+]
+`;
+
+exports[`@body() 2`] = `
+Array [
+  Object {
+    "index": 0,
+    "name": "param1",
+  },
+]
+`;
+
+exports[`@body() 3`] = `
+Array [
+  Object {
+    "index": 1,
+    "name": "query1",
+  },
+]
+`;
