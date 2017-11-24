@@ -1,4 +1,23 @@
+import "reflect-metadata";
+
 import * as HTTP from "http-status-codes";
+
+export interface LastCall {
+    readonly statusCode: number;
+    readonly message: string;
+}
+
+let lastCall: LastCall;
+
+export function setLastCall(last: LastCall) {
+    lastCall = last;
+}
+
+export function consumeLastCall() {
+    const last = lastCall;
+    lastCall = undefined;
+    return last;
+}
 
 export interface Answer<T> {
     readonly message?: string;
@@ -12,13 +31,7 @@ export interface WrappedAnswer<T> {
 
 export type Wrapper<T> = {
     readonly body?: T;
-    readonly message: string;
-} | {
-    readonly body: T;
     readonly message?: string;
-} | {
-    readonly body: T;
-    readonly message: string;
 };
 
 function isWrapper(wrapper: any): wrapper is Wrapper<any> {
@@ -28,45 +41,36 @@ function isWrapper(wrapper: any): wrapper is Wrapper<any> {
     return Object.keys(wrapper).every(key => ["message", "body"].includes(key));
 }
 
-function answer<T>(statusCode: number, arg1: T | Wrapper<T> | string, arg2?: string): T {
+function getWrapper<T>(arg1: T | Wrapper<T> | string, arg2?: string): Wrapper<T> {
     if (typeof arg1 === "undefined") {
-        return {
-            statusCode,
-        } as any;
+        return {};
     }
     if (typeof arg2 === "undefined") {
         if (isWrapper(arg1)) {
             const { message, body } = arg1;
             return {
-                statusCode,
-                result: {
-                    message,
-                    data: body,
-                },
-            } as any;
+                message, body,
+            };
         }
         if (typeof arg1 === "string") {
             return {
-                statusCode,
-                result: {
-                    message: arg1,
-                },
-            } as any;
+                message: arg1,
+            };
         }
         return {
-            statusCode,
-            result: {
-                data: arg1,
-            },
-        } as any;
+            body: arg1,
+        };
     }
     return {
-        statusCode,
-        result: {
-            data: arg1,
-            message: arg2,
-        },
-    } as any;
+        body: arg1 as T,
+        message: arg2,
+    };
+}
+
+function answer<T>(statusCode: number, arg1: T | Wrapper<T> | string, arg2?: string): T {
+    const { message, body } = getWrapper(arg1, arg2);
+    setLastCall({ statusCode, message });
+    return body;
 }
 
 export function accepted<T>(wrapper: Wrapper<T>): T;

@@ -40,9 +40,16 @@ import * as Answers from "../answers";
         args: [],
     },
 ].forEach(({ args, testName }) => {
-    Object.keys(Answers).map(key => Answers[key]).forEach(answerFunction => {
-        test(`${answerFunction.name} returns the expected result with ${testName}`, () => {
-            expect(answerFunction(...args)).toMatchSnapshot();
+    Object.keys(Answers)
+        .filter(key => !(["consumeLastCall", "setLastCall"].includes(key)))
+        .map(key => Answers[key])
+        .forEach(answerFunction => {
+            test(`${answerFunction.name} returns the expected result with ${testName}`, () => {
+                const body = answerFunction(...args);
+                expect(body).toMatchSnapshot();
+                const { message, statusCode } = Answers.consumeLastCall();
+                expect(statusCode).toMatchSnapshot();
+                expect(message).toMatchSnapshot();
+            });
         });
-    });
 });

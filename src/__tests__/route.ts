@@ -1,6 +1,7 @@
 import { route, getRoutes } from "../route";
 import { controller, ControllerMode } from "../controller";
 import { body, param, query } from "../parameter-decorators";
+import { ok } from "../answers";
 
 test("`route()` throws when decorating a method on a non-@controller class", () => {
     expect(() => {
@@ -73,4 +74,21 @@ test("when calling the route with the controller in `CLIENT` mode with no inject
         target: routes[0].target,
         options: undefined,
     }, {}, undefined, {});
+});
+
+test("when calling the route with the controller in `SERVER` mode", () => {
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController { //tslint:disable-line
+        @route("GET", "/get/:id")
+        public method(@param("id") id: string, @body() thing: any, @query("search") search: string) {
+            return ok({ id, thing, search });
+        }
+    }
+
+    const test = new TestController();
+    expect(test.method("some-id", { property: "test" }, "query")).toEqual({
+        id: "some-id",
+        thing: { property: "test" },
+        search: "query",
+    });
 });

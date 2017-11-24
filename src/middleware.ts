@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 import { Controller } from "./controller";
 import { Route, getRoutes } from "./route";
-import { WrappedAnswer, internalServerError } from "./answers";
+import { WrappedAnswer, internalServerError, consumeLastCall } from "./answers";
 import {
     QueryParameter,
     BodyParameter,
@@ -83,16 +83,16 @@ export function restRpc(...controllerObjects: any[]): Router {
             bodyParameters.forEach(({ index }) => { args[index] = request.body; });
             urlParameters.forEach(({ index, name }) => { args[index] = request.params[name]; });
 
-            let answer: WrappedAnswer<any>;
+            let data: any;
             try {
-                answer = await routeMethod(...args);
+                data = await routeMethod(...args);
             } catch (err) {
                 console.error(err);
-                answer = internalServerError();
+                data = internalServerError();
             }
             // Respond to the request with the given status code and body.
-            const { statusCode, result } = answer;
-            response.status(statusCode).send(result);
+            const { statusCode, message } = consumeLastCall();
+            response.status(statusCode).send({ data, message });
             return;
         };
 
