@@ -9,7 +9,7 @@ import {
     getBodyParameters,
     getQueryParameters,
     getUrlParameters,
-} from "./parameter-decorators";
+} from "./parameters";
 
 /**
  * A wrapper around a `Route` which also carries the Route's parameter injections.

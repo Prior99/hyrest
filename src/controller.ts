@@ -1,13 +1,10 @@
 import "isomorphic-fetch";
 import "reflect-metadata";
 
-import { HTTPMethod } from "./http-method";
 import { Route } from "./route";
-import { Params } from "./parameters";
-import { ApiError } from "./api-error";
+import { Params, ApiError, HTTPMethod } from "./types";
 import { compile } from "path-to-regexp";
 import { isBrowser } from "./is-browser";
-import { Answer } from "./answers";
 
 export enum ControllerMode {
     SERVER = "server",
@@ -138,7 +135,7 @@ export class Controller {
             });
 
             // Parse the response from the Api as JSON.
-            const answer: Answer<T> = await response.json();
+            const answer = await response.json();
 
             // If the response's status code was a 2xx status code, return the response as it succeeded.
             if (response.ok) {

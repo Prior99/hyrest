@@ -1,7 +1,7 @@
 import { restRpc } from "../middleware";
 import { controller, ControllerMode } from "../controller";
 import { route } from "../route";
-import { body, param, query } from "../parameter-decorators";
+import { body, param, query } from "../parameters";
 import { ok, created } from "../answers";
 import * as request from "supertest";
 import * as Express from "express";

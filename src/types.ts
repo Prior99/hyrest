@@ -1,5 +1,23 @@
 import { Answer } from "./answers";
 
+export interface Params {
+    [key: string]: string;
+}
+
+/**
+ * This type represents all possible HTTP methods.
+ */
+export type HTTPMethod =
+    "GET" |
+    "POST" |
+    "PATCH" |
+    "PUT" |
+    "DELETE" |
+    "HEAD" |
+    "OPTIONS" |
+    "CONNECT" |
+    "TRACE";
+
 /**
  * This error will be thrown if the call to a route from the client did not succeed.
  * It transports the HTTP status code as well as the answer from the server if available.

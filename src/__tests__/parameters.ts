@@ -1,4 +1,4 @@
-import { body, getBodyParameters, param, getUrlParameters, query, getQueryParameters } from "../parameter-decorators";
+import { body, getBodyParameters, param, getUrlParameters, query, getQueryParameters } from "../parameters";
 
 test("@body()", () => {
     class TestController { //tslint:disable-line

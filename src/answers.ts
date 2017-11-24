@@ -1,33 +1,7 @@
 import "reflect-metadata";
 
 import * as HTTP from "http-status-codes";
-
-export interface LastCall {
-    readonly statusCode: number;
-    readonly message: string;
-}
-
-let lastCall: LastCall;
-
-export function setLastCall(last: LastCall) {
-    lastCall = last;
-}
-
-export function consumeLastCall() {
-    const last = lastCall;
-    lastCall = undefined;
-    return last;
-}
-
-export interface Answer<T> {
-    readonly message?: string;
-    readonly data?: T;
-}
-
-export interface WrappedAnswer<T> {
-    readonly statusCode: number;
-    readonly result: Answer<T>;
-}
+import { setLastCall } from "./last-call";
 
 export type Wrapper<T> = {
     readonly body?: T;

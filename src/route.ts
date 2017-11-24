@@ -1,7 +1,6 @@
 import "reflect-metadata";
 
-import { HTTPMethod } from "./http-method";
-import { Params } from "./parameters";
+import { HTTPMethod, Params } from "./types";
 import { ControllerMode, Controller } from "./controller";
 import {
     QueryParameter,
@@ -10,7 +9,7 @@ import {
     getBodyParameters,
     getQueryParameters,
     getUrlParameters,
-} from "./parameter-decorators";
+} from "./parameters";
 
 /**
  * Additional options which can be passed to a Route.

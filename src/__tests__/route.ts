@@ -1,6 +1,6 @@
 import { route, getRoutes } from "../route";
 import { controller, ControllerMode } from "../controller";
-import { body, param, query } from "../parameter-decorators";
+import { body, param, query } from "../parameters";
 import { ok } from "../answers";
 
 test("`route()` throws when decorating a method on a non-@controller class", () => {

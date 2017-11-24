@@ -41,7 +41,6 @@ import * as Answers from "../answers";
     },
 ].forEach(({ args, testName }) => {
     Object.keys(Answers)
-        .filter(key => !(["consumeLastCall", "setLastCall"].includes(key)))
         .map(key => Answers[key])
         .forEach(answerFunction => {
             test(`${answerFunction.name} returns the expected result with ${testName}`, () => {

@@ -1,8 +1,7 @@
 import "isomorphic-fetch";
 
 import { Controller } from "../controller";
-import { HTTPMethod } from "../http-method";
-import { ApiError } from "../api-error";
+import { ApiError, HTTPMethod  } from "../types";
 
 let controller: Controller;
 
