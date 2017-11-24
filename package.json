@@ -38,6 +38,7 @@
   "devDependencies": {
     "@types/jest": "^21.1.7",
     "jest": "^21.2.1",
+    "supertest": "^3.0.0",
     "ts-jest": "^21.2.3",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"
