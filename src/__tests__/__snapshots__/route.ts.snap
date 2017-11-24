@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`\`route()\` registers on a class 1`] = `
+Array [
+  Object {
+    "method": "GET",
+    "options": undefined,
+    "property": "method",
+    "target": TestController {
+      "method": [Function],
+    },
+    "url": "/get",
+  },
+]
+`;
