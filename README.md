@@ -377,6 +377,12 @@ yarn build
 yarn test
 ```
 
+### Linting
+
+```
+yarn lint
+```
+
 ### Starting the example
 
 Server:
