@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`oneOf detects "" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "[object Object]" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "[object Object]" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "-1" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "-1" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "0" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "0" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "1" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "1" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "27" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "27" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "a" as invalid 1`] = `
+Object {
+  "error": "Not one of ().",
+}
+`;
+
+exports[`oneOf detects "null" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "null" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "test" as invalid 1`] = `
+Object {
+  "error": "Not one of (1, 2, 3, 5).",
+}
+`;
+
+exports[`oneOf detects "test" as invalid 2`] = `
+Object {
+  "error": "Not one of (a, b, c).",
+}
+`;
+
+exports[`oneOf detects "undefined" as invalid 1`] = `Object {}`;
+
+exports[`oneOf detects "undefined" as invalid 2`] = `Object {}`;
+
+exports[`required detects "" as exepcted 1`] = `Object {}`;
+
+exports[`required detects "" as exepcted 2`] = `Object {}`;
+
+exports[`required detects "[object Object]" as exepcted 1`] = `Object {}`;
+
+exports[`required detects "9" as exepcted 1`] = `Object {}`;
+
+exports[`required detects "null" as exepcted 1`] = `
+Object {
+  "error": "Missing required field.",
+}
+`;
+
+exports[`required detects "undefined" as exepcted 1`] = `
+Object {
+  "error": "Missing required field.",
+}
+`;

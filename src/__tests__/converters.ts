@@ -1,6 +1,4 @@
-import "reflect-metadata";
-
-import { is, getConverters, integer, float, string, oneOf, schema } from "../converters";
+import { int, float, str, obj } from "../converters";
 
 [
     "10",
@@ -25,8 +23,8 @@ import { is, getConverters, integer, float, string, oneOf, schema } from "../con
     null, //tslint:disable-line
     undefined,
 ].forEach(input => {
-    test(`integer handles "${input}" correctly`, () => {
-        expect(integer(input)).toMatchSnapshot();
+    test(`int handles "${input}" correctly`, () => {
+        expect(int(input)).toMatchSnapshot();
     });
 });
 
@@ -62,139 +60,24 @@ import { is, getConverters, integer, float, string, oneOf, schema } from "../con
     null, //tslint:disable-line
     undefined,
 ].forEach(input => {
-    test(`string handles "${input}", correctly`, () => {
-        expect(string(input)).toMatchSnapshot();
+    test(`str handles "${input}", correctly`, () => {
+        expect(str(input)).toMatchSnapshot();
     });
 });
 
 [
+    "",
+    10,
+    {},
+    [],
     {
-        options: [1, 2, 3, 5],
-        values: [
-            0,
-            27,
-            -1,
-            "1",
-            "test",
-            {},
-            [],
-            null, //tslint:disable-line
-            undefined,
-        ],
+        nested: {},
     },
-    {
-        options: ["a", "b", "c"],
-        values: [
-            0,
-            27,
-            -1,
-            "1",
-            "test",
-            {},
-            [],
-            null, //tslint:disable-line
-            undefined,
-        ],
-    },
-    {
-        options: [],
-        values: ["a"],
-    },
-].forEach(({ options, values }) => {
-    values.forEach(value => {
-        test(`oneOf detects "${value}" as invalid`, () => {
-            expect(oneOf(...options)(value)).toMatchSnapshot();
-        });
-    });
-    test("oneOf detects each option as valid", () => {
-        options.forEach(option => {
-            expect(oneOf(...options)(option)).toEqual({ value: option });
-        });
-    });
-});
-
-test("@is", () => {
-    class TestController {
-        public method(@is(integer) parameter1, @is(float) parameter2, @is(string) @is(oneOf("a", "b")) parameter3) {
-            return;
-        }
-    }
-
-    const controller = new TestController();
-
-    const converters = Reflect.getMetadata("api:route:converters", controller, "method");
-    expect(converters).toMatchSnapshot();
-    expect(converters.get(0)[0].converter("20")).toEqual({ value: 20 });
-});
-
-[
-    {
-        testSchema: {
-            a: integer,
-            b: float,
-            c: string,
-        },
-        valid: [
-            {
-                a: 10,
-                b: 23.5,
-                c: "test",
-            },
-            {
-                a: 10120,
-                b: 123.5,
-                c: "another string",
-            },
-        ],
-        invalid: [
-            {
-                a: false,
-                b: 123.5,
-                c: "another string",
-                d: "invalid",
-            },
-            {
-                a: false,
-            },
-        ],
-    },
-    {
-        testSchema: {
-            a: [integer, oneOf(1, 2, 3, 4)],
-            b: {
-                c: integer,
-            },
-        },
-        valid: [
-            {
-                a: 3,
-                b: {
-                    c: 19,
-                },
-            },
-            undefined,
-        ],
-        invalid: [
-            {
-                a: 19,
-                b: {
-                    c: {
-                        d: "test",
-                    }
-                }
-            },
-        ],
-    },
-
-].forEach(({ testSchema, valid, invalid }) => {
-    valid.forEach(input => {
-        test("The test schema detects a valid input as valid", async () => {
-            expect(await schema(testSchema)(input)).toEqual({ value: input });
-        });
-    });
-    invalid.forEach(input => {
-        test("The test schema detects a invalid input as invalid", async () => {
-            expect(await schema(testSchema)(input)).toEqual({ error: "Schema validation failed." });
-        });
+    "10",
+    null, //tslint:disable-line
+    undefined,
+].forEach(input => {
+    test(`obj handles "${input}", correctly`, () => {
+        expect(obj(input)).toMatchSnapshot();
     });
 });

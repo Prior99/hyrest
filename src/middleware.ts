@@ -45,20 +45,6 @@ function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
     }, []);
 }
 
-async function convert<T>(arg: any, converters: Converter<T>[]) {
-    const conversionResults = await Promise.all(converters.map(converter => converter(arg)));
-    const error = conversionResults
-        .map(result => result.error)
-        .find(conversionError => Boolean(conversionError));
-    if (error) {
-        return { error };
-    }
-    if (converters.length > 0) {
-        return conversionResults[0].value;
-    }
-    return undefined;
-}
-
 /**
  * A middleware to use with express. Takes a list of controllers as arguments. All controllers will be attached
  * to react and will receive requests.

@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@is 1`] = `
+Map {
+  2 => Object {
+    "converter": [Function],
+    "validators": Array [
+      [Function],
+    ],
+  },
+  1 => Object {
+    "converter": [Function],
+    "validators": Array [],
+  },
+  0 => Object {
+    "converter": [Function],
+    "validators": Array [],
+  },
+}
+`;

@@ -2,7 +2,9 @@ import { restRpc } from "../middleware";
 import { controller, ControllerMode } from "../controller";
 import { route } from "../route";
 import { body, param, query } from "../parameters";
-import { is, float, integer, schema, required } from "../converters";
+import { float, int } from "../converters";
+import { required } from "../validators";
+import { is, schema } from "../validation";
 import { ok, created } from "../answers";
 import * as request from "supertest";
 import * as Express from "express";
@@ -137,8 +139,8 @@ test("The `restRpc` middleware handles invalid requests correctly", async () => 
     class TestController { //tslint:disable-line
         @route("GET", "/user/:id")
         public getTest(
-                @is(integer) @param("id") id: number,
-                @is(float) @is(required) @query("search") search: number) {
+                @is(int) @param("id") id: number,
+                @is(float).validate(required) @query("search") search: number) {
             return ok("Everything is okay.");
         }
 

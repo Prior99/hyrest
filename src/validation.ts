@@ -34,6 +34,9 @@ async function validateSchema<T extends Object>(validationSchema: Schema, input:
 
 export function schema<T extends Object>(validationSchema: Schema): Validator<T> {
     return async (value: T) => {
+        if (typeof value === "undefined") {
+            return {};
+        }
         return (await validateSchema(validationSchema, value)) ? {} : { error: "Schema validation failed." };
     };
 }
