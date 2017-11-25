@@ -1,6 +1,6 @@
 export { Route, RouteOptions, route } from "./route";
 export { controller, ControllerOptions, ErrorHandler, ControllerMode } from "./controller";
-export { restRpc } from "./middleware";
+export { hyrest } from "./middleware";
 export * from "./answers";
 export { body, query, param } from "./parameters";
 export { configureRPC } from "./configure";

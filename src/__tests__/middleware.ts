@@ -1,4 +1,4 @@
-import { restRpc } from "../middleware";
+import { hyrest } from "../middleware";
 import { controller, ControllerMode } from "../controller";
 import { route } from "../route";
 import { body, param, query } from "../parameters";
@@ -10,7 +10,7 @@ import * as request from "supertest";
 import * as Express from "express";
 import * as BodyParser from "body-parser";
 
-test("The `restRpc` middleware handles requests correctly", async () => {
+test("The `hyrest` middleware handles requests correctly", async () => {
     const mockA = jest.fn();
     const mockB = jest.fn();
 
@@ -39,7 +39,7 @@ test("The `restRpc` middleware handles requests correctly", async () => {
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(restRpc(new TestController1()));
+    http.use(hyrest(new TestController1()));
 
     const responseA = await request(http)
         .get("/user/some-id/test-a?search=test%20test")
@@ -73,13 +73,13 @@ test("The `restRpc` middleware handles requests correctly", async () => {
         .send();
 });
 
-test("The `restRpc` middleware throws when adding a non-@controller object", () => {
+test("The `hyrest` middleware throws when adding a non-@controller object", () => {
     class NotAController {} //tslint:disable-line
 
-    expect(() => restRpc(new NotAController())).toThrow();
+    expect(() => hyrest(new NotAController())).toThrow();
 });
 
-test("The `restRpc` middleware reacts to all http methods", async () => {
+test("The `hyrest` middleware reacts to all http methods", async () => {
     @controller({ mode: ControllerMode.SERVER })
     class TestController2 { //tslint:disable-line
         @route("GET", "/get")
@@ -109,7 +109,7 @@ test("The `restRpc` middleware reacts to all http methods", async () => {
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(restRpc(new TestController2()));
+    http.use(hyrest(new TestController2()));
 
     await request(http).get("/get").expect(200);
     await request(http).post("/post").expect(200);
@@ -121,17 +121,17 @@ test("The `restRpc` middleware reacts to all http methods", async () => {
     await request(http).trace("/trace").expect(200);
 });
 
-test("The `restRpc` middleware throws with an invalid HTTP method", () => {
+test("The `hyrest` middleware throws with an invalid HTTP method", () => {
     @controller()
     class TestController3 { //tslint:disable-line
         @route("INVALID" as any, "/invalid")
         public invalid() { return ok(); }
     }
 
-    expect(() => restRpc(new TestController3())).toThrow();
+    expect(() => hyrest(new TestController3())).toThrow();
 });
 
-test("The `restRpc` middleware handles invalid requests correctly", async () => {
+test("The `hyrest` middleware handles invalid requests correctly", async () => {
     @controller({ mode: ControllerMode.SERVER })
     class TestController4 { //tslint:disable-line
         @route("GET", "/user/:id")
@@ -149,7 +149,7 @@ test("The `restRpc` middleware handles invalid requests correctly", async () => 
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(restRpc(new TestController4()));
+    http.use(hyrest(new TestController4()));
 
     const responseA = await request(http)
         .get("/user/some-id?search=test")

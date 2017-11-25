@@ -58,14 +58,14 @@ function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
  *
  * @return An express router.
  */
-export function restRpc(...controllerObjects: any[]): Router {
+export function hyrest(...controllerObjects: any[]): Router {
     // Get the actual `Controller` instances for each @controller decorated object.
     // Throws an error if an instance of a class not decorated with @controller has been passed.
     const controllers = controllerObjects.map(controllerObject => {
         const controller: Controller = Reflect.getMetadata("api:controller", controllerObject.constructor);
         if (!controller) {
             const name = controllerObject.constructor.name;
-            throw new Error(`Added an object to the RestRpc middleware which is not a @controller. Check ${name}.`);
+            throw new Error(`Added an object to the Hyrest middleware which is not a @controller. Check ${name}.`);
         }
         return controller;
     });

@@ -1,7 +1,7 @@
 {
-  "name": "rest-rpc",
+  "name": "hyrest",
   "version": "1.0.0",
-  "description": "A REST RPC library.",
+  "description": "A hybrid REST library for the frontend and backend.",
   "main": "src/index.ts",
   "author": "Frederick Gnodtke",
   "license": "MIT",
