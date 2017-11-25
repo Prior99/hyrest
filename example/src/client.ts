@@ -1,13 +1,13 @@
 import "isomorphic-fetch";
 
 import { ExampleController } from "./example-controller";
-import { configureRPC, ControllerMode } from "../../src";
+import { configureController, ControllerMode } from "../../src";
 
 process.on("unhandledRejection", err => console.error(err));
 
 // This is only necessary in Node to enforce Client mode.
 // The controller will be in client mode in browser automatically.
-configureRPC(ExampleController, { mode: ControllerMode.CLIENT });
+configureController(ExampleController, { mode: ControllerMode.CLIENT });
 
 const exampleController = new ExampleController();
 

@@ -9,7 +9,7 @@ import { Controller, ControllerOptions } from "./controller";
  * @param controllerClass The class of the controller to configure.
  * @param options The options with which the controller specified in the first argument should be configured.
  */
-export function configureRPC(controllerClass: Function, options: ControllerOptions) {
+export function configureController(controllerClass: Function, options: ControllerOptions) {
     const controller: Controller = Reflect.getMetadata("api:controller", controllerClass);
     if (!controller) {
         const name = controllerClass.name;

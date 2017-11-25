@@ -101,7 +101,7 @@ export class Controller {
     }
 
     /**
-     * Will be called by `configureRPC` and applies the given options to this controller.
+     * Will be called by `configureController` and applies the given options to this controller.
      */
     public configure(options: ControllerOptions) {
         const { throwOnError, errorHandler, baseUrl, mode } = options;
@@ -167,7 +167,7 @@ export class Controller {
 /**
  * Decorate an individual class as an Api controller.
  *
- * @param options Global options with which this controller can be configured. `configureRPC` can also set
+ * @param options Global options with which this controller can be configured. `configureController` can also set
  *                set and override these options.
  *
  * @return The decorated class.

@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`\`configureRPC\` sets the options as expected 1`] = `
+exports[`\`configureController\` sets the options as expected 1`] = `
 Controller {
   "mode": "client",
   "throwOnError": true,
 }
 `;
 
-exports[`\`configureRPC\` sets the options as expected 2`] = `
+exports[`\`configureController\` sets the options as expected 2`] = `
 Controller {
   "errorHandler": [Function],
   "mode": "client",
@@ -15,7 +15,7 @@ Controller {
 }
 `;
 
-exports[`\`configureRPC\` sets the options as expected 3`] = `
+exports[`\`configureController\` sets the options as expected 3`] = `
 Controller {
   "baseUrl": "http://example.com/",
   "mode": "client",
@@ -23,21 +23,21 @@ Controller {
 }
 `;
 
-exports[`\`configureRPC\` sets the options as expected 4`] = `
+exports[`\`configureController\` sets the options as expected 4`] = `
 Controller {
   "mode": "client",
   "throwOnError": true,
 }
 `;
 
-exports[`\`configureRPC\` sets the options as expected 5`] = `
+exports[`\`configureController\` sets the options as expected 5`] = `
 Controller {
   "mode": "server",
   "throwOnError": true,
 }
 `;
 
-exports[`\`configureRPC\` sets the options as expected 6`] = `
+exports[`\`configureController\` sets the options as expected 6`] = `
 Controller {
   "baseUrl": "http://example.com/",
   "errorHandler": [Function],
@@ -46,4 +46,6 @@ Controller {
 }
 `;
 
-exports[`\`configureRPC\` throws an error when called with a non-@controller 1`] = `"Tried to configure an object which is not a @controller. Check NotAController."`;
+exports[`\`configureController\` throws an error when called with a non-@controller 1`] = `"Tried to configure an object which is not a @controller. Check NotAController."`;
+
+

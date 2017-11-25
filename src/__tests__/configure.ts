@@ -1,4 +1,4 @@
-import { configureRPC, controller, ControllerMode } from "..";
+import { configureController, controller, ControllerMode } from "..";
 
 [
     {
@@ -23,18 +23,20 @@ import { configureRPC, controller, ControllerMode } from "..";
         baseUrl: "http://example.com/",
     },
 ].forEach(options => {
-    test("`configureRPC` sets the options as expected", () => {
+    test("`configureController` sets the options as expected", () => {
         @controller()
         class TestController {}
 
         const testController = new TestController();
 
-        configureRPC(TestController, options);
+        configureController(TestController, options);
         expect(Reflect.getMetadata("api:controller", TestController)).toMatchSnapshot();
     });
 });
 
-test("`configureRPC` throws an error when called with a non-@controller", () => {
+test("`configureController` throws an error when called with a non-@controller", () => {
     class NotAController {} //tslint:disable-line
-    expect(() => configureRPC(NotAController, {})).toThrowErrorMatchingSnapshot();
+    expect(() => configureController(NotAController, {})).toThrowErrorMatchingSnapshot();
 });
+
+

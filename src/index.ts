@@ -3,7 +3,7 @@ export { controller, ControllerOptions, ErrorHandler, ControllerMode } from "./c
 export { hyrest } from "./middleware";
 export * from "./answers";
 export { body, query, param } from "./parameters";
-export { configureRPC } from "./configure";
+export { configureController } from "./configure";
 export { ApiError } from "./types";
 export * from "./validators";
 export { is, schema } from "./validation";
