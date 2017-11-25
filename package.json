@@ -17,6 +17,13 @@
     "lib"
   ],
   "jest": {
+    "coverageThreshold": {
+      "global": {
+        "statements": 100,
+        "lines": 100,
+        "functions": 100
+      }
+    },
     "collectCoverage": true,
     "moduleFileExtensions": [
       "ts",
