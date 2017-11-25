@@ -11,7 +11,8 @@ import {
     getQueryParameters,
     getUrlParameters,
 } from "./parameters";
-import { getConverters, Converter } from "./converters";
+import { getValidation, processValue } from "./validation";
+import { Converter } from "./converters";
 
 /**
  * A wrapper around a `Route` which also carries the Route's parameter injections.
@@ -101,22 +102,22 @@ export function restRpc(...controllerObjects: any[]): Router {
 
             let data: any;
 
-            // Validate and convert all values;
-            const converted = await Promise.all(args.map((arg, index) => {
-                const converters = getConverters(route.target, route.property, index)
-                    .map(converterOptions => converterOptions.converter);
-                return convert(arg, converters);
+            // Validate and convert all values,
+            const processed = await Promise.all(args.map((arg, index) => {
+                const options = getValidation(route.target, route.property, index);
+                return processValue(arg, options.converter, options.validators);
             }));
 
             // If an error occured, answer with `unprocessableEntity`.
-            const error = converted
-                .map(result => result && result.error)
-                .find(conversionError => Boolean(conversionError));
-            if (error) {
-                data = unprocessableEntity(error);
+            const errors = processed.reduce((result, current) => {
+                result.push(...current.errors);
+                return result;
+            }, []);
+            if (errors.length > 0) {
+                data = unprocessableEntity(errors[0]);
             } else {
                 try {
-                    data = await routeMethod(...args);
+                    data = await routeMethod(...processed.map(result => result.value));
                 } catch (err) {
                     console.error(err);
                     data = internalServerError();

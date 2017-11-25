@@ -12,16 +12,41 @@ configureRPC(ExampleController, { mode: ControllerMode.CLIENT });
 const exampleController = new ExampleController();
 
 async function call() {
-    console.log(await exampleController.postExample(8, { name: "hunter" }, 9, "c")); //tslint:disable-line
+    const validBody = {
+        name: "hunter",
+        other: {
+            num1: 12,
+            num2: 0.5,
+        },
+    };
+    console.log(await exampleController.postExample(8, validBody, 9, "c")); //tslint:disable-line
     try {
-        await exampleController.postExample("invalid" as any, { name: "hunter" }, 9, "c");
+        await exampleController.postExample("invalid" as any, validBody, 9, "c");
     } catch (err) {
-        console.log(err.answer); //tslint:disable-line
+        console.log(err.statusCode, err.answer); //tslint:disable-line
     }
     try {
-        await exampleController.postExample(10, { name: "hunter" }, 9, "d");
+        await exampleController.postExample(10, validBody, 9, "d");
     } catch (err) {
-        console.log(err.answer); //tslint:disable-line
+        console.log(err.statusCode, err.answer); //tslint:disable-line
+    }
+    try {
+        await exampleController.postExample(10, validBody, 9, undefined);
+    } catch (err) {
+        console.log(err.statusCode, err.answer); //tslint:disable-line
+    }
+    const invalidBody = {
+        name: "hunter",
+        other: {
+            num1: 12,
+            num2: 0.5,
+            otherParameter: "dangling",
+        },
+    };
+    try {
+        await exampleController.postExample(10, invalidBody, 9, "c");
+    } catch (err) {
+        console.log(err.statusCode, err.answer); //tslint:disable-line
     }
 }
 

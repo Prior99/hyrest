@@ -19,6 +19,7 @@ const query = {
     search: "some-search&? -\\/",
     page: "7",
     size: "100",
+    notDefined: undefined,
 };
 const body = {
     someKey: "some value",

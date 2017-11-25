@@ -17,7 +17,11 @@ function getDefaultControllerMode() {
 
 function buildQueryString(query: Params) {
     const queryString = Object.keys(query).reduce((result, key) => {
-        const value = encodeURIComponent(query[key]);
+        const unencoded = query[key];
+        if (typeof unencoded === "undefined" || unencoded === null) {
+            return result;
+        }
+        const value = encodeURIComponent(unencoded);
         return `${result}&${key}=${value}`;
     }, "");
     // Remove first `&`.
