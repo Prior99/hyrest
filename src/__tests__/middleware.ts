@@ -15,7 +15,7 @@ test("The `restRpc` middleware handles requests correctly", async () => {
     const mockB = jest.fn();
 
     @controller({ mode: ControllerMode.SERVER })
-    class TestController {
+    class TestController1 {
         @route("GET", "/user/:id/test-a")
         public getTestA(@param("id") id: string, @query("search") search: string) {
             mockA(id, search);
@@ -39,7 +39,7 @@ test("The `restRpc` middleware handles requests correctly", async () => {
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(restRpc(new TestController()));
+    http.use(restRpc(new TestController1()));
 
     const responseA = await request(http)
         .get("/user/some-id/test-a?search=test%20test")
@@ -79,9 +79,9 @@ test("The `restRpc` middleware throws when adding a non-@controller object", () 
     expect(() => restRpc(new NotAController())).toThrow();
 });
 
-test("The `restRpc` middleware reacts to all http methods", () => {
-    @controller()
-    class TestController { //tslint:disable-line
+test("The `restRpc` middleware reacts to all http methods", async () => {
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController2 { //tslint:disable-line
         @route("GET", "/get")
         public getGet() { return ok(); }
 
@@ -103,40 +103,37 @@ test("The `restRpc` middleware reacts to all http methods", () => {
         @route("OPTIONS", "/options")
         public optionsOptions() { return ok(); }
 
-        @route("CONNECT", "/connect")
-        public connectConnect() { return ok(); }
-
         @route("TRACE", "/trace")
         public traceTrace() { return ok(); }
     }
 
     const http = Express();
-    http.use(restRpc(new TestController()));
+    http.use(BodyParser.json());
+    http.use(restRpc(new TestController2()));
 
-    request(http).get("/get").expect(200);
-    request(http).post("/post").expect(200);
-    request(http).patch("/patch").expect(200);
-    request(http).put("/put").expect(200);
-    request(http).delete("/delete").expect(200);
-    request(http).head("/head").expect(200);
-    request(http).options("/options").expect(200);
-    request(http).connect("/connect").expect(200);
-    request(http).trace("/trace").expect(200);
+    await request(http).get("/get").expect(200);
+    await request(http).post("/post").expect(200);
+    await request(http).patch("/patch").expect(200);
+    await request(http).put("/put").expect(200);
+    await request(http).delete("/delete").expect(200);
+    await request(http).head("/head").expect(200);
+    await request(http).options("/options").expect(200);
+    await request(http).trace("/trace").expect(200);
 });
 
 test("The `restRpc` middleware throws with an invalid HTTP method", () => {
     @controller()
-    class TestController { //tslint:disable-line
+    class TestController3 { //tslint:disable-line
         @route("INVALID" as any, "/invalid")
         public invalid() { return ok(); }
     }
 
-    expect(() => restRpc(new TestController())).toThrow();
+    expect(() => restRpc(new TestController3())).toThrow();
 });
 
 test("The `restRpc` middleware handles invalid requests correctly", async () => {
     @controller({ mode: ControllerMode.SERVER })
-    class TestController { //tslint:disable-line
+    class TestController4 { //tslint:disable-line
         @route("GET", "/user/:id")
         public getTest(
                 @is(int) @param("id") id: number,
@@ -152,7 +149,7 @@ test("The `restRpc` middleware handles invalid requests correctly", async () => 
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(restRpc(new TestController()));
+    http.use(restRpc(new TestController4()));
 
     const responseA = await request(http)
         .get("/user/some-id?search=test")

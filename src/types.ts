@@ -18,7 +18,6 @@ export type HTTPMethod =
     "DELETE" |
     "HEAD" |
     "OPTIONS" |
-    "CONNECT" |
     "TRACE";
 
 /**

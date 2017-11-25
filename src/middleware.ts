@@ -126,7 +126,6 @@ export function restRpc(...controllerObjects: any[]): Router {
             case "DELETE": router.delete(route.url, handler); break;
             case "HEAD": router.head(route.url, handler); break;
             case "OPTIONS": router.options(route.url, handler); break;
-            case "CONNECT": router.connect(route.url, handler); break;
             case "TRACE": router.trace(route.url, handler); break;
             default: throw new Error(`Unknown HTTP method ${route.method}. Take a look at ${route.property}.`);
         }
