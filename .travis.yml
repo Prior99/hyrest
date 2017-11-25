@@ -15,4 +15,7 @@ script:
   - yarn lint
   - yarn test
 
+after_script:
+  - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+
 cache: yarn
