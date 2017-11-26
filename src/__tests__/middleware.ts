@@ -9,6 +9,7 @@ import { ok, created } from "../answers";
 import * as request from "supertest";
 import * as Express from "express";
 import * as BodyParser from "body-parser";
+import bind from "bind-decorator";
 
 test("The `hyrest` middleware handles requests correctly", async () => {
     const mockA = jest.fn();
@@ -205,12 +206,13 @@ test("The `hyrest` middleware preserves `this` in the @is decorator", async () =
     const mock = jest.fn();
     @controller({ mode: ControllerMode.SERVER })
     class TestController6 { //tslint:disable-line
+        @bind
         private validate() {
             mock(this);
             return {};
         }
 
-        @route("GET", "/get/:id")
+        @bind @route("GET", "/get/:id")
         public getGet(@param("id") @is(str).validateCtx(ctx => [ctx.validate])) {
             return ok();
         }

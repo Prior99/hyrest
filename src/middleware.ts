@@ -95,7 +95,7 @@ export function hyrest(...controllerObjects: any[]): Router {
                 const options = getValidation(route.target, route.property, index);
                 const factoryValidators = options.validatorFactory ? options.validatorFactory(controllerObject) : [];
                 const validators = [ ...options.validators, ...factoryValidators ];
-                return processValue(arg, options.converter, validators, controllerObject);
+                return processValue(arg, options.converter, validators);
             }));
 
             // If an error occured, answer with `unprocessableEntity`.
