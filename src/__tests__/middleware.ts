@@ -176,3 +176,27 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
         message: "Everything is okay.",
     }));
 });
+
+test("The `hyrest` middleware preserves `this`", async () => {
+    const mock = jest.fn();
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController4 { //tslint:disable-line
+        @route("GET", "/get")
+        public getGet() {
+            mock(this);
+            return ok();
+        }
+    }
+
+    const instance = new TestController4();
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(hyrest(instance));
+
+    const responseA = await request(http)
+        .get("/get")
+        .expect(200)
+        .set("content-type", "application/json");
+    expect(mock.mock.calls[0][0]).toBe(instance);
+});

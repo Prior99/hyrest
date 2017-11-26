@@ -22,6 +22,7 @@ interface RouteConfiguration {
     readonly queryParameters: QueryParameter[];
     readonly bodyParameters: BodyParameter[];
     readonly urlParameters: UrlParameter[];
+    readonly controllerObject: Object;
 }
 
 /**
@@ -39,6 +40,7 @@ function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
             queryParameters: getQueryParameters(controllerObject, route.property),
             bodyParameters: getBodyParameters(controllerObject, route.property),
             urlParameters: getUrlParameters(controllerObject, route.property),
+            controllerObject,
         }));
         result.push(...routes);
         return result;
@@ -74,7 +76,7 @@ export function hyrest(...controllerObjects: any[]): Router {
     const routes: RouteConfiguration[] = listRoutes(controllerObjects);
 
     const router = Router();
-    routes.forEach(({ route, queryParameters, bodyParameters, urlParameters }) => {
+    routes.forEach(({ route, queryParameters, bodyParameters, urlParameters, controllerObject }) => {
         // Grab the actual method from the instance and the route's property name.
         const routeMethod = (route.target as any)[route.property];
 
@@ -103,7 +105,7 @@ export function hyrest(...controllerObjects: any[]): Router {
                 data = unprocessableEntity(errors[0]);
             } else {
                 try {
-                    data = await routeMethod(...processed.map(result => result.value));
+                    data = await routeMethod.apply(controllerObject, processed.map(result => result.value));
                 } catch (err) {
                     console.error(err);
                     data = internalServerError();
