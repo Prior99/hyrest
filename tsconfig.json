@@ -13,9 +13,10 @@
         "emitDecoratorMetadata": true
     },
     "exclude": [
-        "node_modules",
-        "dist",
+        "node_modules.",
+        "dist/",
         "**/__tests__/*",
-        "example/"
+        "example/",
+        "index.d.ts"
     ]
 }
