@@ -118,7 +118,7 @@ export interface FullValidator<T> {
     (input: any): Processed<T> | Promise<Processed<T>>;
     (target: Object, propertyKey: string | symbol, index: number): void;
     validate: (...validators: Validator<T>[]) => FullValidator<T>;
-    validateCtx: (ctx: any) => Validator<T>[];
+    validateCtx: (factory: (ctx: any) => Validator<T>[]) => FullValidator<T>;
     validators: Validator<T>[];
     validatorFactory: (ctx: any) => Validator<T>[];
 }
@@ -140,7 +140,7 @@ export function is<T>(converter: Converter<T>): FullValidator<T> {
             options.validatorFactory = fn.validationFactory;
             return;
         } else {
-            const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : [];
+            const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : []; //tslint:disable-line
             return processValue(args[0], converter, [...fn.validators, ...factoryValidators]);
         }
     };
