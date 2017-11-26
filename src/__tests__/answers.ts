@@ -40,6 +40,10 @@ import { consumeLastCall } from "../last-call";
         testName: "no parameters",
         args: [],
     },
+    {
+        testName: "an empty body",
+        args: [{}],
+    },
 ].forEach(({ args, testName }) => {
     Object.keys(Answers)
         .map(key => Answers[key])

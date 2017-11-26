@@ -12,7 +12,8 @@ function isWrapper(wrapper: any): wrapper is Wrapper<any> {
     if (typeof wrapper !== "object") {
         return false;
     }
-    return Object.keys(wrapper).every(key => ["message", "body"].includes(key));
+    const keys = Object.keys(wrapper);
+    return keys.length > 0 && keys.every(key => ["message", "body"].includes(key));
 }
 
 function getWrapper<T>(arg1: T | Wrapper<T> | string, arg2?: string): Wrapper<T> {

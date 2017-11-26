@@ -20,6 +20,12 @@ exports[`accepted returns the expected result with a wrapper 2`] = `202`;
 
 exports[`accepted returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`accepted returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`accepted returns the expected result with an empty body 2`] = `202`;
+
+exports[`accepted returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`accepted returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`accepted returns the expected result with no parameters 2`] = `202`;
@@ -61,6 +67,12 @@ Object {
 exports[`badGateway returns the expected result with a wrapper 2`] = `502`;
 
 exports[`badGateway returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`badGateway returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`badGateway returns the expected result with an empty body 2`] = `502`;
+
+exports[`badGateway returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`badGateway returns the expected result with no parameters 1`] = `undefined`;
 
@@ -104,6 +116,12 @@ exports[`badRequest returns the expected result with a wrapper 2`] = `400`;
 
 exports[`badRequest returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`badRequest returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`badRequest returns the expected result with an empty body 2`] = `400`;
+
+exports[`badRequest returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`badRequest returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`badRequest returns the expected result with no parameters 2`] = `400`;
@@ -145,6 +163,12 @@ Object {
 exports[`conflict returns the expected result with a wrapper 2`] = `409`;
 
 exports[`conflict returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`conflict returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`conflict returns the expected result with an empty body 2`] = `409`;
+
+exports[`conflict returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`conflict returns the expected result with no parameters 1`] = `undefined`;
 
@@ -188,6 +212,12 @@ exports[`created returns the expected result with a wrapper 2`] = `201`;
 
 exports[`created returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`created returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`created returns the expected result with an empty body 2`] = `201`;
+
+exports[`created returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`created returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`created returns the expected result with no parameters 2`] = `201`;
@@ -229,6 +259,12 @@ Object {
 exports[`expectationFailed returns the expected result with a wrapper 2`] = `417`;
 
 exports[`expectationFailed returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`expectationFailed returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`expectationFailed returns the expected result with an empty body 2`] = `417`;
+
+exports[`expectationFailed returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`expectationFailed returns the expected result with no parameters 1`] = `undefined`;
 
@@ -272,6 +308,12 @@ exports[`failedDependency returns the expected result with a wrapper 2`] = `424`
 
 exports[`failedDependency returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`failedDependency returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`failedDependency returns the expected result with an empty body 2`] = `424`;
+
+exports[`failedDependency returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`failedDependency returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`failedDependency returns the expected result with no parameters 2`] = `424`;
@@ -313,6 +355,12 @@ Object {
 exports[`forbidden returns the expected result with a wrapper 2`] = `403`;
 
 exports[`forbidden returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`forbidden returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`forbidden returns the expected result with an empty body 2`] = `403`;
+
+exports[`forbidden returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`forbidden returns the expected result with no parameters 1`] = `undefined`;
 
@@ -356,6 +404,12 @@ exports[`gatewayTimeout returns the expected result with a wrapper 2`] = `504`;
 
 exports[`gatewayTimeout returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`gatewayTimeout returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`gatewayTimeout returns the expected result with an empty body 2`] = `504`;
+
+exports[`gatewayTimeout returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`gatewayTimeout returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`gatewayTimeout returns the expected result with no parameters 2`] = `504`;
@@ -397,6 +451,12 @@ Object {
 exports[`gone returns the expected result with a wrapper 2`] = `410`;
 
 exports[`gone returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`gone returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`gone returns the expected result with an empty body 2`] = `410`;
+
+exports[`gone returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`gone returns the expected result with no parameters 1`] = `undefined`;
 
@@ -440,6 +500,12 @@ exports[`httpContinue returns the expected result with a wrapper 2`] = `100`;
 
 exports[`httpContinue returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`httpContinue returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`httpContinue returns the expected result with an empty body 2`] = `100`;
+
+exports[`httpContinue returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`httpContinue returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`httpContinue returns the expected result with no parameters 2`] = `100`;
@@ -481,6 +547,12 @@ Object {
 exports[`httpVersionNotSupported returns the expected result with a wrapper 2`] = `505`;
 
 exports[`httpVersionNotSupported returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`httpVersionNotSupported returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`httpVersionNotSupported returns the expected result with an empty body 2`] = `505`;
+
+exports[`httpVersionNotSupported returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`httpVersionNotSupported returns the expected result with no parameters 1`] = `undefined`;
 
@@ -524,6 +596,12 @@ exports[`insufficientSpaceOnResource returns the expected result with a wrapper 
 
 exports[`insufficientSpaceOnResource returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`insufficientSpaceOnResource returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`insufficientSpaceOnResource returns the expected result with an empty body 2`] = `419`;
+
+exports[`insufficientSpaceOnResource returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`insufficientSpaceOnResource returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`insufficientSpaceOnResource returns the expected result with no parameters 2`] = `419`;
@@ -565,6 +643,12 @@ Object {
 exports[`insufficientStorage returns the expected result with a wrapper 2`] = `507`;
 
 exports[`insufficientStorage returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`insufficientStorage returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`insufficientStorage returns the expected result with an empty body 2`] = `507`;
+
+exports[`insufficientStorage returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`insufficientStorage returns the expected result with no parameters 1`] = `undefined`;
 
@@ -608,6 +692,12 @@ exports[`internalServerError returns the expected result with a wrapper 2`] = `5
 
 exports[`internalServerError returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`internalServerError returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`internalServerError returns the expected result with an empty body 2`] = `500`;
+
+exports[`internalServerError returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`internalServerError returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`internalServerError returns the expected result with no parameters 2`] = `500`;
@@ -649,6 +739,12 @@ Object {
 exports[`lengthRequired returns the expected result with a wrapper 2`] = `411`;
 
 exports[`lengthRequired returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`lengthRequired returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`lengthRequired returns the expected result with an empty body 2`] = `411`;
+
+exports[`lengthRequired returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`lengthRequired returns the expected result with no parameters 1`] = `undefined`;
 
@@ -692,6 +788,12 @@ exports[`locked returns the expected result with a wrapper 2`] = `423`;
 
 exports[`locked returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`locked returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`locked returns the expected result with an empty body 2`] = `423`;
+
+exports[`locked returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`locked returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`locked returns the expected result with no parameters 2`] = `423`;
@@ -733,6 +835,12 @@ Object {
 exports[`methodFailure returns the expected result with a wrapper 2`] = `420`;
 
 exports[`methodFailure returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`methodFailure returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`methodFailure returns the expected result with an empty body 2`] = `420`;
+
+exports[`methodFailure returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`methodFailure returns the expected result with no parameters 1`] = `undefined`;
 
@@ -776,6 +884,12 @@ exports[`methodNotAllowed returns the expected result with a wrapper 2`] = `405`
 
 exports[`methodNotAllowed returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`methodNotAllowed returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`methodNotAllowed returns the expected result with an empty body 2`] = `405`;
+
+exports[`methodNotAllowed returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`methodNotAllowed returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`methodNotAllowed returns the expected result with no parameters 2`] = `405`;
@@ -817,6 +931,12 @@ Object {
 exports[`movedPermanently returns the expected result with a wrapper 2`] = `301`;
 
 exports[`movedPermanently returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`movedPermanently returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`movedPermanently returns the expected result with an empty body 2`] = `301`;
+
+exports[`movedPermanently returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`movedPermanently returns the expected result with no parameters 1`] = `undefined`;
 
@@ -860,6 +980,12 @@ exports[`movedTemporarily returns the expected result with a wrapper 2`] = `302`
 
 exports[`movedTemporarily returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`movedTemporarily returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`movedTemporarily returns the expected result with an empty body 2`] = `302`;
+
+exports[`movedTemporarily returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`movedTemporarily returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`movedTemporarily returns the expected result with no parameters 2`] = `302`;
@@ -901,6 +1027,12 @@ Object {
 exports[`multiStatus returns the expected result with a wrapper 2`] = `207`;
 
 exports[`multiStatus returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`multiStatus returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`multiStatus returns the expected result with an empty body 2`] = `207`;
+
+exports[`multiStatus returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`multiStatus returns the expected result with no parameters 1`] = `undefined`;
 
@@ -944,6 +1076,12 @@ exports[`multipleChoices returns the expected result with a wrapper 2`] = `300`;
 
 exports[`multipleChoices returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`multipleChoices returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`multipleChoices returns the expected result with an empty body 2`] = `300`;
+
+exports[`multipleChoices returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`multipleChoices returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`multipleChoices returns the expected result with no parameters 2`] = `300`;
@@ -985,6 +1123,12 @@ Object {
 exports[`networkAuthenticationRequired returns the expected result with a wrapper 2`] = `511`;
 
 exports[`networkAuthenticationRequired returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`networkAuthenticationRequired returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`networkAuthenticationRequired returns the expected result with an empty body 2`] = `511`;
+
+exports[`networkAuthenticationRequired returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`networkAuthenticationRequired returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1028,6 +1172,12 @@ exports[`noContent returns the expected result with a wrapper 2`] = `204`;
 
 exports[`noContent returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`noContent returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`noContent returns the expected result with an empty body 2`] = `204`;
+
+exports[`noContent returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`noContent returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`noContent returns the expected result with no parameters 2`] = `204`;
@@ -1069,6 +1219,12 @@ Object {
 exports[`nonAuthoritativeInformation returns the expected result with a wrapper 2`] = `203`;
 
 exports[`nonAuthoritativeInformation returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`nonAuthoritativeInformation returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`nonAuthoritativeInformation returns the expected result with an empty body 2`] = `203`;
+
+exports[`nonAuthoritativeInformation returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`nonAuthoritativeInformation returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1112,6 +1268,12 @@ exports[`notAcceptable returns the expected result with a wrapper 2`] = `406`;
 
 exports[`notAcceptable returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`notAcceptable returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`notAcceptable returns the expected result with an empty body 2`] = `406`;
+
+exports[`notAcceptable returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`notAcceptable returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`notAcceptable returns the expected result with no parameters 2`] = `406`;
@@ -1153,6 +1315,12 @@ Object {
 exports[`notFound returns the expected result with a wrapper 2`] = `404`;
 
 exports[`notFound returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`notFound returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`notFound returns the expected result with an empty body 2`] = `404`;
+
+exports[`notFound returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`notFound returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1196,6 +1364,12 @@ exports[`notImplemented returns the expected result with a wrapper 2`] = `501`;
 
 exports[`notImplemented returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`notImplemented returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`notImplemented returns the expected result with an empty body 2`] = `501`;
+
+exports[`notImplemented returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`notImplemented returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`notImplemented returns the expected result with no parameters 2`] = `501`;
@@ -1237,6 +1411,12 @@ Object {
 exports[`notModified returns the expected result with a wrapper 2`] = `304`;
 
 exports[`notModified returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`notModified returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`notModified returns the expected result with an empty body 2`] = `304`;
+
+exports[`notModified returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`notModified returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1280,6 +1460,12 @@ exports[`ok returns the expected result with a wrapper 2`] = `200`;
 
 exports[`ok returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`ok returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`ok returns the expected result with an empty body 2`] = `200`;
+
+exports[`ok returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`ok returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`ok returns the expected result with no parameters 2`] = `200`;
@@ -1321,6 +1507,12 @@ Object {
 exports[`partialContent returns the expected result with a wrapper 2`] = `206`;
 
 exports[`partialContent returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`partialContent returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`partialContent returns the expected result with an empty body 2`] = `206`;
+
+exports[`partialContent returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`partialContent returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1364,6 +1556,12 @@ exports[`paymentRequired returns the expected result with a wrapper 2`] = `402`;
 
 exports[`paymentRequired returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`paymentRequired returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`paymentRequired returns the expected result with an empty body 2`] = `402`;
+
+exports[`paymentRequired returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`paymentRequired returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`paymentRequired returns the expected result with no parameters 2`] = `402`;
@@ -1405,6 +1603,12 @@ Object {
 exports[`preconditionFailed returns the expected result with a wrapper 2`] = `412`;
 
 exports[`preconditionFailed returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`preconditionFailed returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`preconditionFailed returns the expected result with an empty body 2`] = `412`;
+
+exports[`preconditionFailed returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`preconditionFailed returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1448,6 +1652,12 @@ exports[`preconditionRequired returns the expected result with a wrapper 2`] = `
 
 exports[`preconditionRequired returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`preconditionRequired returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`preconditionRequired returns the expected result with an empty body 2`] = `428`;
+
+exports[`preconditionRequired returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`preconditionRequired returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`preconditionRequired returns the expected result with no parameters 2`] = `428`;
@@ -1489,6 +1699,12 @@ Object {
 exports[`processing returns the expected result with a wrapper 2`] = `102`;
 
 exports[`processing returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`processing returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`processing returns the expected result with an empty body 2`] = `102`;
+
+exports[`processing returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`processing returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1532,6 +1748,12 @@ exports[`proxyAuthenticationRequired returns the expected result with a wrapper 
 
 exports[`proxyAuthenticationRequired returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`proxyAuthenticationRequired returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`proxyAuthenticationRequired returns the expected result with an empty body 2`] = `407`;
+
+exports[`proxyAuthenticationRequired returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`proxyAuthenticationRequired returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`proxyAuthenticationRequired returns the expected result with no parameters 2`] = `407`;
@@ -1573,6 +1795,12 @@ Object {
 exports[`requestHeaderFieldsTooLarge returns the expected result with a wrapper 2`] = `431`;
 
 exports[`requestHeaderFieldsTooLarge returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`requestHeaderFieldsTooLarge returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`requestHeaderFieldsTooLarge returns the expected result with an empty body 2`] = `431`;
+
+exports[`requestHeaderFieldsTooLarge returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`requestHeaderFieldsTooLarge returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1616,6 +1844,12 @@ exports[`requestTimeout returns the expected result with a wrapper 2`] = `408`;
 
 exports[`requestTimeout returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`requestTimeout returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`requestTimeout returns the expected result with an empty body 2`] = `408`;
+
+exports[`requestTimeout returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`requestTimeout returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`requestTimeout returns the expected result with no parameters 2`] = `408`;
@@ -1657,6 +1891,12 @@ Object {
 exports[`requestTooLong returns the expected result with a wrapper 2`] = `413`;
 
 exports[`requestTooLong returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`requestTooLong returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`requestTooLong returns the expected result with an empty body 2`] = `413`;
+
+exports[`requestTooLong returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`requestTooLong returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1700,6 +1940,12 @@ exports[`requestUriTooLong returns the expected result with a wrapper 2`] = `414
 
 exports[`requestUriTooLong returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`requestUriTooLong returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`requestUriTooLong returns the expected result with an empty body 2`] = `414`;
+
+exports[`requestUriTooLong returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`requestUriTooLong returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`requestUriTooLong returns the expected result with no parameters 2`] = `414`;
@@ -1741,6 +1987,12 @@ Object {
 exports[`requestedRangeNotSatisfiable returns the expected result with a wrapper 2`] = `416`;
 
 exports[`requestedRangeNotSatisfiable returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`requestedRangeNotSatisfiable returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`requestedRangeNotSatisfiable returns the expected result with an empty body 2`] = `416`;
+
+exports[`requestedRangeNotSatisfiable returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`requestedRangeNotSatisfiable returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1784,6 +2036,12 @@ exports[`resetContent returns the expected result with a wrapper 2`] = `205`;
 
 exports[`resetContent returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`resetContent returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`resetContent returns the expected result with an empty body 2`] = `205`;
+
+exports[`resetContent returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`resetContent returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`resetContent returns the expected result with no parameters 2`] = `205`;
@@ -1825,6 +2083,12 @@ Object {
 exports[`seeOther returns the expected result with a wrapper 2`] = `303`;
 
 exports[`seeOther returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`seeOther returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`seeOther returns the expected result with an empty body 2`] = `303`;
+
+exports[`seeOther returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`seeOther returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1868,6 +2132,12 @@ exports[`serviceUnavailable returns the expected result with a wrapper 2`] = `50
 
 exports[`serviceUnavailable returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`serviceUnavailable returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`serviceUnavailable returns the expected result with an empty body 2`] = `503`;
+
+exports[`serviceUnavailable returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`serviceUnavailable returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`serviceUnavailable returns the expected result with no parameters 2`] = `503`;
@@ -1909,6 +2179,12 @@ Object {
 exports[`switchingProtocols returns the expected result with a wrapper 2`] = `101`;
 
 exports[`switchingProtocols returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`switchingProtocols returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`switchingProtocols returns the expected result with an empty body 2`] = `101`;
+
+exports[`switchingProtocols returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`switchingProtocols returns the expected result with no parameters 1`] = `undefined`;
 
@@ -1952,6 +2228,12 @@ exports[`temporaryRedirect returns the expected result with a wrapper 2`] = `307
 
 exports[`temporaryRedirect returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`temporaryRedirect returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`temporaryRedirect returns the expected result with an empty body 2`] = `307`;
+
+exports[`temporaryRedirect returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`temporaryRedirect returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`temporaryRedirect returns the expected result with no parameters 2`] = `307`;
@@ -1993,6 +2275,12 @@ Object {
 exports[`tooManyRequests returns the expected result with a wrapper 2`] = `429`;
 
 exports[`tooManyRequests returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`tooManyRequests returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`tooManyRequests returns the expected result with an empty body 2`] = `429`;
+
+exports[`tooManyRequests returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`tooManyRequests returns the expected result with no parameters 1`] = `undefined`;
 
@@ -2036,6 +2324,12 @@ exports[`unauthorized returns the expected result with a wrapper 2`] = `401`;
 
 exports[`unauthorized returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`unauthorized returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`unauthorized returns the expected result with an empty body 2`] = `401`;
+
+exports[`unauthorized returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`unauthorized returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`unauthorized returns the expected result with no parameters 2`] = `401`;
@@ -2077,6 +2371,12 @@ Object {
 exports[`unprocessableEntity returns the expected result with a wrapper 2`] = `422`;
 
 exports[`unprocessableEntity returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`unprocessableEntity returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`unprocessableEntity returns the expected result with an empty body 2`] = `422`;
+
+exports[`unprocessableEntity returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`unprocessableEntity returns the expected result with no parameters 1`] = `undefined`;
 
@@ -2120,6 +2420,12 @@ exports[`unsupportedMediaType returns the expected result with a wrapper 2`] = `
 
 exports[`unsupportedMediaType returns the expected result with a wrapper 3`] = `"Some message."`;
 
+exports[`unsupportedMediaType returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`unsupportedMediaType returns the expected result with an empty body 2`] = `415`;
+
+exports[`unsupportedMediaType returns the expected result with an empty body 3`] = `undefined`;
+
 exports[`unsupportedMediaType returns the expected result with no parameters 1`] = `undefined`;
 
 exports[`unsupportedMediaType returns the expected result with no parameters 2`] = `415`;
@@ -2161,6 +2467,12 @@ Object {
 exports[`useProxy returns the expected result with a wrapper 2`] = `305`;
 
 exports[`useProxy returns the expected result with a wrapper 3`] = `"Some message."`;
+
+exports[`useProxy returns the expected result with an empty body 1`] = `Object {}`;
+
+exports[`useProxy returns the expected result with an empty body 2`] = `305`;
+
+exports[`useProxy returns the expected result with an empty body 3`] = `undefined`;
 
 exports[`useProxy returns the expected result with no parameters 1`] = `undefined`;
 
