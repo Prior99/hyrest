@@ -92,3 +92,20 @@ test("when calling the route with the controller in `SERVER` mode", () => {
         search: "query",
     });
 });
+
+test("@route preserves `this`", () => {
+    const mock = jest.fn();
+
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController { //tslint:disable-line
+        @route("GET", "/get")
+        public method() {
+            mock(this);
+            return ok();
+        }
+    }
+
+    const test = new TestController();
+    test.method();
+    expect(mock.mock.calls[0][0]).toBe(test);
+});

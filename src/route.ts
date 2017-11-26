@@ -83,7 +83,7 @@ export function getRoutes(target: Object): Route[] {
  * @return A method decorator.
  */
 export function route(method: HTTPMethod, url: string, options?: RouteOptions): MethodDecorator {
-    return (target: Object, property: string, descriptor: PropertyDescriptor) => {
+    return function (target: Object, property: string, descriptor: PropertyDescriptor) {
         // Insert the new `Route` into the reflection metadata.
         const routeMeta = { target, property, method, url, options };
         const routes = getRoutes(target);
@@ -124,7 +124,7 @@ export function route(method: HTTPMethod, url: string, options?: RouteOptions): 
             }
 
             // Otherwise, just call the original function with the original arguments.
-            return originalFunction(...args);
+            return originalFunction.apply(this, args); //tslint:disable-line
         };
         return descriptor;
     };
