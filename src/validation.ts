@@ -51,7 +51,7 @@ export function schema<T extends Object>(validationSchema: Schema): Validator<T>
  * @return An object containing all errors and the converted value.
  */
 export async function processValue<T>(
-        input: any, converter: Converter<T>, validators: Validator<T>[]): Promise<Processed<T>> {
+        input: any, converter: Converter<T>, validators: Validator<T>[], context?: Object): Promise<Processed<T>> {
     const { error, value } = converter ?
             await converter(input) :
             { value: input, error: undefined };
@@ -60,7 +60,7 @@ export async function processValue<T>(
             errors: [error],
         };
     }
-    const errors = (await Promise.all(validators.map(validator => validator(value))))
+    const errors = (await Promise.all(validators.map(validator => validator.apply(context, [value]))))
         .reduce((result, { error: validationError }) => {
             if (validationError) {
                 result.push(validationError);

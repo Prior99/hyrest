@@ -2,7 +2,7 @@ import { hyrest } from "../middleware";
 import { controller, ControllerMode } from "../controller";
 import { route } from "../route";
 import { body, param, query } from "../parameters";
-import { float, int } from "../converters";
+import { float, int, str } from "../converters";
 import { required } from "../validators";
 import { is, schema } from "../validation";
 import { ok, created } from "../answers";
@@ -180,7 +180,7 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
 test("The `hyrest` middleware preserves `this`", async () => {
     const mock = jest.fn();
     @controller({ mode: ControllerMode.SERVER })
-    class TestController4 { //tslint:disable-line
+    class TestController5 { //tslint:disable-line
         @route("GET", "/get")
         public getGet() {
             mock(this);
@@ -188,7 +188,7 @@ test("The `hyrest` middleware preserves `this`", async () => {
         }
     }
 
-    const instance = new TestController4();
+    const instance = new TestController5();
 
     const http = Express();
     http.use(BodyParser.json());
@@ -196,6 +196,34 @@ test("The `hyrest` middleware preserves `this`", async () => {
 
     const responseA = await request(http)
         .get("/get")
+        .expect(200)
+        .set("content-type", "application/json");
+    expect(mock.mock.calls[0][0]).toBe(instance);
+});
+
+test("The `hyrest` middleware preserves `this` in the @is decorator", async () => {
+    const mock = jest.fn();
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController6 { //tslint:disable-line
+        private static validate() {
+            mock(this);
+            return {};
+        }
+
+        @route("GET", "/get/:id")
+        public getGet(@param("id") @is(str).validate(TestController6.validate)) {
+            return ok();
+        }
+    }
+
+    const instance = new TestController6();
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(hyrest(instance));
+
+    const responseA = await request(http)
+        .get("/get/some-id")
         .expect(200)
         .set("content-type", "application/json");
     expect(mock.mock.calls[0][0]).toBe(instance);

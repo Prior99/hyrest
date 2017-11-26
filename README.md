@@ -304,6 +304,27 @@ class ValidationController {
 Afterwards just use the method as a validator in any schema or decorator. The frontend will call
 the REST endpoint and the server will perform the check on the database.
 
+### What if I need to access "this" from my validator?
+
+All validators are bound to the context of the instance. It might look a bit weird, but it is
+possible to achieve this by using a static method instead:
+
+```typescript
+import { controller, route, body, DataType } from "hyrest";
+
+@controller()
+class SomeController {
+    private static validator(value: string) {
+        console.log(this); // Current instance on which the route was called.
+        ...
+    }
+    @route("POST", "/validate/email")
+    public validateEmail(@body() @is(DataType.str).validate(SomeController.validator) value: string) {
+        ...
+    }
+}
+```
+
 ## Usage as express middleware
 
 Use the `hyrest` middleware to connect your controllers to express:
