@@ -205,13 +205,13 @@ test("The `hyrest` middleware preserves `this` in the @is decorator", async () =
     const mock = jest.fn();
     @controller({ mode: ControllerMode.SERVER })
     class TestController6 { //tslint:disable-line
-        private static validate() {
+        private validate() {
             mock(this);
             return {};
         }
 
         @route("GET", "/get/:id")
-        public getGet(@param("id") @is(str).validate(TestController6.validate)) {
+        public getGet(@param("id") @is(str).validateCtx(ctx => [ctx.validate])) {
             return ok();
         }
     }

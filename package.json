@@ -1,6 +1,6 @@
 {
   "name": "hyrest",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "A hybrid REST library for the frontend and backend.",
   "main": "dist/index.js",
   "author": "Frederick Gnodtke",

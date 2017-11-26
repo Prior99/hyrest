@@ -6,6 +6,7 @@ import { Converter } from "./converters";
 export interface ValidationOptions<T> {
     converter?: Converter<T>;
     readonly validators: Validator<T>[];
+    validatorFactory?: (ctx: any) => Validator<T>[];
 }
 
 export interface Schema {
@@ -117,7 +118,9 @@ export interface FullValidator<T> {
     (input: any): Processed<T> | Promise<Processed<T>>;
     (target: Object, propertyKey: string | symbol, index: number): void;
     validate: (...validators: Validator<T>[]) => FullValidator<T>;
+    validateCtx: (ctx: any) => Validator<T>[];
     validators: Validator<T>[];
+    validatorFactory: (ctx: any) => Validator<T>[];
 }
 
 /**
@@ -134,14 +137,20 @@ export function is<T>(converter: Converter<T>): FullValidator<T> {
             const options = getValidation(args[0], args[1], args[2]);
             options.converter = converter;
             options.validators.push(...fn.validators);
+            options.validatorFactory = fn.validationFactory;
             return;
         } else {
-            return processValue(args[0], converter, fn.validators);
+            const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : [];
+            return processValue(args[0], converter, [...fn.validators, ...factoryValidators]);
         }
     };
     fn.validators = [];
     fn.validate = (...validators: Validator<T>[]) => {
         fn.validators.push(...validators);
+        return fn;
+    };
+    fn.validateCtx = (factory: (ctx: any) => Validator<T>[]) => {
+        fn.validationFactory = factory;
         return fn;
     };
     return fn as FullValidator<T>;

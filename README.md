@@ -306,20 +306,20 @@ the REST endpoint and the server will perform the check on the database.
 
 ### What if I need to access "this" from my validator?
 
-All validators are bound to the context of the instance. It might look a bit weird, but it is
-possible to achieve this by using a static method instead:
+Another method called `validateCtx` exists, which takes a factory with the current `this` context
+passed in as the first argument.
 
 ```typescript
 import { controller, route, body, DataType } from "hyrest";
 
 @controller()
 class SomeController {
-    private static validator(value: string) {
+    private validator(value: string) {
         console.log(this); // Current instance on which the route was called.
         ...
     }
     @route("POST", "/validate/email")
-    public validateEmail(@body() @is(DataType.str).validate(SomeController.validator) value: string) {
+    public validateEmail(@body() @is(DataType.str).validateCtx(ctx => [ctx.validator]) value: string) {
         ...
     }
 }
