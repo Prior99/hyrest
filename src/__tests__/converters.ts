@@ -1,4 +1,6 @@
-import { int, float, str, obj } from "../converters";
+import { int, float, str, obj, arr } from "../converters";
+import { required, length } from "../validators";
+import { is, schema } from "../validation";
 
 [
     "10",
@@ -79,5 +81,36 @@ import { int, float, str, obj } from "../converters";
 ].forEach(input => {
     test(`obj handles "${input}", correctly`, () => {
         expect(obj(input)).toMatchSnapshot();
+    });
+});
+
+[
+    {
+        dataType: is(str).validate(length(1, 3)),
+        tests: [
+            ["hi", "yo", "1"],
+            ["hi", "yo", "1", ""],
+            [1, 2, 3, 4],
+            ["1", "2", 3],
+            [],
+        ],
+    },
+    {
+        dataType: is(obj).validate(schema({ value: is(int).validate(required) })),
+        tests: [
+            [ { value: 5 }, { value: 1 }, { value: 100} ],
+            [ {}, { value: 1 }, { value: 100} ],
+            [ { value: "test" } ],
+            [],
+            {},
+            null, //tslint:disable-line
+            undefined,
+        ],
+    },
+].forEach(({ dataType, tests }) => {
+    tests.forEach(value => {
+        test("arr with a specific datatype and input detects it as expected", async () => {
+            expect(await arr(dataType)(value)).toMatchSnapshot();
+        });
     });
 });

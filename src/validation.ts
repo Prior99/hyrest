@@ -114,7 +114,7 @@ export function getValidation(target: Object, propertyKey: string | symbol, inde
 }
 
 export interface FullValidator<T> {
-    (input: any): T;
+    (input: any): Processed<T> | Promise<Processed<T>>;
     (target: Object, propertyKey: string | symbol, index: number): void;
     validate: (...validators: Validator<T>[]) => FullValidator<T>;
     validators: Validator<T>[];

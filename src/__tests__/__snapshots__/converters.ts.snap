@@ -1,5 +1,91 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`arr with a specific datatype and input detects it as expected 1`] = `
+Object {
+  "value": Array [
+    "hi",
+    "yo",
+    "1",
+  ],
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 2`] = `
+Object {
+  "error": "Array validation failed: String is shorter than 1.",
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 3`] = `
+Object {
+  "error": "Array validation failed: Not a valid string.",
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 4`] = `
+Object {
+  "error": "Array validation failed: Not a valid string.",
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 5`] = `
+Object {
+  "value": Array [],
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 6`] = `
+Object {
+  "value": Array [
+    Object {
+      "value": 5,
+    },
+    Object {
+      "value": 1,
+    },
+    Object {
+      "value": 100,
+    },
+  ],
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 7`] = `
+Object {
+  "error": "Array validation failed: Schema validation failed.",
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 8`] = `
+Object {
+  "error": "Array validation failed: Schema validation failed.",
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 9`] = `
+Object {
+  "value": Array [],
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 10`] = `
+Object {
+  "error": "Not an array.",
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 11`] = `
+Object {
+  "error": "Not an array.",
+}
+`;
+
+exports[`arr with a specific datatype and input detects it as expected 12`] = `
+Object {
+  "value": undefined,
+}
+`;
+
 exports[`float handles "" correctly 1`] = `
 Object {
   "error": "Not a valid float.",

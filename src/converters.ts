@@ -1,3 +1,5 @@
+import { FullValidator } from "./validation";
+
 export interface Converted<T> {
     error?: string;
     value?: T;
@@ -59,4 +61,22 @@ export function obj(value: any): Converted<Object> {
     if (typeof value === "undefined") { return { value }; }
     if (typeof value !== "object" || Array.isArray(value)) { return { error: "Not a valid object."}; }
     return { value };
+}
+
+/**
+ * Makes sure the given input is an array matching the given validation.
+ *
+ * @param fullValidator validator to apply to all elements in the array..
+ *
+ * @return The input if it was a matching array and an error otherwise.
+ */
+export function arr<T>(fullValidator: FullValidator<T>): Converter<T[]> {
+    return async (value: any) => {
+        if (typeof value === "undefined") { return { value }; }
+        if (!Array.isArray(value)) { return { error: "Not an array." }; }
+        const error = (await Promise.all(value.map(elem => fullValidator(elem))))
+                .find(result => result.errors.length > 0);
+        if (error) { return { error: `Array validation failed: ${error.errors[0]}` }; }
+        return { value };
+    };
 }

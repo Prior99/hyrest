@@ -1,5 +1,123 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`email detects "" as expected 1`] = `
+Object {
+  "error": "String is not a valid email.",
+}
+`;
+
+exports[`email detects "" as expected 2`] = `
+Object {
+  "error": "String is not a valid email.",
+}
+`;
+
+exports[`email detects "[object Object]" as expected 1`] = `
+Object {
+  "error": "String is not a valid email.",
+}
+`;
+
+exports[`email detects "9" as expected 1`] = `
+Object {
+  "error": "String is not a valid email.",
+}
+`;
+
+exports[`email detects "null" as expected 1`] = `
+Object {
+  "error": "String is not a valid email.",
+}
+`;
+
+exports[`email detects "test@" as expected 1`] = `
+Object {
+  "error": "String is not a valid email.",
+}
+`;
+
+exports[`email detects "test@example" as expected 1`] = `
+Object {
+  "error": "String is not a valid email.",
+}
+`;
+
+exports[`email detects "test@example.com" as expected 1`] = `Object {}`;
+
+exports[`email detects "undefined" as expected 1`] = `Object {}`;
+
+exports[`length detects "" as expected with [object Object] 1`] = `
+Object {
+  "error": "String is shorter than 5.",
+}
+`;
+
+exports[`length detects "" as expected with [object Object] 2`] = `
+Object {
+  "error": "String is shorter than 5.",
+}
+`;
+
+exports[`length detects "" as expected with [object Object] 3`] = `Object {}`;
+
+exports[`length detects "" as expected with [object Object] 4`] = `Object {}`;
+
+exports[`length detects "[object Object]" as expected with [object Object] 1`] = `Object {}`;
+
+exports[`length detects "1" as expected with [object Object] 1`] = `
+Object {
+  "error": "String is shorter than 5.",
+}
+`;
+
+exports[`length detects "1" as expected with [object Object] 2`] = `
+Object {
+  "error": "String is shorter than 5.",
+}
+`;
+
+exports[`length detects "1" as expected with [object Object] 3`] = `Object {}`;
+
+exports[`length detects "9" as expected with [object Object] 1`] = `Object {}`;
+
+exports[`length detects "longertext" as expected with [object Object] 1`] = `Object {}`;
+
+exports[`length detects "longertext" as expected with [object Object] 2`] = `Object {}`;
+
+exports[`length detects "null" as expected with [object Object] 1`] = `
+Object {
+  "error": "Cannot determine length of null.",
+}
+`;
+
+exports[`length detects "reallylongtextthatexceeds10" as expected with [object Object] 1`] = `
+Object {
+  "error": "String exceeds maximum length of 10.",
+}
+`;
+
+exports[`length detects "reallylongtextthatexceeds10" as expected with [object Object] 2`] = `
+Object {
+  "error": "String exceeds maximum length of 10.",
+}
+`;
+
+exports[`length detects "test" as expected with [object Object] 1`] = `
+Object {
+  "error": "String is shorter than 5.",
+}
+`;
+
+exports[`length detects "test" as expected with [object Object] 2`] = `
+Object {
+  "error": "String is shorter than 5.",
+}
+`;
+
+exports[`length detects "test" as expected with [object Object] 3`] = `Object {}`;
+
+exports[`length detects "undefined" as expected with [object Object] 1`] = `Object {}`;
+
 exports[`oneOf detects "" as invalid 1`] = `
 Object {
   "error": "Not one of (1, 2, 3, 5).",
@@ -106,21 +224,21 @@ exports[`oneOf detects "undefined" as invalid 1`] = `Object {}`;
 
 exports[`oneOf detects "undefined" as invalid 2`] = `Object {}`;
 
-exports[`required detects "" as exepcted 1`] = `Object {}`;
+exports[`required detects "" as expected 1`] = `Object {}`;
 
-exports[`required detects "" as exepcted 2`] = `Object {}`;
+exports[`required detects "" as expected 2`] = `Object {}`;
 
-exports[`required detects "[object Object]" as exepcted 1`] = `Object {}`;
+exports[`required detects "[object Object]" as expected 1`] = `Object {}`;
 
-exports[`required detects "9" as exepcted 1`] = `Object {}`;
+exports[`required detects "9" as expected 1`] = `Object {}`;
 
-exports[`required detects "null" as exepcted 1`] = `
+exports[`required detects "null" as expected 1`] = `
 Object {
   "error": "Missing required field.",
 }
 `;
 
-exports[`required detects "undefined" as exepcted 1`] = `
+exports[`required detects "undefined" as expected 1`] = `
 Object {
   "error": "Missing required field.",
 }
