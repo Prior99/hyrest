@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`marking properties on a nested structure 1`] = `
+Array [
+  Object {
+    "property": "b",
+    "target": A {},
+  },
+  Object {
+    "property": "restrictedA",
+    "target": B {},
+  },
+  Object {
+    "property": "d",
+    "target": C {},
+  },
+  Object {
+    "property": "a",
+    "target": A {},
+  },
+  Object {
+    "property": "permissiveA",
+    "target": B {},
+  },
+  Object {
+    "property": "c",
+    "target": C {},
+  },
+  Object {
+    "property": "bs",
+    "target": C {},
+  },
+]
+`;
+
+exports[`marking properties on a nested structure 2`] = `
+Array [
+  Object {
+    "property": "a",
+    "target": A {},
+  },
+  Object {
+    "property": "permissiveA",
+    "target": B {},
+  },
+  Object {
+    "property": "c",
+    "target": C {},
+  },
+  Object {
+    "property": "bs",
+    "target": C {},
+  },
+]
+`;
+
+exports[`marking properties on a nested structure with scopes and dumping them 1`] = `
+Object {
+  "bs": Array [
+    Object {
+      "permissiveA": Object {
+        "a": "test1",
+        "b": 2,
+      },
+      "restrictedA": Object {
+        "a": "test3",
+        "b": 4,
+      },
+    },
+    Object {
+      "permissiveA": Object {
+        "a": "test5",
+        "b": 6,
+      },
+      "restrictedA": Object {
+        "a": "test1",
+        "b": 2,
+      },
+    },
+  ],
+  "c": "test7",
+  "d": 42,
+}
+`;
+
+exports[`marking properties on a nested structure with scopes and dumping them 2`] = `
+Object {
+  "bs": Array [
+    Object {
+      "permissiveA": Object {
+        "a": "test1",
+      },
+    },
+    Object {
+      "permissiveA": Object {
+        "a": "test5",
+      },
+    },
+  ],
+  "c": "test7",
+}
+`;

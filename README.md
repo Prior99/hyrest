@@ -330,7 +330,7 @@ class SomeController {
 Use the `hyrest` middleware to connect your controllers to express:
 
 ```typescript
-import { hyrest } from "hyrest";
+import { hyrest } from "hyrest/dist/middleware";
 import * as Express from express;
 import * as BodyParser from "body-parser";
 import { UserController } from "./user-controller";
@@ -347,6 +347,8 @@ app.listen(3000);
 ```
 
 Everything else hapens magically.
+**The middleware needs to be directly imported from `dist/middleware` in order to keep the overall bundle
+independent from express.**
 
 ## Usage as client
 
@@ -376,6 +378,126 @@ await userController.createUser({
 });
 
 console.log(await gameController.listGames());
+```
+
+## Scopes
+
+Use `@scope` to define scopes in which particular fields of a class should be included.
+Scopes can include each other. In the example below, the scope **foreign** only includes the
+fields `username` and **owner** includes `password`, `email` and `username`.
+
+```typescript
+import { scope, createScope } from "hyrest";
+
+const foreign = createScope();
+const owner = createScope().include(foreign);
+const signup = createScope();
+
+class User {
+    @scope(owner, signup)
+    public password: string;
+
+    @scope(owner, signup)
+    public email: string;
+
+    @scope(foreign, signup)
+    public username: string;
+}
+```
+
+## Dumping
+
+The `dump` function will create a new object containing all keys which were marked with the specific
+scope.
+
+```typescript
+
+const user: User = ...;
+
+console.log(dump(owner, user));
+// {
+//     email: "test@example.com",
+//     username: "test",
+//     password: "12345678"
+// }
+console.log(dump(foreign, user));
+// {
+//      username: "test"
+// }
+```
+
+## Nested objects
+
+Often, objects will be nested and you will want to dump those nested objects. Scopes are valid
+across nested objects as well:
+
+```typescript
+import { scope } from "hyrest";
+
+const foreign = createScope();
+const owner = createScope().include(foreign);
+
+class User {
+    @scope(owner)
+    public password: string;
+
+    @scope(owner)
+    public email: string;
+
+    @scope(foreign)
+    public username: string;
+
+    @scope(foreign)
+    public games: Game[];
+}
+
+class Game {
+    @scope(owner)
+    public pricePayed: number;
+
+    @scope(foreign)
+    public name: string;
+
+    @scope(foreign)
+    public hoursPlayed: string;
+}
+```
+
+So if you call `dump` on a user, only the correctly scoped properties will be included:
+
+```typescript
+const user: User = ...;
+
+console.log(dump(owner, user));
+// {
+//    password: "12345678",
+//    email: "test@example.com",
+//    username: "test",
+//    games: [
+//        {
+//            pricePayed: 42.5,
+//            name: "Some game",
+//            hoursPlayed: 100,
+//        }
+//    ]
+//}
+console.log(dump(foreign, user));
+// {
+//    username: "test",
+//    games: [
+//        {
+//            name: "Some game",
+//            hoursPlayed: 100,
+//        }
+//    ]
+//}
+```
+
+You can call `dump` as described above or use the curried notation (`dump(scope)(instance)`).
+This is especially usefull for the use in higher order functions like `map`:
+
+```
+users.map(dump(owner))
 ```
 
 ## Contributing
