@@ -11,6 +11,38 @@ and call them from the frontend. When developing both server and client in the s
 or sharing a common library with all endpoints between the both, a call to a REST endoint
 is transparent, type-safe and as easy calling a method.
 
+## Table of contents
+
+ * [Hyrest](#hyrest)
+     * [Table of contents](#table-of-contents)
+     * [Routes and Controllers](#routes-and-controllers)
+         * [Controller configuration](#controller-configuration)
+             * [ControllerOptions.mode](#controlleroptionsmode)
+             * [ControllerOptions.throwOnError](#controlleroptionsthrowonerror)
+             * [ControllerOptions.errorHandler](#controlleroptionserrorhandler)
+             * [ControllerOptions.baseUrl](#controlleroptionsbaseurl)
+         * [Route configuration](#route-configuration)
+     * [Validation](#validation)
+         * [Parameters](#parameters)
+         * [Advanced Validation](#advanced-validation)
+         * [Schema Validation](#schema-validation)
+         * [What happens when Validation Fails?](#what-happens-when-validation-fails)
+         * [Custom Validators](#custom-validators)
+         * [How about validation against my database?](#how-about-validation-against-my-database)
+         * [How about validation against my database from the frontend?](#how-about-validation-against-my-database-from-the-frontend)
+         * [What if I need to access "this" from my validator?](#what-if-i-need-to-access-this-from-my-validator)
+     * [Usage as express middleware](#usage-as-express-middleware)
+     * [Usage as client](#usage-as-client)
+     * [Scopes](#scopes)
+         * [Dumping](#dumping)
+         * [Nested Objects](#nested-objects)
+     * [Contributing](#contributing)
+         * [Building](#building)
+         * [Running the tests with coverage](#running-the-tests-with-coverage)
+         * [Linting](#linting)
+         * [Starting the example](#starting-the-example)
+     * [Contributors](#contributors)
+
 ## Routes and Controllers
 
 Controllers bundle Routes. Routes can only be defined within controllers.
@@ -151,7 +183,7 @@ class GameController {
 When using an `@is` decorator with a datatype, the input is validated and automatically converted,
 so in the example above `count` is of type number.
 
-#### Advanced Validation
+### Advanced Validation
 
 In addition to validating the datatype and converting the input advanced validation can be
 performed:
@@ -175,7 +207,7 @@ class GameController {
 }
 ```
 
-#### Schema Validation
+### Schema Validation
 
 It is possible to perform schema validation of object using the same infrastructure as for
 parameters:
@@ -215,12 +247,12 @@ class UserControllre {
 }
 ```
 
-#### What happens when Validation Fails?
+### What happens when Validation Fails?
 
 When the validation fails a `422 UNPROCESSABLE ENTITY` is returned, containing a body with
 `{ message: "Error message." }`. Only the first error message will be returned.
 
-#### Custom Validators
+### Custom Validators
 
 Validators are not black magic. It is easy to define custom validators and converters.
 
@@ -270,7 +302,7 @@ function required<T>(value: T): Validation {
 }
 ```
 
-#### How about validation against my database?
+### How about validation against my database?
 
 This is not a problem. All validators can be `async` or return `Promise`s. This way, a validator
 might just as well perform a request against the database.
@@ -283,7 +315,7 @@ function emailAvailable(value: string): Validation {
 }
 ```
 
-#### How about validation against my database from the frontend?
+### How about validation against my database from the frontend?
 
 This is not a problem either:
 
@@ -405,7 +437,7 @@ class User {
 }
 ```
 
-## Dumping
+### Dumping
 
 The `dump` function will create a new object containing all keys which were marked with the specific
 scope.
@@ -426,7 +458,7 @@ console.log(dump(foreign, user));
 // }
 ```
 
-## Nested objects
+### Nested objects
 
 Often, objects will be nested and you will want to dump those nested objects. Scopes are valid
 across nested objects as well:
