@@ -128,7 +128,7 @@ export function scope(...scopes: Scope[]): MethodDecorator {
 }
 
 export function arrayOf<T>(clazz: Constructable<T>): MethodDecorator {
-    return function<T>(target: Object, property: string, descriptor?: TypedPropertyDescriptor<T>) {
+    return function<U>(target: Object, property: string, descriptor?: TypedPropertyDescriptor<U>) {
         Reflect.defineMetadata("scopes:construct", clazz, target, property);
     };
 }
