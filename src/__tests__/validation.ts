@@ -1,8 +1,8 @@
-import { is, schema } from "../validation";
+import { is, schema, getPropertyValidation } from "../validation";
 import { int, float, str, obj } from "../converters";
-import { oneOf } from "../validators";
+import { oneOf, required } from "../validators";
 
-test("@is", () => {
+test("@is as parameter decorator", () => {
     class TestController {
         public method(
                 @is(int) parameter1,
@@ -14,9 +14,29 @@ test("@is", () => {
 
     const controller = new TestController();
 
-    const converters = Reflect.getMetadata("api:route:validation", controller, "method");
+    const converters = Reflect.getMetadata("api:validation:parameters", controller, "method");
     expect(converters).toMatchSnapshot();
     expect(converters.get(0).converter("20")).toEqual({ value: 20 });
+});
+
+test("@is as property decorator", () => {
+    class TestController {
+        @is(str).validate(oneOf("a", "b"), required)
+        public test1: string;
+
+        @is(int).validate(oneOf(1, 2, 3), required)
+        public test2: number;
+    }
+
+    const controller = new TestController();
+
+    const converter1 = Reflect.getMetadata("api:validation:property", controller, "test1");
+    expect(converter1).toMatchSnapshot();
+    expect(converter1.converter("a")).toEqual({ value: "a" });
+    const converter2 = Reflect.getMetadata("api:validation:property", controller, "test2");
+    expect(converter2).toMatchSnapshot();
+    expect(converter2.converter("2")).toEqual({ value: 2 });
+    expect(getPropertyValidation(controller, "test2")).toEqual(converter2);
 });
 
 [

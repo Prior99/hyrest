@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`@is 1`] = `
+exports[`@is as parameter decorator 1`] = `
 Map {
   2 => Object {
     "converter": [Function],
@@ -19,5 +19,27 @@ Map {
     "validatorFactory": undefined,
     "validators": Array [],
   },
+}
+`;
+
+exports[`@is as property decorator 1`] = `
+Object {
+  "converter": [Function],
+  "validatorFactory": undefined,
+  "validators": Array [
+    [Function],
+    [Function],
+  ],
+}
+`;
+
+exports[`@is as property decorator 2`] = `
+Object {
+  "converter": [Function],
+  "validatorFactory": undefined,
+  "validators": Array [
+    [Function],
+    [Function],
+  ],
 }
 `;

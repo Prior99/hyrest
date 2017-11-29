@@ -71,24 +71,28 @@ export async function processValue<T>(
     return { value, errors };
 }
 
+type ValidationMap = Map<number, ValidationOptions<any>>;
+
 /**
  * Retrieves all the validators and the converter for a given parameter at index `index` on the method with name
  * `propertyKey` on the instance of a controller `target`.
  * This function is always guaranteed to return the options. If nothing was defined yet, a new metadata key with
  * an empty options object will be defined.
  *
- * @param target The target instance of a @controller decorated object on which a method's parameter should be
- *               looked up.
+ * @param target The target instance of an object on which a method's parameter should be looked up.
  * @param propertyKey The name of a method on `target` on which a parameter should be decorated.
- * @param index The index of the parameter to decorate.
+ * @param index The index of the parameter to decorate. This argument is optional. If spared, the validation is
+ *              appended to the property instead of the parameter.
  *
  * @return An options object to which new validators and a converter can be appended. Is always guaranteed to return
  *         an options object.
  */
-export function getValidation(target: Object, propertyKey: string | symbol, index: number): ValidationOptions<any> {
+export function getParameterValidation(
+    target: Object, propertyKey: string | symbol, index: number,
+): ValidationOptions<any> {
     // Try to retrieve the `Map` of options with the keys being the parameter index and the value being
     // an the options object.
-    const map: Map<number, ValidationOptions<any>> = Reflect.getMetadata("api:route:validation", target, propertyKey);
+    const map: ValidationMap = Reflect.getMetadata("api:validation:parameters", target, propertyKey);
 
     // If no map has been found then this function has never been called for this method before. A new map needs
     // to be created and an empty options object needs to be attached.
@@ -98,7 +102,7 @@ export function getValidation(target: Object, propertyKey: string | symbol, inde
         newMap.set(index, newOptions);
 
         // Define the new key on the reflection metadatas.
-        Reflect.defineMetadata("api:route:validation", newMap, target, propertyKey);
+        Reflect.defineMetadata("api:validation:parameters", newMap, target, propertyKey);
         return newOptions;
     }
 
@@ -109,6 +113,27 @@ export function getValidation(target: Object, propertyKey: string | symbol, inde
     if (!options) {
         const newOptions: ValidationOptions<any> = { validators: [] };
         map.set(index, newOptions);
+        return newOptions;
+    }
+    return options;
+}
+
+/**
+ * Returns the validation options defined on the specified property. This will always return an
+ * array. If no validations options had been defined previously, a new array is created into
+ * which new options can be added.
+ *
+ * @param target The target instance of an object on which the property is defined.
+ * @param propertyKey The name of a property on `target` which hould be decorated.
+ *
+ * @return An array of options objects to which new validators and a converter can be appended.
+ * Is always guaranteed to return an array.
+ */
+export function getPropertyValidation(target: Object, propertyKey: string): ValidationOptions<any> {
+    const options = Reflect.getMetadata("api:validation:property", target, propertyKey);
+    if (!options) {
+        const newOptions: ValidationOptions<any> = { validators: [] };
+        Reflect.defineMetadata("api:validation:property", newOptions, target, propertyKey);
         return newOptions;
     }
     return options;
@@ -133,15 +158,25 @@ export interface FullValidator<T> {
  */
 export function is<T>(converter: Converter<T>): FullValidator<T> {
     const fn: any = (...args: any[]) => {
-        if (args.length === 3) {
-            const options = getValidation(args[0], args[1], args[2]);
+        if (args.length !== 3) {
+            // Called as a function.
+            const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : []; //tslint:disable-line
+            return processValue(args[0], converter, [...fn.validators, ...factoryValidators]);
+        }
+        else if (typeof args[2] === "number") {
+            // Parameter decorator.
+            const options = getParameterValidation(args[0], args[1], args[2]);
             options.converter = converter;
             options.validators.push(...fn.validators);
             options.validatorFactory = fn.validationFactory;
             return;
         } else {
-            const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : []; //tslint:disable-line
-            return processValue(args[0], converter, [...fn.validators, ...factoryValidators]);
+            // Property decorator
+            const options = getPropertyValidation(args[0], args[1]);
+            options.converter = converter;
+            options.validators.push(...fn.validators);
+            options.validatorFactory = fn.validationFactory;
+            return;
         }
     };
     fn.validators = [];
