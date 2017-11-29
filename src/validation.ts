@@ -1,7 +1,8 @@
 import "reflect-metadata";
 
 import { Validator, Validation } from "./validators";
-import { Converter } from "./converters";
+import { schemaFrom } from "./schema-generator";
+import { Converter, arr, bool, str, float, obj } from "./converters";
 
 export interface ValidationOptions<T> {
     converter?: Converter<T>;
@@ -92,7 +93,7 @@ export function getParameterValidation(
 ): ValidationOptions<any> {
     // Try to retrieve the `Map` of options with the keys being the parameter index and the value being
     // an the options object.
-    const map: ValidationMap = Reflect.getMetadata("api:validation:parameters", target, propertyKey);
+    const map: ValidationMap = Reflect.getMetadata("validation:parameters", target, propertyKey);
 
     // If no map has been found then this function has never been called for this method before. A new map needs
     // to be created and an empty options object needs to be attached.
@@ -102,7 +103,7 @@ export function getParameterValidation(
         newMap.set(index, newOptions);
 
         // Define the new key on the reflection metadatas.
-        Reflect.defineMetadata("api:validation:parameters", newMap, target, propertyKey);
+        Reflect.defineMetadata("validation:parameters", newMap, target, propertyKey);
         return newOptions;
     }
 
@@ -130,13 +131,28 @@ export function getParameterValidation(
  * Is always guaranteed to return an array.
  */
 export function getPropertyValidation(target: Object, propertyKey: string): ValidationOptions<any> {
-    const options = Reflect.getMetadata("api:validation:property", target, propertyKey);
+    const options = Reflect.getMetadata("validation:property", target, propertyKey);
     if (!options) {
         const newOptions: ValidationOptions<any> = { validators: [] };
-        Reflect.defineMetadata("api:validation:property", newOptions, target, propertyKey);
+        Reflect.defineMetadata("validation:property", newOptions, target, propertyKey);
         return newOptions;
     }
     return options;
+}
+
+export interface ValidatedProperty {
+    readonly property: string;
+    readonly propertyType: Function;
+}
+
+export function getValidatedProperties(target: Object): ValidatedProperty[] {
+    const properties = Reflect.getMetadata("validation:properties", target);
+    if (!properties) {
+        const newProperties: ValidatedProperty[] = [];
+        Reflect.defineMetadata("validation:properties", newProperties, target);
+        return newProperties;
+    }
+    return properties;
 }
 
 export interface FullValidator<T> {
@@ -156,7 +172,7 @@ export interface FullValidator<T> {
  *
  * @return A decorator for a parameter in a @route method.
  */
-export function is<T>(converter: Converter<T>): FullValidator<T> {
+export function is<T>(converter?: Converter<T>): FullValidator<T> {
     const fn: any = (...args: any[]) => {
         if (args.length !== 3) {
             // Called as a function.
@@ -171,9 +187,17 @@ export function is<T>(converter: Converter<T>): FullValidator<T> {
             options.validatorFactory = fn.validationFactory;
             return;
         } else {
-            // Property decorator
+            const propertyType = Reflect.getMetadata("design:type", args[0], args[1]);
+            const arrayOfType = Reflect.getMetadata("arrayof", args[0], args[1]);
+            getValidatedProperties(args[0]).push({
+                property: args[1],
+                propertyType,
+            });
+            // Property decorator.
             const options = getPropertyValidation(args[0], args[1]);
-            options.converter = converter;
+            options.converter = typeof converter === "function" ?
+                converter :
+                inferConverter(propertyType, arrayOfType);
             options.validators.push(...fn.validators);
             options.validatorFactory = fn.validationFactory;
             return;
@@ -189,4 +213,35 @@ export function is<T>(converter: Converter<T>): FullValidator<T> {
         return fn;
     };
     return fn as FullValidator<T>;
+}
+
+/**
+ * Infers the needed converter based on the constructor type.
+ *
+ * @param ctor The constructor such as `Number` or `Object`.
+ *
+ * @return The corresponding converter.
+ */
+export function inferConverter(ctor: Function, arrayOfType?: Function): Converter<any> {
+    if (ctor === Number) {
+        return float;
+    }
+    if (ctor === String) {
+        return str;
+    }
+    if (ctor === Boolean) {
+        return bool;
+    }
+    if (ctor === Object) {
+        return obj;
+    }
+    if (ctor === Array) {
+        if (arrayOfType) {
+            return arr(is(inferConverter(arrayOfType)));
+        }
+        return arr();
+    }
+    if (ctor === Function) {
+        return schema(schemaFrom(ctor));
+    }
 }

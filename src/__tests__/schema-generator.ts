@@ -30,24 +30,25 @@ beforeEach(() => {
 
         @scope(scope1, scope2) @arrayOf(B) @is()
         public bs: _B[];
-
     }
 
     A = _A;
     B = _B;
 });
 
-test("the generated schema is the same as a manually defined schema", () => {
-    const schemaA = {
-        email: is(str).validate(email),
-        anInteger: is(int).validate(oneOf(1, 2, 3)),
-    };
-    let schemaB: any;
-    schemaB = {
-        a: is(obj).validate(schema(schemaA)),
-        as: is(arr(is(obj).validate(schema(schemaA)))),
-        bs: is(arr(is(obj).validate(schema(schemaB)))),
-    };
-    expect(schemaFrom(A)).toEqual(schemaA);
-    expect(schemaFrom(B)).toEqual(schemaB);
+[
+    {
+        a: { email: "test@example.com", anInteger: 8 },
+        bs: [
+            {
+                a: { email: "some@example.com" },
+                bs: [],
+                as: [ { email: "some@example.com", anInteger: 7 }, { email: "an@example.com"} ],
+            },
+        ],
+    },
+].forEach(input => {
+    test("the generated schema detects valid inputs as valid", async () => {
+        expect(await schema(schemaFrom(B))(input)).toEqual({});
+    });
 });

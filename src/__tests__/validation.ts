@@ -14,7 +14,7 @@ test("@is as parameter decorator", () => {
 
     const controller = new TestController();
 
-    const converters = Reflect.getMetadata("api:validation:parameters", controller, "method");
+    const converters = Reflect.getMetadata("validation:parameters", controller, "method");
     expect(converters).toMatchSnapshot();
     expect(converters.get(0).converter("20")).toEqual({ value: 20 });
 });
@@ -30,10 +30,10 @@ test("@is as property decorator", () => {
 
     const controller = new TestController();
 
-    const converter1 = Reflect.getMetadata("api:validation:property", controller, "test1");
+    const converter1 = Reflect.getMetadata("validation:property", controller, "test1");
     expect(converter1).toMatchSnapshot();
     expect(converter1.converter("a")).toEqual({ value: "a" });
-    const converter2 = Reflect.getMetadata("api:validation:property", controller, "test2");
+    const converter2 = Reflect.getMetadata("validation:property", controller, "test2");
     expect(converter2).toMatchSnapshot();
     expect(converter2.converter("2")).toEqual({ value: 2 });
     expect(getPropertyValidation(controller, "test2")).toEqual(converter2);

@@ -34,7 +34,7 @@ export function float(input: any): Converted<number> {
     if (typeof input === "undefined") { return { value: input }; }
     const value = parseFloat(input);
     if (isNaN(value)) { return { error: "Not a valid float." }; }
-    return { value} ;
+    return { value };
 }
 
 /**
@@ -70,13 +70,27 @@ export function obj(value: any): Converted<Object> {
  *
  * @return The input if it was a matching array and an error otherwise.
  */
-export function arr<T>(fullValidator: FullValidator<T>): Converter<T[]> {
+export function arr<T>(fullValidator?: FullValidator<T>): Converter<T[]> {
     return async (value: any) => {
         if (typeof value === "undefined") { return { value }; }
         if (!Array.isArray(value)) { return { error: "Not an array." }; }
+        if (!fullValidator) { return { value }; }
         const error = (await Promise.all(value.map(elem => fullValidator(elem))))
                 .find(result => result.errors.length > 0);
         if (error) { return { error: `Array validation failed: ${error.errors[0]}` }; }
         return { value };
     };
+}
+
+/**
+ * Makes sure the given input is a boolean.
+ *
+ * @param input The input to check.
+ *
+ * @return The boolean in `input` if it was a boolean and an error otherwise.
+ */
+export function bool(value: any): Converted<boolean> {
+    if (typeof value === "undefined") { return { value }; }
+    if (typeof value !== "boolean") { return { error: "Not a valid boolean." }; }
+    return { value };
 }

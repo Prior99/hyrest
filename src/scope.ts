@@ -129,7 +129,7 @@ export function scope(...scopes: Scope[]): MethodDecorator {
 
 export function arrayOf<T>(clazz: Constructable<T>): MethodDecorator {
     return function<U>(target: Object, property: string, descriptor?: TypedPropertyDescriptor<U>) {
-        Reflect.defineMetadata("scopes:construct", clazz, target, property);
+        Reflect.defineMetadata("arrayof", clazz, target, property);
     };
 }
 
@@ -191,7 +191,7 @@ export function populate<T>(populateScope: Scope, initialClass: Constructable<T>
             if (typeof dataValue === "undefined") {
                 return;
             }
-            const nextOverrideClass = Reflect.getMetadata("scopes:construct", target, property);
+            const nextOverrideClass = Reflect.getMetadata("arrayof", target, property);
             (instance as any)[property] = internalPopulate(dataValue, expectedType, nextOverrideClass);
         });
         return instance;

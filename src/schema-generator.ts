@@ -1,14 +1,14 @@
 import "reflect-metadata";
-import { Schema } from "./validation";
+import { Schema, getValidatedProperties, getPropertyValidation, is } from "./validation";
 import { Constructable } from "./types";
 
-export function validatable<T extends Constructable>(from: T): T {
-    console.log(Reflect.getMetadataKeys(from));
-    return from;
-}
-
 export function schemaFrom(from: Function): Schema {
-    console.log(Reflect.getMetadataKeys(from.prototype, "email"));
-    console.log(Object.getOwnPropertyNames(from));
-    return;
+    const properties = getValidatedProperties(from.prototype);
+    return properties.reduce((result, { property, propertyType }) => {
+        const options = getPropertyValidation(from.prototype, property);
+        (result as any)[property] = is(options.converter)
+            .validate(...options.validators)
+            .validateCtx(options.validatorFactory);
+        return result;
+    }, {});
 }
