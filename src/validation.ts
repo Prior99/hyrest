@@ -16,20 +16,28 @@ export interface Schema {
 
 export interface Processed<T> {
     value?: T;
+    nested?: Processed<any>;
     errors: string[];
 }
 
-async function validateSchema<T extends Object>(validationSchema: Schema, input: T): Promise<boolean> {
-    const result = await Promise.all(Object.keys(validationSchema).map(async key => {
+async function validateSchema<T extends Object>(validationSchema: Schema, input: T): Promise<Processed<T>> {
+    const result = {};
+    await Promise.all(Object.keys(validationSchema).map(async key => {
         const schemaValue = validationSchema[key];
         const inputValue = (input as any)[key];
-
         if (typeof schemaValue === "function") {
-            return (await schemaValue(inputValue)).errors.length === 0;
+            (result as any)[key] = await schemaValue(inputValue);
+            return;
         }
-
-        return await validateSchema(schemaValue, inputValue);
+        (result as any)[key] = await validateSchema(schemaValue, inputValue);
     }));
+    Object.keys(input).forEach(key => {
+        if (Object.keys(validateSchema).includes(key)) {
+            return;
+        }
+        // TODO: WIP: BETTER SCHEMA RETURN.
+    });
+
     const noAdditionalKeys = Object.keys(input).every(key => Object.keys(validationSchema).includes(key));
     return result.every(keyResult => keyResult) && noAdditionalKeys;
 }
