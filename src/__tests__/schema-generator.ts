@@ -10,6 +10,7 @@ let scope1, scope2: Scope;
 beforeEach(() => {
     scope1 = createScope();
     scope2 = createScope();
+
     class _A { //tslint:disable-line
         @scope(scope1)
         @is(str).validate(email)
@@ -21,17 +22,14 @@ beforeEach(() => {
     }
 
     class _B { //tslint:disable-line
-        @scope(scope1)
-        @is(obj).validate(schema(schemaFrom(A)))
-        public a: A;
+        @scope(scope1) @is()
+        public a: _A;
 
-        @scope(scope2) @arrayOf(A)
-        @is(arr).validate(schema(schemaFrom(A)))
-        public as: A[];
+        @scope(scope2) @arrayOf(A) @is()
+        public as: _A[];
 
-        @scope(scope1, scope2) @arrayOf(B)
-        @is(arr).validate(schema(schemaFrom(B)))
-        public bs: B[];
+        @scope(scope1, scope2) @arrayOf(B) @is()
+        public bs: _B[];
 
     }
 
@@ -40,16 +38,16 @@ beforeEach(() => {
 });
 
 test("the generated schema is the same as a manually defined schema", () => {
-    const schemaAScope1 = {
+    const schemaA = {
         email: is(str).validate(email),
         anInteger: is(int).validate(oneOf(1, 2, 3)),
     };
-    const schemaAScope2 = {
-        email: is(str).validate(email),
-        anInteger: is(int).validate(oneOf(1, 2, 3)),
+    let schemaB: any;
+    schemaB = {
+        a: is(obj).validate(schema(schemaA)),
+        as: is(arr(is(obj).validate(schema(schemaA)))),
+        bs: is(arr(is(obj).validate(schema(schemaB)))),
     };
-    let schemaBScope1: any;
-    schemaBScope1 = {
-        
-    };
+    expect(schemaFrom(A)).toEqual(schemaA);
+    expect(schemaFrom(B)).toEqual(schemaB);
 });
