@@ -1,7 +1,7 @@
 import { schemaFrom } from "../schema-generator";
 import { createScope, scope, arrayOf, Scope } from "../scope";
 import { is, schema } from "../validation";
-import { email, oneOf } from "../validators";
+import { email, oneOf, required } from "../validators";
 import { int, str, obj, arr } from "../converters";
 
 let A, B: Function;
@@ -13,7 +13,7 @@ beforeEach(() => {
 
     class _A { //tslint:disable-line
         @scope(scope1)
-        @is(str).validate(email)
+        @is(str).validate(email, required)
         public email: string;
 
         @scope(scope2)
@@ -22,7 +22,7 @@ beforeEach(() => {
     }
 
     class _B { //tslint:disable-line
-        @scope(scope1) @is()
+        @scope(scope1) @is().validate(required)
         public a: _A;
 
         @scope(scope2) @arrayOf(A) @is()
@@ -38,17 +38,59 @@ beforeEach(() => {
 
 [
     {
-        a: { email: "test@example.com", anInteger: 8 },
+        a: { email: "test@example.com", anInteger: 1 },
         bs: [
             {
                 a: { email: "some@example.com" },
                 bs: [],
-                as: [ { email: "some@example.com", anInteger: 7 }, { email: "an@example.com"} ],
+                as: [ { email: "some@example.com", anInteger: 3 }, { email: "an@example.com" } ],
             },
         ],
     },
-].forEach(input => {
-    test("the generated schema detects valid inputs as valid", async () => {
+    {
+        a: { email: "foo@example.com" },
+        bs: [],
+    },
+].forEach((input, index) => {
+    test(`the generated schema detects valid inputs as valid (${index})`, async () => {
         expect(await schema(schemaFrom(B))(input)).toEqual({});
+    });
+});
+
+[
+    {},
+    {
+        bs: [],
+    },
+    {
+        a: { email: "invalid-email" },
+    },
+    {
+        a: { email: "some@exmaple.com", anInteger: 3.141 },
+    },
+    {
+        a: { email: "some@exmaple.com", anInteger: 2 },
+        bs: {
+            a: { email: "some@exmaple.com", anInteger: 3 },
+            bs: [],
+        },
+    },
+    {
+        a: { email: "some@exmaple.com", anInteger: 3 },
+        bs: [
+            {
+                a: { email: "some@exmaple.com", anInteger: 3 },
+                bs: [],
+            },
+        ],
+        as: [
+            {},
+        ],
+    },
+].forEach((input, index) => {
+    test(`the generated schema detects invalid inputs as invalid (${index})`, async () => {
+        expect(await schema(schemaFrom(B))(input)).toEqual({
+            error: "Schema validation failed.",
+        });
     });
 });

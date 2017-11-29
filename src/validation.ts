@@ -241,7 +241,5 @@ export function inferConverter(ctor: Function, arrayOfType?: Function): Converte
         }
         return arr();
     }
-    if (ctor === Function) {
-        return schema(schemaFrom(ctor));
-    }
+    return schema(schemaFrom(ctor));
 }
