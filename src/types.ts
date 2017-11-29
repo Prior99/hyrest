@@ -42,3 +42,7 @@ export class ApiError extends Error {
         this.answer = answer;
     }
 }
+
+export type Constructable<T> = {
+    new(): T;
+};

@@ -36,6 +36,9 @@ is transparent, type-safe and as easy calling a method.
      * [Scopes](#scopes)
          * [Dumping](#dumping)
          * [Nested Objects](#nested-objects)
+         * [Populating](#populating)
+             * [Populating Arrays](#populating-arrays)
+             * [A word on validation](#a-word-on-validation)
      * [Contributing](#contributing)
          * [Building](#building)
          * [Running the tests with coverage](#running-the-tests-with-coverage)
@@ -464,7 +467,7 @@ Often, objects will be nested and you will want to dump those nested objects. Sc
 across nested objects as well:
 
 ```typescript
-import { scope } from "hyrest";
+import { scope, createScope } from "hyrest";
 
 const foreign = createScope();
 const owner = createScope().include(foreign);
@@ -528,9 +531,113 @@ console.log(dump(foreign, user));
 You can call `dump` as described above or use the curried notation (`dump(scope)(instance)`).
 This is especially usefull for the use in higher order functions like `map`:
 
-```
+```typescript
 users.map(dump(owner))
 ```
+
+### Populating
+
+It is possible to populate a structure of classes with a given input using the defined scopes:
+
+```typescript
+import { scope, createScope } from "hyrest";
+
+const signup = createScope();
+const world = createScope();
+
+class Pet {
+    @scope(world)
+    public id: string;
+
+    @scope(signup)
+    public name: string;
+
+    public format() {
+        return `Pet name is: ${this.name}`;
+    }
+}
+
+class User {
+    @scope(world)
+    public id: string;
+
+    @scope(signup, world)
+    public name: string;
+
+    @scope(signup, world)
+    public email: string;
+
+    @scope(signup, world)
+    public password: string;
+
+    @scope(signup, world)
+    public pet: Pet;
+
+    public format() {
+        return `User name is: ${this.name}`;
+    }
+
+    public passwordLength() {
+        return this.password.length;
+    }
+}
+```
+
+The structure above can be populated with any matching structure. Only the keys defined in the
+specified scope will be taken into account. Actual instances of the defined classes will
+be created.
+
+```typescript
+import { populate } from "hyrest";
+const input = {
+    name: "Lorem Ipsum",
+    email: "test@example.com",
+    password: "12345678",
+    pet: {
+        name: "pete"
+    }
+};
+
+const user: User = populate(signup, User, input);
+console.log(user.constructor); // Will be `User`
+console.log(user.pet.constructor); // Will be `Pet`
+console.log(user.format()); // "User name is: Lorem Ipsum"
+console.log(user.pet.format()); // "Pet name is: Pete"
+```
+
+Of course, populate also has a curried version available for easy use in higher order functions:
+
+```typescript
+populate(signup, User)(input)
+```
+
+#### Populating Arrays
+
+Arrays can also be populated, but a special `arrayOf` decorator is necessary to infer the type of
+the array's elements:
+
+```typescript
+import { scope, arrayOf } from "hyrest";
+
+class User {
+    @scope(signup) @arrayOf(User)
+    public friends: User[];
+
+    @scope(signup) @arrayOf(Pet)
+    public pets: Pet[];
+
+    @scope(signup) @arrayOf(String)
+    public favoriteColors: string[];
+}
+```
+
+Otherwise an `InvariantError` will be thrown.
+
+#### A word on validation
+
+The `populate` function is not intended to be used for validation and does not feature a
+validation layer of any kind. If a class expects property `a` to be a `string`, but a `number`
+is provided, nothing will break. Take a look at [Validation](#validation).
 
 ## Contributing
 

@@ -1,5 +1,7 @@
 import "reflect-metadata";
-import * as uuid from "uuid";
+
+import { Constructable } from "./types";
+import * as invariant from "invariant";
 
 export interface PropertyMeta {
     /**
@@ -10,18 +12,15 @@ export interface PropertyMeta {
      * The name of the property that was decorated.
      */
     readonly property: string;
+    /**
+     * The expected type for this property.
+     */
+    readonly expectedType: any | any[];
 }
 
 export class Scope {
-    public identifier: string;
-
     private included: Scope[] = [];
     private ownProperties: PropertyMeta[] = [];
-
-    constructor(name?: string) {
-        // TODO: Check for duplicates!
-        this.identifier = typeof name === "string" ? name : uuid.v4();
-    }
 
     /**
      * Include all properties from another scope in this scope:
@@ -64,7 +63,7 @@ export class Scope {
         return this.included.reduce((result, included) => {
             result.push(...included.properties);
             return result;
-        }, this.ownProperties);
+        }, [ ...this.ownProperties ]);
     }
 
     /**
@@ -100,14 +99,12 @@ export class Scope {
 }
 
 /**
- * Create a new scope with an optional name.
- *
- * @param name An optional unique identifier for this scope. If not provided, a uuid will be used.
+ * Create a new scope.
  *
  * @return A new scope.
  */
-export function createScope(name?: string) {
-    return new Scope(name);
+export function createScope() {
+    return new Scope();
 }
 
 /**
@@ -123,9 +120,16 @@ export function createScope(name?: string) {
  */
 export function scope(...scopes: Scope[]): MethodDecorator {
     return function<T>(target: Object, property: string, descriptor?: TypedPropertyDescriptor<T>) {
+        const expectedType = Reflect.getMetadata("design:type", target, property);
         scopes.forEach(decoratedScope => decoratedScope.registerProperty({
-            target, property,
+            target, property, expectedType,
         }));
+    };
+}
+
+export function arrayOf<T>(clazz: Constructable<T>): MethodDecorator {
+    return function<T>(target: Object, property: string, descriptor?: TypedPropertyDescriptor<T>) {
+        Reflect.defineMetadata("scopes:construct", clazz, target, property);
     };
 }
 
@@ -163,4 +167,37 @@ export function dump<T>(dumpScope: Scope, arg2?: T): T | ((instance: T) => T) {
         return internalDump(arg2);
     }
     return internalDump;
+}
+
+export function populate<T>(populateScope: Scope, initialClass: Constructable<T>): (data: any) => T;
+export function populate<T>(populateScope: Scope, initialClass: Constructable<T>, data: any): T;
+export function populate<T>(populateScope: Scope, initialClass: Constructable<T>, arg3?: any): T | ((data: T) => T) {
+    function internalPopulate<U extends any | any[]>(
+        data: any, thisClass: any = initialClass, arrayClass?: Constructable<any>,
+    ): U {
+        if (thisClass === Array) {
+            invariant(Array.isArray(data), "Structure does not match. Array expected.");
+            invariant(typeof arrayClass === "function", "Structure does not match. Array expected.");
+            return (data as any[]).map(element => internalPopulate(element, arrayClass)) as any as U;
+        }
+        if (thisClass === Number || thisClass === Boolean || thisClass === String || thisClass === Object) {
+            return data;
+        }
+        invariant(typeof data === "object" && !Array.isArray(data), "Structure does not match. Object expected.");
+        const instance = new thisClass();
+        const propertiesForClass = populateScope.propertiesForClass(thisClass);
+        propertiesForClass.forEach(({ property, target, expectedType }) => {
+            const dataValue = (data as any)[property];
+            if (typeof dataValue === "undefined") {
+                return;
+            }
+            const nextOverrideClass = Reflect.getMetadata("scopes:construct", target, property);
+            (instance as any)[property] = internalPopulate(dataValue, expectedType, nextOverrideClass);
+        });
+        return instance;
+    }
+    if (typeof arg3 !== "undefined") {
+        return internalPopulate(arg3);
+    }
+    return internalPopulate;
 }

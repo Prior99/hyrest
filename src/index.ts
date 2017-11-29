@@ -8,7 +8,7 @@ export { configureController } from "./configure";
 export { ApiError } from "./types";
 export * from "./validators";
 export { is, schema } from "./validation";
-export { dump, createScope, scope } from "./scope";
+export { dump, createScope, scope, Scope, populate, arrayOf } from "./scope";
 
 import * as dataType from "./converters";
 export const DataType = dataType;

@@ -3,32 +3,39 @@
 exports[`marking properties on a nested structure 1`] = `
 Array [
   Object {
+    "expectedType": [Function],
     "property": "b",
-    "target": A {},
+    "target": _A {},
   },
   Object {
+    "expectedType": [Function],
     "property": "restrictedA",
-    "target": B {},
+    "target": _B {},
   },
   Object {
+    "expectedType": [Function],
     "property": "d",
-    "target": C {},
+    "target": _C {},
   },
   Object {
+    "expectedType": [Function],
     "property": "a",
-    "target": A {},
+    "target": _A {},
   },
   Object {
+    "expectedType": [Function],
     "property": "permissiveA",
-    "target": B {},
+    "target": _B {},
   },
   Object {
+    "expectedType": [Function],
     "property": "c",
-    "target": C {},
+    "target": _C {},
   },
   Object {
+    "expectedType": [Function],
     "property": "bs",
-    "target": C {},
+    "target": _C {},
   },
 ]
 `;
@@ -36,20 +43,24 @@ Array [
 exports[`marking properties on a nested structure 2`] = `
 Array [
   Object {
+    "expectedType": [Function],
     "property": "a",
-    "target": A {},
+    "target": _A {},
   },
   Object {
+    "expectedType": [Function],
     "property": "permissiveA",
-    "target": B {},
+    "target": _B {},
   },
   Object {
+    "expectedType": [Function],
     "property": "c",
-    "target": C {},
+    "target": _C {},
   },
   Object {
+    "expectedType": [Function],
     "property": "bs",
-    "target": C {},
+    "target": _C {},
   },
 ]
 `;
@@ -98,5 +109,230 @@ Object {
     },
   ],
   "c": "test7",
+}
+`;
+
+exports[`populating a marked and nested structure 1`] = `
+_C {
+  "bs": Array [
+    _B {
+      "permissiveA": _A {
+        "a": "lorem",
+        "b": 30,
+      },
+      "restrictedA": _A {
+        "a": "ipsum",
+        "b": 40,
+      },
+    },
+    _B {
+      "permissiveA": _A {
+        "a": "dolor",
+        "b": 50,
+      },
+      "restrictedA": _A {
+        "a": "sit",
+        "b": 60,
+      },
+    },
+    _B {},
+  ],
+  "c": "foo",
+  "d": 42,
+}
+`;
+
+exports[`populating a marked and nested structure 2`] = `
+_C {
+  "bs": Array [
+    _B {
+      "permissiveA": _A {
+        "a": "lorem",
+      },
+    },
+    _B {
+      "permissiveA": _A {
+        "a": "dolor",
+      },
+    },
+    _B {},
+  ],
+  "c": "foo",
+}
+`;
+
+exports[`populating a structure with an (un-)typed array 1`] = `
+Typed {
+  "test": Array [
+    "a",
+    "b",
+    "c",
+  ],
+}
+`;
+
+exports[`populating a structure with an \`any\` or \`interface\` type 1`] = `
+Class1 {
+  "test1": "a",
+  "test2": Object {},
+}
+`;
+
+exports[`populating a structure with an \`any\` or \`interface\` type 2`] = `
+Class1 {
+  "test1": 1,
+  "test2": Object {
+    "test": false,
+  },
+}
+`;
+
+exports[`populating a structure with an \`any\` or \`interface\` type 3`] = `
+Class1 {
+  "test1": Array [],
+  "test2": Array [],
+}
+`;
+
+exports[`populating a structure with an \`any\` or \`interface\` type 4`] = `
+Class1 {
+  "test1": false,
+  "test2": Object {
+    "test": true,
+  },
+}
+`;
+
+exports[`populating a structure with an \`any\` or \`interface\` type 5`] = `
+Class1 {
+  "test1": Object {},
+}
+`;
+
+exports[`populating and dumping a circular structure 1`] = `
+Circular {
+  "circular1": Circular {
+    "circular1": Circular {
+      "property1": "c",
+    },
+    "circularArray": Array [
+      Circular {
+        "circular1": Circular {},
+        "circularArray": Array [],
+        "property1": "a",
+      },
+    ],
+    "property1": "e",
+  },
+  "circularArray": Array [
+    Circular {
+      "circular1": Circular {},
+      "circularArray": Array [
+        Circular {
+          "property1": "ipsum",
+        },
+      ],
+      "property1": "baz",
+    },
+  ],
+  "property1": "foo",
+}
+`;
+
+exports[`populating and dumping a circular structure 2`] = `
+Circular {
+  "circular2": Circular {
+    "circular2": Circular {
+      "circular2": Circular {},
+    },
+    "circularArray": Array [],
+    "property2": "sit",
+  },
+  "circularArray": Array [
+    Circular {
+      "circular2": Circular {},
+      "circularArray": Array [
+        Circular {},
+      ],
+      "property2": "dolor",
+    },
+  ],
+  "property2": "bar",
+}
+`;
+
+exports[`populating and dumping a circular structure 3`] = `
+Object {
+  "circular1": Object {
+    "circular1": Object {
+      "property1": "c",
+    },
+    "circularArray": Array [
+      Object {
+        "circular1": Object {},
+        "circularArray": Array [],
+        "property1": "a",
+      },
+    ],
+    "property1": "e",
+  },
+  "circularArray": Array [
+    Object {
+      "circular1": Object {},
+      "circularArray": Array [
+        Object {
+          "property1": "ipsum",
+        },
+      ],
+      "property1": "baz",
+    },
+  ],
+  "property1": "foo",
+}
+`;
+
+exports[`populating and dumping a circular structure 4`] = `
+Object {
+  "circularArray": Array [
+    Object {
+      "circularArray": Array [
+        Object {},
+      ],
+    },
+  ],
+}
+`;
+
+exports[`populating and dumping a circular structure 5`] = `
+Object {
+  "circularArray": Array [
+    Object {
+      "circularArray": Array [
+        Object {},
+      ],
+    },
+  ],
+}
+`;
+
+exports[`populating and dumping a circular structure 6`] = `
+Object {
+  "circular2": Object {
+    "circular2": Object {
+      "circular2": Object {},
+    },
+    "circularArray": Array [],
+    "property2": "sit",
+  },
+  "circularArray": Array [
+    Object {
+      "circular2": Object {},
+      "circularArray": Array [
+        Object {},
+      ],
+      "property2": "dolor",
+    },
+  ],
+  "property2": "bar",
 }
 `;
