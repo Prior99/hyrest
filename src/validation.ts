@@ -8,6 +8,7 @@ export interface ValidationOptions<T> {
     converter?: Converter<T>;
     readonly validators: Validator<T>[];
     validatorFactory?: (ctx: any) => Validator<T>[];
+    validationSchema: Schema;
 }
 
 export interface Schema {
@@ -59,16 +60,6 @@ export interface SchemaValidator<T> {
     (value: T): Promise<Processed<T>>;
 }
 
-export function schema<T extends Object>(validationSchema: Schema): SchemaValidator<T> {
-    return async (value: T) => {
-        if (typeof value === "undefined") {
-            return {};
-        }
-        const result = await validateSchema(validationSchema, value);
-        return result;
-    };
-}
-
 /**
  * Fully processes an unprocessed input value. This means conversion and validation of the value.
  *
@@ -79,7 +70,7 @@ export function schema<T extends Object>(validationSchema: Schema): SchemaValida
  * @return An object containing all errors and the converted value.
  */
 export async function processValue<T>(
-        input: any, converter: Converter<T>, validators: Validator<T>[]): Promise<Processed<T>> {
+        input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema): Promise<Processed<T>> {
     const { error, value } = converter ?
             await converter(input) :
             { value: input, error: undefined };
@@ -95,6 +86,10 @@ export async function processValue<T>(
             }
             return result;
         }, []);
+    if (schema) {
+        const schemaResult = await validateSchema(schema, input);
+        if ,
+    }
     if (errors.length > 0) {
         return { errors };
     }
@@ -192,6 +187,7 @@ export interface FullValidator<T> {
     validateCtx: (factory: (ctx: any) => Validator<T>[]) => FullValidator<T>;
     validators: Validator<T>[];
     validatorFactory: (ctx: any) => Validator<T>[];
+    validationSchema: Schema;
 }
 
 function isCustomClass(propertyType: Function) {
@@ -215,7 +211,7 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
         if (args.length !== 3) {
             // Called as a function.
             const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : []; //tslint:disable-line
-            return processValue(args[0], converter, [...fn.validators, ...factoryValidators]);
+            return processValue(args[0], converter, [...fn.validators, ...factoryValidators], fn.validationSchema);
         }
         else if (typeof args[2] === "number") {
             // Parameter decorator.
@@ -223,6 +219,7 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
             options.converter = converter;
             options.validators.push(...fn.validators);
             options.validatorFactory = fn.validationFactory;
+            options.validationSchema = fn.validationSchema;
             return;
         } else {
             const propertyType = Reflect.getMetadata("design:type", args[0], args[1]);
@@ -236,8 +233,9 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
             options.converter = typeof converter === "function" ?
                 converter :
                 inferConverter(propertyType, arrayOfType);
-            if (isCustomClass(propertyType)) {
-                options.validators.push(schema(schemaFrom(propertyType)));
+            options.validationSchema = fn.validationSchema;
+            if (isCustomClass(propertyType) && !options.validationSchema) {
+                options.validationSchema = schemaFrom(propertyType);
             }
             options.validators.push(...fn.validators);
             options.validatorFactory = fn.validationFactory;
@@ -251,6 +249,10 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
     };
     fn.validateCtx = (factory: (ctx: any) => Validator<T>[]) => {
         fn.validationFactory = factory;
+        return fn;
+    };
+    fn.schema = (schema: Schema) => {
+        fn.validationSchema = schema;
         return fn;
     };
     return fn as FullValidator<T>;
