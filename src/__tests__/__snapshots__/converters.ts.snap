@@ -52,13 +52,25 @@ Object {
 
 exports[`arr with a specific datatype and input detects it as expected 7`] = `
 Object {
-  "error": "Array validation failed: Schema validation failed.",
+  "value": Array [
+    Object {},
+    Object {
+      "value": 1,
+    },
+    Object {
+      "value": 100,
+    },
+  ],
 }
 `;
 
 exports[`arr with a specific datatype and input detects it as expected 8`] = `
 Object {
-  "error": "Array validation failed: Schema validation failed.",
+  "value": Array [
+    Object {
+      "value": "test",
+    },
+  ],
 }
 `;
 

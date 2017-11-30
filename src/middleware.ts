@@ -11,7 +11,7 @@ import {
     getQueryParameters,
     getUrlParameters,
 } from "./parameters";
-import { getParameterValidation, processValue } from "./validation";
+import { getParameterValidation, processValue, hasErrors, Processed } from "./validation";
 import { Converter } from "./converters";
 
 /**
@@ -91,20 +91,43 @@ export function hyrest(...controllerObjects: any[]): Router {
             let data: any;
 
             // Validate and convert all values,
-            const processed = await Promise.all(args.map((arg, index) => {
+            const processed: Processed<any>[] = [];
+            const queryErrors: { [key: string]: Processed<any> } = {};
+            let bodyError: Processed<any>;
+            const paramErrors: { [key: string]: Processed<any> } = {};
+            let errorEncountered = false;
+            await Promise.all(args.map(async (arg, index) => {
                 const options = getParameterValidation(route.target, route.property, index);
                 const factoryValidators = options.validatorFactory ? options.validatorFactory(controllerObject) : [];
                 const validators = [ ...options.validators, ...factoryValidators ];
-                return processValue(arg, options.converter, validators);
+                const validationResult = await processValue(arg, options.converter, validators);
+                processed.push(validationResult);
+                if (!hasErrors(validationResult)) {
+                    return;
+                }
+                errorEncountered = true;
+                if (bodyParameters.find(param => param.index === index)) {
+                    bodyError = validationResult;
+                    return;
+                }
+                const queryParameter = queryParameters.find(param => param.index === index);
+                if (queryParameter) {
+                    queryErrors[queryParameter.name] = validationResult;
+                    return;
+                }
+                const urlParameter = urlParameters.find(param => param.index === index);
+                if (urlParameter) {
+                    paramErrors[urlParameter.name] = validationResult;
+                    return;
+                }
             }));
 
-            // If an error occured, answer with `unprocessableEntity`.
-            const errors = processed.reduce((result, current) => {
-                result.push(...current.errors);
-                return result;
-            }, []);
-            if (errors.length > 0) {
-                data = unprocessableEntity(errors[0]);
+            if (errorEncountered) {
+                data = unprocessableEntity({
+                    url: Object.keys(paramErrors).length > 0 ? paramErrors : undefined,
+                    body: bodyError,
+                    query: Object.keys(queryErrors).length > 0 ? queryErrors : undefined,
+                }, "Validation failed.");
             } else {
                 try {
                     data = await routeMethod.apply(controllerObject, processed.map(result => result.value));

@@ -1,4 +1,4 @@
-import { is, schema, getPropertyValidation } from "../validation";
+import { is, schema, getPropertyValidation, hasErrors } from "../validation";
 import { int, float, str, obj } from "../converters";
 import { oneOf, required } from "../validators";
 
@@ -76,6 +76,7 @@ test("@is as property decorator", () => {
             b: {
                 c: is(int),
             },
+            d: is(int).validate(required),
         },
         valid: [
             {
@@ -83,6 +84,7 @@ test("@is as property decorator", () => {
                 b: {
                     c: 19,
                 },
+                d: 8,
             },
             undefined,
         ],
@@ -106,7 +108,8 @@ test("@is as property decorator", () => {
     });
     invalid.forEach(input => {
         test("The test schema detects a invalid input as invalid", async () => {
-            expect(await schema(testSchema)(input)).toEqual({ error: "Schema validation failed." });
+            expect(await schema(testSchema)(input)).toMatchSnapshot();
+            expect(hasErrors(await schema(testSchema)(input))).toBe(true);
         });
     });
 });

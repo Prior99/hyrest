@@ -143,8 +143,13 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
         }
 
         @route("POST", "/user/:id")
-        public postTest(@is(schema({})) @body() search: user) {
+        public postTest(@is(schema({})) @body() user: User) {
             return ok("Everything is okay.");
+        }
+
+        @route("POST", "/echo")
+        public postTest(@is(schema({ email: is(str).validate(email) })) @body() user: User) {
+            return ok(user, "Everything is okay.");
         }
     }
 
@@ -157,7 +162,11 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
         .expect(422)
         .set("content-type", "application/json");
     expect(responseA.text).toBe(JSON.stringify({
-        message: "Not a valid integer.",
+        data: {
+            url: { id: { errors: ["Not a valid integer."] } },
+            query: { search: { errors: ["Not a valid float."] } },
+        },
+        message: "Validation failed.",
     }));
 
     const responseB = await request(http)
@@ -165,7 +174,10 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
         .expect(422)
         .set("content-type", "application/json");
     expect(responseB.text).toBe(JSON.stringify({
-        message: "Missing required field.",
+        data: {
+            query: { search: { errors: ["Missing required field."] } },
+        },
+        message: "Validation failed.",
     }));
 
     const responseC = await request(http)
@@ -174,6 +186,34 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
         .set("content-type", "application/json")
         .send({});
     expect(responseC.text).toBe(JSON.stringify({
+        message: "Everything is okay.",
+    }));
+
+    const responseD = await request(http)
+        .post("/user/27")
+        .expect(422)
+        .set("content-type", "application/json")
+        .send({ foo: "bar" });
+    expect(responseD.text).toBe(JSON.stringify({
+        data: {
+            body: {
+                value: {
+                    foo: { errors: ["Unexpected key."] },
+                },
+            },
+        },
+        message: "Validation failed.",
+    }));
+
+    const responseE = await request(http)
+        .post("/echo")
+        .expect(200)
+        .set("content-type", "application/json")
+        .send({ email: "some@example.com" });
+    expect(responseE.text).toBe(JSON.stringify({
+        data: {
+            email: "some@example.com",
+        },
         message: "Everything is okay.",
     }));
 });

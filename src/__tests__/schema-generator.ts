@@ -1,6 +1,6 @@
 import { schemaFrom } from "../schema-generator";
 import { createScope, scope, arrayOf, Scope } from "../scope";
-import { is, schema } from "../validation";
+import { is, schema, hasErrors } from "../validation";
 import { email, oneOf, required } from "../validators";
 import { int, str, obj, arr } from "../converters";
 
@@ -53,6 +53,10 @@ beforeEach(() => {
     },
 ].forEach((input, index) => {
     test(`the generated schema detects valid inputs as valid (${index})`, async () => {
+        console.log("-----")
+        console.log(schemaFrom(B))
+        console.log(schemaFrom(B).a)
+        console.log(schemaFrom(B).as)
         expect(await schema(schemaFrom(B))(input)).toEqual({});
     });
 });
@@ -89,8 +93,8 @@ beforeEach(() => {
     },
 ].forEach((input, index) => {
     test(`the generated schema detects invalid inputs as invalid (${index})`, async () => {
-        expect(await schema(schemaFrom(B))(input)).toEqual({
-            error: "Schema validation failed.",
-        });
+        const result = await schema(schemaFrom(B))(input);
+        expect(hasErrors(result)).toBe(true);
+        expect(result).toMatchSnapshot();
     });
 });

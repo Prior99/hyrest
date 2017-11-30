@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`the generated schema detects invalid inputs as invalid (0) 1`] = `
+Object {
+  "value": Object {
+    "a": Object {
+      "errors": Array [
+        "Missing required field.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`the generated schema detects invalid inputs as invalid (1) 1`] = `
+Object {
+  "value": Object {
+    "a": Object {
+      "errors": Array [
+        "Missing required field.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`the generated schema detects invalid inputs as invalid (4) 1`] = `
+Object {
+  "value": Object {
+    "bs": Object {
+      "errors": Array [
+        "Not an array.",
+      ],
+    },
+  },
+}
+`;

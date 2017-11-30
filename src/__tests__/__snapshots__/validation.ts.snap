@@ -43,3 +43,58 @@ Object {
   ],
 }
 `;
+
+exports[`The test schema detects a invalid input as invalid 1`] = `
+Object {
+  "value": Object {
+    "a": Object {
+      "errors": Array [
+        "Not a valid integer.",
+      ],
+    },
+    "d": Object {
+      "errors": Array [
+        "Unexpected key.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`The test schema detects a invalid input as invalid 2`] = `
+Object {
+  "value": Object {
+    "a": Object {
+      "errors": Array [
+        "Not a valid integer.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`The test schema detects a invalid input as invalid 3`] = `
+Object {
+  "value": Object {
+    "a": Object {
+      "errors": Array [
+        "Not one of (1, 2, 3, 4).",
+      ],
+    },
+    "b": Object {
+      "value": Object {
+        "c": Object {
+          "errors": Array [
+            "Not a valid integer.",
+          ],
+        },
+      },
+    },
+    "d": Object {
+      "errors": Array [
+        "Missing required field.",
+      ],
+    },
+  },
+}
+`;

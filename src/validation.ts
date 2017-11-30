@@ -16,38 +16,56 @@ export interface Schema {
 
 export interface Processed<T> {
     value?: T;
-    nested?: Processed<any>;
-    errors: string[];
+    errors?: string[];
 }
 
 async function validateSchema<T extends Object>(validationSchema: Schema, input: T): Promise<Processed<T>> {
-    const result = {};
+    const result: Processed<any> = { value: {}, errors: [] };
     await Promise.all(Object.keys(validationSchema).map(async key => {
         const schemaValue = validationSchema[key];
         const inputValue = (input as any)[key];
-        if (typeof schemaValue === "function") {
-            (result as any)[key] = await schemaValue(inputValue);
-            return;
+        const schemaResult = typeof schemaValue === "function" ?
+            await schemaValue(inputValue) :
+            await validateSchema(schemaValue, inputValue);
+        if (hasErrors(schemaResult)) {
+            (result.value as any)[key] = schemaResult;
         }
-        (result as any)[key] = await validateSchema(schemaValue, inputValue);
     }));
     Object.keys(input).forEach(key => {
-        if (Object.keys(validateSchema).includes(key)) {
+        if (Object.keys(validationSchema).includes(key)) {
             return;
         }
-        // TODO: WIP: BETTER SCHEMA RETURN.
+        else {
+            (result.value as any)[key] = { errors: [ "Unexpected key." ]};
+        }
     });
-
-    const noAdditionalKeys = Object.keys(input).every(key => Object.keys(validationSchema).includes(key));
-    return result.every(keyResult => keyResult) && noAdditionalKeys;
+    if (result.errors.length === 0) {
+        delete result.errors;
+    }
+    if (Object.keys(result.value).length === 0) {
+        delete result.value;
+    }
+    return result;
 }
 
-export function schema<T extends Object>(validationSchema: Schema): Validator<T> {
+export function hasErrors(processed: Processed<any>): boolean {
+    const { errors, value } = processed;
+    return Boolean(errors && errors.length > 0) || Boolean(value && Object.keys(value).reduce((result, key) => {
+        return result || hasErrors(value[key]);
+    }, false));
+}
+
+export interface SchemaValidator<T> {
+    (value: T): Promise<Processed<T>>;
+}
+
+export function schema<T extends Object>(validationSchema: Schema): SchemaValidator<T> {
     return async (value: T) => {
         if (typeof value === "undefined") {
             return {};
         }
-        return (await validateSchema(validationSchema, value)) ? {} : { error: "Schema validation failed." };
+        const result = await validateSchema(validationSchema, value);
+        return result;
     };
 }
 
@@ -77,7 +95,10 @@ export async function processValue<T>(
             }
             return result;
         }, []);
-    return { value, errors };
+    if (errors.length > 0) {
+        return { errors };
+    }
+    return { value };
 }
 
 type ValidationMap = Map<number, ValidationOptions<any>>;
@@ -167,9 +188,18 @@ export interface FullValidator<T> {
     (input: any): Processed<T> | Promise<Processed<T>>;
     (target: Object, propertyKey: string | symbol, index: number): void;
     validate: (...validators: Validator<T>[]) => FullValidator<T>;
+    schema: (schema: Schema) => FullValidator<T>;
     validateCtx: (factory: (ctx: any) => Validator<T>[]) => FullValidator<T>;
     validators: Validator<T>[];
     validatorFactory: (ctx: any) => Validator<T>[];
+}
+
+function isCustomClass(propertyType: Function) {
+return propertyType !== Number &&
+    propertyType !== String &&
+    propertyType !== Boolean &&
+    propertyType !== Array &&
+    typeof propertyType === "function";
 }
 
 /**
@@ -206,6 +236,9 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
             options.converter = typeof converter === "function" ?
                 converter :
                 inferConverter(propertyType, arrayOfType);
+            if (isCustomClass(propertyType)) {
+                options.validators.push(schema(schemaFrom(propertyType)));
+            }
             options.validators.push(...fn.validators);
             options.validatorFactory = fn.validationFactory;
             return;
@@ -240,14 +273,11 @@ export function inferConverter(ctor: Function, arrayOfType?: Function): Converte
     if (ctor === Boolean) {
         return bool;
     }
-    if (ctor === Object) {
-        return obj;
-    }
     if (ctor === Array) {
         if (arrayOfType) {
             return arr(is(inferConverter(arrayOfType)));
         }
         return arr();
     }
-    return schema(schemaFrom(ctor));
+    return obj;
 }

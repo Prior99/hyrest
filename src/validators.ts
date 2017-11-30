@@ -28,6 +28,7 @@ export function oneOf<T>(...options: T[]): Validator<T> {
  * @return The input if it was not `undefined` or `null`, otherwise an error will be returned.
  */
 export function required<T>(value: T): Validation {
+    console.log("REQUIRED", value)
     if (typeof value === "undefined" || value === null) { return { error: "Missing required field." }; }
     return {};
 }

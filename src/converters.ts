@@ -1,4 +1,4 @@
-import { FullValidator } from "./validation";
+import { FullValidator, hasErrors } from "./validation";
 
 export interface Converted<T> {
     error?: string;
@@ -76,7 +76,7 @@ export function arr<T>(fullValidator?: FullValidator<T>): Converter<T[]> {
         if (!Array.isArray(value)) { return { error: "Not an array." }; }
         if (!fullValidator) { return { value }; }
         const error = (await Promise.all(value.map(elem => fullValidator(elem))))
-                .find(result => result.errors.length > 0);
+                .find(result => hasErrors(result));
         if (error) { return { error: `Array validation failed: ${error.errors[0]}` }; }
         return { value };
     };
