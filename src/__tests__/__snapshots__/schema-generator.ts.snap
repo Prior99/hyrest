@@ -24,6 +24,10 @@ Object {
 }
 `;
 
+exports[`the generated schema detects invalid inputs as invalid (2) 1`] = `Processed {}`;
+
+exports[`the generated schema detects invalid inputs as invalid (3) 1`] = `Processed {}`;
+
 exports[`the generated schema detects invalid inputs as invalid (4) 1`] = `
 Object {
   "value": Object {
@@ -35,3 +39,5 @@ Object {
   },
 }
 `;
+
+exports[`the generated schema detects invalid inputs as invalid (5) 1`] = `Processed {}`;

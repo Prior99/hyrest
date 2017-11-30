@@ -11,7 +11,7 @@ import {
     getQueryParameters,
     getUrlParameters,
 } from "./parameters";
-import { getParameterValidation, processValue, hasErrors, Processed } from "./validation";
+import { getParameterValidation, processValue, Processed } from "./validation";
 import { Converter } from "./converters";
 
 /**
@@ -103,7 +103,7 @@ export function hyrest(...controllerObjects: any[]): Router {
                 const { converter, validationSchema } = options;
                 const validationResult = await processValue(arg, converter, validators, validationSchema);
                 processed.push(validationResult);
-                if (!hasErrors(validationResult)) {
+                if (!validationResult.hasErrors) {
                     return;
                 }
                 errorEncountered = true;

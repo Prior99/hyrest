@@ -4,6 +4,7 @@ exports[`@is as parameter decorator 1`] = `
 Map {
   2 => Object {
     "converter": [Function],
+    "validationSchema": undefined,
     "validatorFactory": undefined,
     "validators": Array [
       [Function],
@@ -11,11 +12,13 @@ Map {
   },
   1 => Object {
     "converter": [Function],
+    "validationSchema": undefined,
     "validatorFactory": undefined,
     "validators": Array [],
   },
   0 => Object {
     "converter": [Function],
+    "validationSchema": undefined,
     "validatorFactory": undefined,
     "validators": Array [],
   },
@@ -25,6 +28,7 @@ Map {
 exports[`@is as property decorator 1`] = `
 Object {
   "converter": [Function],
+  "validationSchema": undefined,
   "validatorFactory": undefined,
   "validators": Array [
     [Function],
@@ -36,6 +40,7 @@ Object {
 exports[`@is as property decorator 2`] = `
 Object {
   "converter": [Function],
+  "validationSchema": undefined,
   "validatorFactory": undefined,
   "validators": Array [
     [Function],
@@ -45,14 +50,14 @@ Object {
 `;
 
 exports[`The test schema detects a invalid input as invalid 1`] = `
-Object {
-  "value": Object {
-    "a": Object {
+Processed {
+  "nested": Object {
+    "a": Processed {
       "errors": Array [
         "Not a valid integer.",
       ],
     },
-    "d": Object {
+    "d": Processed {
       "errors": Array [
         "Unexpected key.",
       ],
@@ -62,9 +67,9 @@ Object {
 `;
 
 exports[`The test schema detects a invalid input as invalid 2`] = `
-Object {
-  "value": Object {
-    "a": Object {
+Processed {
+  "nested": Object {
+    "a": Processed {
       "errors": Array [
         "Not a valid integer.",
       ],
@@ -74,23 +79,36 @@ Object {
 `;
 
 exports[`The test schema detects a invalid input as invalid 3`] = `
-Object {
-  "value": Object {
-    "a": Object {
+Processed {
+  "nested": Object {
+    "a": Processed {
       "errors": Array [
         "Not one of (1, 2, 3, 4).",
       ],
+      "value": 19,
     },
-    "b": Object {
-      "value": Object {
-        "c": Object {
+    "b": Processed {
+      "nested": Object {
+        "c": Processed {
           "errors": Array [
             "Not a valid integer.",
           ],
         },
       },
     },
-    "d": Object {
+    "d": Processed {
+      "errors": Array [
+        "Missing required field.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`The test schema detects a invalid input as invalid 4`] = `
+Processed {
+  "nested": Object {
+    "d": Processed {
       "errors": Array [
         "Missing required field.",
       ],

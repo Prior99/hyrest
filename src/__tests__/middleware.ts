@@ -3,8 +3,8 @@ import { controller, ControllerMode } from "../controller";
 import { route } from "../route";
 import { body, param, query } from "../parameters";
 import { float, int, str } from "../converters";
-import { required } from "../validators";
-import { is, schema } from "../validation";
+import { required, email } from "../validators";
+import { is } from "../validation";
 import { ok, created } from "../answers";
 import * as request from "supertest";
 import * as Express from "express";
@@ -143,12 +143,12 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
         }
 
         @route("POST", "/user/:id")
-        public postTest(@is(schema({})) @body() user: User) {
+        public postTest(@is().schema({}) @body() user: User) {
             return ok("Everything is okay.");
         }
 
         @route("POST", "/echo")
-        public postTest(@is(schema({ email: is(str).validate(email) })) @body() user: User) {
+        public postTest(@is().schema({ email: is(str).validate(email) }) @body() user: User) {
             return ok(user, "Everything is okay.");
         }
     }

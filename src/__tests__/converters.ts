@@ -96,7 +96,7 @@ import { is, schema } from "../validation";
         ],
     },
     {
-        dataType: is(obj).validate(schema({ value: is(int).validate(required) })),
+        dataType: is(obj).schema({ value: is(int).validate(required) }),
         tests: [
             [ { value: 5 }, { value: 1 }, { value: 100} ],
             [ {}, { value: 1 }, { value: 100} ],

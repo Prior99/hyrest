@@ -32,7 +32,10 @@ export class Processed<T> {
     public errors?: string[];
 
     public addErrors (...errors: string[]) {
-        if (!this.errors) { this.errors = [...errors]; }
+        if (!this.errors) {
+            this.errors = [...errors];
+            return;
+        }
         this.errors.push(...errors);
     }
 
@@ -51,22 +54,26 @@ export class Processed<T> {
     }
 
     public merge(other: Processed<T>) {
+        if (typeof other === "undefined" || other === null) {
+            return;
+        }
         this.errors.push(...other.errors);
-        Object.keys(other.nested).forEach(key => {
-            if (typeof this.nested[key] === "undefined") {
-                this.nested[key] = other.nested[key];
-                return;
-            }
-            this.nested[key].merge(other.nested[key]);
-        });
-        invariant(typeof this.value === "undefined" || typeof other.value === "undefined");
-        if (typeof this.value === "undefined") {
+        if (typeof other.nested !== "undefined" && other.nested !== null) {
+            Object.keys(other.nested).forEach(key => {
+                if (typeof this.nested === "undefined" || typeof this.nested[key] === "undefined") {
+                    this.addNested(key, other.nested[key]);
+                    return;
+                }
+                this.nested[key].merge(other.nested[key]);
+            });
+        }
+        if (typeof this.value === "undefined" && typeof other.value !== "undefined") {
             this.value = other.value;
         }
     }
 }
 
-async function validateSchema<T extends { [key: string]: any }>(
+export async function validateSchema<T extends { [key: string]: any }>(
     validationSchema: Schema, input: T,
 ): Promise<Processed<T>> {
     const result = new Processed<T>();
@@ -74,23 +81,25 @@ async function validateSchema<T extends { [key: string]: any }>(
     // properties on the object are valid.
     await Promise.all(Object.keys(validationSchema).map(async key => {
         const schemaValue = validationSchema[key];
-        const inputValue = input[key];
+        const inputValue = input ? input[key] : undefined;
         // Get the validation result. If the value from the schema was a function, use it
         // as a validator, otherwise it was a nested schema.
         const schemaResult = typeof schemaValue === "function" ?
             await schemaValue(inputValue) :
             await validateSchema(schemaValue, inputValue);
 
-        if (result.hasErrors) {
-            result.nested[key] = schemaResult;
+        if (schemaResult.hasErrors) {
+            result.addNested(key, schemaResult);
         }
     }));
-    // Check that no extra keys exist on the input.
-    Object.keys(input).forEach(key => {
-        if (!Object.keys(validationSchema).includes(key)) {
-            result.nested[key] = new Processed({ errors: [ "Unexpected key." ] });
-        }
-    });
+    if (typeof input !== "undefined" && input !== null) {
+        // Check that no extra keys exist on the input.
+        Object.keys(input).forEach(key => {
+            if (!Object.keys(validationSchema).includes(key)) {
+                result.addNested(key, new Processed({ errors: [ "Unexpected key." ] }));
+            }
+        });
+    }
     return result;
 }
 
@@ -113,7 +122,8 @@ export async function processValue<T>(
     // If a converter existed, grab the error and the value from it. Otherwise just consider the
     // input valid.
     const { error, value } = converter ?  await converter(input) : { value: input, error: undefined };
-    const processed = new Processed({ value });
+    const processed = new Processed<T>();
+    if (typeof value !== "undefined") { processed.value = value; }
     // If the converter failed there is no way to make sure the value can safely be handed to the
     // validators. Early exit with the errors emitted by the converter.
     if (error) {
