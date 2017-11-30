@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`the generated schema detects invalid inputs as invalid (0) 1`] = `
-Object {
-  "value": Object {
-    "a": Object {
+Processed {
+  "nested": Object {
+    "a": Processed {
       "errors": Array [
         "Missing required field.",
       ],
@@ -13,9 +13,9 @@ Object {
 `;
 
 exports[`the generated schema detects invalid inputs as invalid (1) 1`] = `
-Object {
-  "value": Object {
-    "a": Object {
+Processed {
+  "nested": Object {
+    "a": Processed {
       "errors": Array [
         "Missing required field.",
       ],
@@ -29,9 +29,9 @@ exports[`the generated schema detects invalid inputs as invalid (2) 1`] = `Proce
 exports[`the generated schema detects invalid inputs as invalid (3) 1`] = `Processed {}`;
 
 exports[`the generated schema detects invalid inputs as invalid (4) 1`] = `
-Object {
-  "value": Object {
-    "bs": Object {
+Processed {
+  "nested": Object {
+    "bs": Processed {
       "errors": Array [
         "Not an array.",
       ],

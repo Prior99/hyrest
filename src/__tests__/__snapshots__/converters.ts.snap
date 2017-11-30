@@ -52,25 +52,13 @@ Object {
 
 exports[`arr with a specific datatype and input detects it as expected 7`] = `
 Object {
-  "value": Array [
-    Object {},
-    Object {
-      "value": 1,
-    },
-    Object {
-      "value": 100,
-    },
-  ],
+  "error": "Array validation failed: undefined",
 }
 `;
 
 exports[`arr with a specific datatype and input detects it as expected 8`] = `
 Object {
-  "value": Array [
-    Object {
-      "value": "test",
-    },
-  ],
+  "error": "Array validation failed: undefined",
 }
 `;
 
