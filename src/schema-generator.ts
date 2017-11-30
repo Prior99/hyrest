@@ -12,7 +12,8 @@ export function schemaFrom(from: Function, scope?: Scope): Schema {
         const options = getPropertyValidation(from.prototype, property);
         (result as any)[property] = is(options.converter)
             .validate(...options.validators)
-            .validateCtx(options.validatorFactory);
+            .validateCtx(options.validatorFactory)
+            .schema(options.validationSchema);
         return result;
     }, {});
 }

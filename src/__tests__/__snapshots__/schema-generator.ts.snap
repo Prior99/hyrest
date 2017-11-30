@@ -7,6 +7,13 @@ Processed {
       "errors": Array [
         "Missing required field.",
       ],
+      "nested": Object {
+        "email": Processed {
+          "errors": Array [
+            "Missing required field.",
+          ],
+        },
+      },
     },
   },
 }
@@ -19,14 +26,59 @@ Processed {
       "errors": Array [
         "Missing required field.",
       ],
+      "nested": Object {
+        "email": Processed {
+          "errors": Array [
+            "Missing required field.",
+          ],
+        },
+      },
     },
   },
 }
 `;
 
-exports[`the generated schema detects invalid inputs as invalid (2) 1`] = `Processed {}`;
+exports[`the generated schema detects invalid inputs as invalid (2) 1`] = `
+Processed {
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [],
+      "nested": Object {
+        "email": Processed {
+          "errors": Array [
+            "String is not a valid email.",
+          ],
+          "value": "invalid-email",
+        },
+      },
+      "value": Object {
+        "email": "invalid-email",
+      },
+    },
+  },
+}
+`;
 
-exports[`the generated schema detects invalid inputs as invalid (3) 1`] = `Processed {}`;
+exports[`the generated schema detects invalid inputs as invalid (3) 1`] = `
+Processed {
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [],
+      "nested": Object {
+        "anInteger": Processed {
+          "errors": Array [
+            "Not a valid integer.",
+          ],
+        },
+      },
+      "value": Object {
+        "anInteger": 3.141,
+        "email": "some@exmaple.com",
+      },
+    },
+  },
+}
+`;
 
 exports[`the generated schema detects invalid inputs as invalid (4) 1`] = `
 Processed {
