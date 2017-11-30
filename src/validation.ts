@@ -3,57 +3,95 @@ import "reflect-metadata";
 import { Validator, Validation } from "./validators";
 import { schemaFrom } from "./schema-generator";
 import { Converter, arr, bool, str, float, obj } from "./converters";
+import * as invariant from "invariant";
 
 export interface ValidationOptions<T> {
     converter?: Converter<T>;
     readonly validators: Validator<T>[];
     validatorFactory?: (ctx: any) => Validator<T>[];
-    validationSchema: Schema;
+    validationSchema?: Schema;
 }
 
 export interface Schema {
     [key: string]: Schema | FullValidator<any>;
 }
 
-export interface Processed<T> {
+export interface ProcessedInput<T> {
     value?: T;
+    nested?: { [key: string]: Processed<any>; };
     errors?: string[];
 }
 
-async function validateSchema<T extends Object>(validationSchema: Schema, input: T): Promise<Processed<T>> {
-    const result: Processed<any> = { value: {}, errors: [] };
+export class Processed<T> {
+    constructor(copy?: ProcessedInput<T>) {
+        Object.assign(this, copy);
+    }
+
+    public value?: T;
+    public nested?: { [key: string]: Processed<any>; };
+    public errors?: string[];
+
+    public addErrors (...errors: string[]) {
+        if (!this.errors) { this.errors = [...errors]; }
+        this.errors.push(...errors);
+    }
+
+    public addNested (key: string, nested: Processed<any>) {
+        if (!this.nested) { this.nested = { [key]: nested }; }
+        this.nested[key] = nested;
+    }
+
+    public get hasErrors(): boolean {
+        const { errors, nested } = this;
+        const currentHasErrors = Boolean(errors && errors.length > 0);
+        const nestedHasErrors: boolean = Boolean(nested && Object.keys(nested).reduce((result, key) => {
+            return result || nested[key].hasErrors;
+        }, false));
+        return  currentHasErrors || nestedHasErrors;
+    }
+
+    public merge(other: Processed<T>) {
+        this.errors.push(...other.errors);
+        Object.keys(other.nested).forEach(key => {
+            if (typeof this.nested[key] === "undefined") {
+                this.nested[key] = other.nested[key];
+                return;
+            }
+            this.nested[key].merge(other.nested[key]);
+        });
+        invariant(typeof this.value === "undefined" || typeof other.value === "undefined");
+        if (typeof this.value === "undefined") {
+            this.value = other.value;
+        }
+    }
+}
+
+async function validateSchema<T extends { [key: string]: any }>(
+    validationSchema: Schema, input: T,
+): Promise<Processed<T>> {
+    const result = new Processed<T>();
+    // Iterate over all keys on the validation schema and make sure all the corresponding
+    // properties on the object are valid.
     await Promise.all(Object.keys(validationSchema).map(async key => {
         const schemaValue = validationSchema[key];
-        const inputValue = (input as any)[key];
+        const inputValue = input[key];
+        // Get the validation result. If the value from the schema was a function, use it
+        // as a validator, otherwise it was a nested schema.
         const schemaResult = typeof schemaValue === "function" ?
             await schemaValue(inputValue) :
             await validateSchema(schemaValue, inputValue);
-        if (hasErrors(schemaResult)) {
-            (result.value as any)[key] = schemaResult;
+
+        if (result.hasErrors) {
+            result.nested[key] = schemaResult;
         }
     }));
+    // Check that no extra keys exist on the input.
     Object.keys(input).forEach(key => {
-        if (Object.keys(validationSchema).includes(key)) {
-            return;
-        }
-        else {
-            (result.value as any)[key] = { errors: [ "Unexpected key." ]};
+        if (!Object.keys(validationSchema).includes(key)) {
+            result.nested[key] = new Processed({ errors: [ "Unexpected key." ] });
         }
     });
-    if (result.errors.length === 0) {
-        delete result.errors;
-    }
-    if (Object.keys(result.value).length === 0) {
-        delete result.value;
-    }
     return result;
-}
-
-export function hasErrors(processed: Processed<any>): boolean {
-    const { errors, value } = processed;
-    return Boolean(errors && errors.length > 0) || Boolean(value && Object.keys(value).reduce((result, key) => {
-        return result || hasErrors(value[key]);
-    }, false));
 }
 
 export interface SchemaValidator<T> {
@@ -70,30 +108,30 @@ export interface SchemaValidator<T> {
  * @return An object containing all errors and the converted value.
  */
 export async function processValue<T>(
-        input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema): Promise<Processed<T>> {
-    const { error, value } = converter ?
-            await converter(input) :
-            { value: input, error: undefined };
+    input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema,
+): Promise<Processed<T>> {
+    // If a converter existed, grab the error and the value from it. Otherwise just consider the
+    // input valid.
+    const { error, value } = converter ?  await converter(input) : { value: input, error: undefined };
+    const processed = new Processed({ value });
+    // If the converter failed there is no way to make sure the value can safely be handed to the
+    // validators. Early exit with the errors emitted by the converter.
     if (error) {
-        return {
-            errors: [error],
-        };
+        processed.addErrors(error);
+        return processed;
     }
-    const errors = (await Promise.all(validators.map(validator => validator(value))))
-        .reduce((result, { error: validationError }) => {
-            if (validationError) {
-                result.push(validationError);
-            }
-            return result;
-        }, []);
+    // Execute each validator for the given input and accumulate all their results.
+    const validationResults = await Promise.all(validators.map(validator => validator(value)));
+    const errors = validationResults
+        .filter(result => typeof result.error !== "undefined")
+        .map(result => result.error);
+    processed.addErrors(...errors);
+    // If a schema was provided, execute it and merge the result into the current result.
     if (schema) {
         const schemaResult = await validateSchema(schema, input);
-        if ,
+        processed.merge(schemaResult);
     }
-    if (errors.length > 0) {
-        return { errors };
-    }
-    return { value };
+    return processed;
 }
 
 type ValidationMap = Map<number, ValidationOptions<any>>;
