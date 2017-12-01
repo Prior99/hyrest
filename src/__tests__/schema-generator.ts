@@ -25,10 +25,10 @@ beforeEach(() => {
         @scope(scope1) @is().validate(required)
         public a: _A;
 
-        @scope(scope2) @arrayOf(A) @is()
+        @scope(scope2) @is() @arrayOf(_A)
         public as: _A[];
 
-        @scope(scope1, scope2) @arrayOf(B) @is()
+        @scope(scope1, scope2) @is() @arrayOf(_B)
         public bs: _B[];
     }
 
@@ -87,10 +87,23 @@ beforeEach(() => {
             {},
         ],
     },
+    {
+        a: { email: "some@exmaple.com", anInteger: 2 },
+        bs: [ { dangling: "invalid" } ],
+    },
 ].forEach((input, index) => {
     test(`the generated schema detects invalid inputs as invalid (${index})`, async () => {
         const result = await validateSchema(schemaFrom(B), input);
         expect(result).toMatchSnapshot();
         expect(result.hasErrors).toBe(true);
     });
+});
+
+test("throws an error if decorated incorrectly", () => {
+    expect(() => {
+        class C { // tslint:disable-line
+            @arrayOf(str) @is()
+            public test: string[];
+        }
+    }).toThrowErrorMatchingSnapshot();
 });

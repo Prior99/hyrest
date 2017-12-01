@@ -42,17 +42,12 @@ exports[`the generated schema detects invalid inputs as invalid (2) 1`] = `
 Processed {
   "nested": Object {
     "a": Processed {
-      "errors": Array [],
       "nested": Object {
         "email": Processed {
           "errors": Array [
             "String is not a valid email.",
           ],
-          "value": "invalid-email",
         },
-      },
-      "value": Object {
-        "email": "invalid-email",
       },
     },
   },
@@ -63,17 +58,12 @@ exports[`the generated schema detects invalid inputs as invalid (3) 1`] = `
 Processed {
   "nested": Object {
     "a": Processed {
-      "errors": Array [],
       "nested": Object {
         "anInteger": Processed {
           "errors": Array [
             "Not a valid integer.",
           ],
         },
-      },
-      "value": Object {
-        "anInteger": 3.141,
-        "email": "some@exmaple.com",
       },
     },
   },
@@ -92,4 +82,56 @@ Processed {
 }
 `;
 
-exports[`the generated schema detects invalid inputs as invalid (5) 1`] = `Processed {}`;
+exports[`the generated schema detects invalid inputs as invalid (5) 1`] = `
+Processed {
+  "nested": Object {
+    "as": Processed {
+      "nested": Object {
+        "0": Processed {
+          "nested": Object {
+            "email": Processed {
+              "errors": Array [
+                "Missing required field.",
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`the generated schema detects invalid inputs as invalid (6) 1`] = `
+Processed {
+  "nested": Object {
+    "bs": Processed {
+      "nested": Object {
+        "0": Processed {
+          "nested": Object {
+            "a": Processed {
+              "errors": Array [
+                "Missing required field.",
+              ],
+              "nested": Object {
+                "email": Processed {
+                  "errors": Array [
+                    "Missing required field.",
+                  ],
+                },
+              },
+            },
+            "dangling": Processed {
+              "errors": Array [
+                "Unexpected key.",
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`throws an error if decorated incorrectly 1`] = `"Decorated property of type array without specifying @arrayOf after @is."`;

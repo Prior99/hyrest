@@ -1,6 +1,6 @@
-import { int, float, str, obj, arr } from "../converters";
+import { int, float, str, obj } from "../converters";
 import { required, length } from "../validators";
-import { is, schema } from "../validation";
+import { is, arr } from "../validation";
 
 [
     "10",
@@ -88,21 +88,21 @@ import { is, schema } from "../validation";
     {
         dataType: is(str).validate(length(1, 3)),
         tests: [
-            ["hi", "yo", "1"],
-            ["hi", "yo", "1", ""],
-            [1, 2, 3, 4],
-            ["1", "2", 3],
-            [],
+            ["hi", "yo", "1"], // Snapshot 1.
+            ["hi", "yo", "1", ""], // Snapshot 2.
+            [1, 2, 3, 4], // Snapshot 3.
+            ["1", "2", 3], // Snapshot 4.
+            [], // Snapshot 5.
         ],
     },
     {
         dataType: is(obj).schema({ value: is(int).validate(required) }),
         tests: [
-            [ { value: 5 }, { value: 1 }, { value: 100} ],
-            [ {}, { value: 1 }, { value: 100} ],
-            [ { value: "test" } ],
-            [],
-            {},
+            [ { value: 5 }, { value: 1 }, { value: 100} ], // Snapshot 6.
+            [ {}, { value: 1 }, { value: 100} ], // Snapshot 7.
+            [ { value: "test" } ], // Snapshot 8.
+            [], // Snapshot 9.
+            {}, // Snapshot 10.
             null, //tslint:disable-line
             undefined,
         ],

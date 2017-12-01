@@ -1,90 +1,113 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`arr with a specific datatype and input detects it as expected 1`] = `
-Object {
-  "value": Array [
-    "hi",
-    "yo",
-    "1",
-  ],
-}
-`;
+exports[`arr with a specific datatype and input detects it as expected 1`] = `Processed {}`;
 
 exports[`arr with a specific datatype and input detects it as expected 2`] = `
-Object {
-  "error": "Array validation failed: String is shorter than 1.",
+Processed {
+  "nested": Object {
+    "3": Processed {
+      "errors": Array [
+        "String is shorter than 1.",
+      ],
+    },
+  },
 }
 `;
 
 exports[`arr with a specific datatype and input detects it as expected 3`] = `
-Object {
-  "error": "Array validation failed: Not a valid string.",
+Processed {
+  "nested": Object {
+    "0": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+    "1": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+    "2": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+    "3": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+  },
 }
 `;
 
 exports[`arr with a specific datatype and input detects it as expected 4`] = `
-Object {
-  "error": "Array validation failed: Not a valid string.",
+Processed {
+  "nested": Object {
+    "2": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+  },
 }
 `;
 
-exports[`arr with a specific datatype and input detects it as expected 5`] = `
-Object {
-  "value": Array [],
-}
-`;
+exports[`arr with a specific datatype and input detects it as expected 5`] = `Processed {}`;
 
-exports[`arr with a specific datatype and input detects it as expected 6`] = `
-Object {
-  "value": Array [
-    Object {
-      "value": 5,
-    },
-    Object {
-      "value": 1,
-    },
-    Object {
-      "value": 100,
-    },
-  ],
-}
-`;
+exports[`arr with a specific datatype and input detects it as expected 6`] = `Processed {}`;
 
 exports[`arr with a specific datatype and input detects it as expected 7`] = `
-Object {
-  "error": "Array validation failed: undefined",
+Processed {
+  "nested": Object {
+    "0": Processed {
+      "nested": Object {
+        "value": Processed {
+          "errors": Array [
+            "Missing required field.",
+          ],
+        },
+      },
+    },
+  },
 }
 `;
 
 exports[`arr with a specific datatype and input detects it as expected 8`] = `
-Object {
-  "error": "Array validation failed: undefined",
+Processed {
+  "nested": Object {
+    "0": Processed {
+      "nested": Object {
+        "value": Processed {
+          "errors": Array [
+            "Not a valid integer.",
+          ],
+        },
+      },
+    },
+  },
 }
 `;
 
-exports[`arr with a specific datatype and input detects it as expected 9`] = `
-Object {
-  "value": Array [],
-}
-`;
+exports[`arr with a specific datatype and input detects it as expected 9`] = `Processed {}`;
 
 exports[`arr with a specific datatype and input detects it as expected 10`] = `
-Object {
-  "error": "Not an array.",
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
 }
 `;
 
 exports[`arr with a specific datatype and input detects it as expected 11`] = `
-Object {
-  "error": "Not an array.",
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
 }
 `;
 
-exports[`arr with a specific datatype and input detects it as expected 12`] = `
-Object {
-  "value": undefined,
-}
-`;
+exports[`arr with a specific datatype and input detects it as expected 12`] = `Processed {}`;
 
 exports[`float handles "" correctly 1`] = `
 Object {

@@ -1,11 +1,11 @@
-import { FullValidator } from "./validation";
+import { FullValidator, Processed } from "./validation";
 
 export interface Converted<T> {
     error?: string;
     value?: T;
 }
 
-export type Converter<T> = (input: any) => Converted<T> | Promise<Converted<T>>;
+export type Converter<T> = (input: any) => Converted<T> | Promise<Converted<T>> | Processed<T> | Promise<Processed<T>>;
 
 /**
  * Converts the given input to an integer if possible.

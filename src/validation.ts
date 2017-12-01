@@ -2,7 +2,7 @@ import "reflect-metadata";
 
 import { Validator, Validation } from "./validators";
 import { schemaFrom } from "./schema-generator";
-import { Converter, arr, bool, str, float, obj } from "./converters";
+import { Converter, bool, str, float, obj } from "./converters";
 import * as invariant from "invariant";
 
 export interface ValidationOptions<T> {
@@ -35,6 +35,9 @@ export class Processed<T> {
     public errors?: string[];
 
     public addErrors (...errors: string[]) {
+        if (errors.length === 0) {
+            return;
+        }
         if (!this.errors) {
             this.errors = [...errors];
             return;
@@ -60,7 +63,13 @@ export class Processed<T> {
         if (typeof other === "undefined" || other === null) {
             return;
         }
-        this.errors.push(...other.errors);
+        if (typeof other.errors !== "undefined") {
+            if (this.errors) {
+                this.errors.push(...other.errors);
+            } else {
+                this.errors = [...other.errors];
+            }
+        }
         if (typeof other.nested !== "undefined" && other.nested !== null) {
             Object.keys(other.nested).forEach(key => {
                 if (typeof this.nested === "undefined" || typeof this.nested[key] === "undefined") {
@@ -110,10 +119,24 @@ export interface SchemaValidator<T> {
     (value: T): Promise<Processed<T>>;
 }
 
-export function arr<T>(value: any): Converted<T[]> {
-    if (typeof value === "undefined") { return { value }; }
-    if (!Array.isArray(value)) { return { error: "Not an array." }; }
-    return { value };
+export function arr<T>(validator?: FullValidator<T>): Converter<T[]> {
+    return async (value: any) => {
+        const processed = new Processed<T[]>();
+        if (typeof value === "undefined") { return processed; }
+        if (!Array.isArray(value)) {
+            processed.addErrors("Not an array.");
+            return processed;
+        }
+        if (typeof validator !== "undefined"){
+            await Promise.all(value.map(async (elem, index) => {
+                const result = await validator(elem);
+                if (result.hasErrors) {
+                    processed.addNested(index, result);
+                }
+            }));
+        }
+        return processed;
+    };
 }
 
 /**
@@ -126,18 +149,25 @@ export function arr<T>(value: any): Converted<T[]> {
  * @return An object containing all errors and the converted value.
  */
 export async function processValue<T>(
-    input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema
+    input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema,
 ): Promise<Processed<T>> {
+    const processed = new Processed<T>();
     // If a converter existed, grab the error and the value from it. Otherwise just consider the
     // input valid.
-    const { error, value } = converter ?  await converter(input) : { value: input, error: undefined };
-    const processed = new Processed<T>();
-    if (typeof value !== "undefined") { processed.value = value; }
-    // If the converter failed there is no way to make sure the value can safely be handed to the
-    // validators. Early exit with the errors emitted by the converter.
-    if (error) {
-        processed.addErrors(error);
-        return processed;
+    let value: T;
+    const conversionResult = converter && await converter(input);
+    if (conversionResult instanceof Processed) {
+        processed.merge(conversionResult);
+        value = processed.value;
+    }
+    else if (typeof conversionResult !== "undefined") {
+        if (conversionResult.error) {
+            // If the converter failed there is no way to make sure the value can safely be handed to the
+            // validators. Early exit with the errors emitted by the converter.
+            processed.addErrors(conversionResult.error);
+            return processed;
+        }
+        value = conversionResult.value;
     }
     // Execute each validator for the given input and accumulate all their results.
     const validationResults = await Promise.all(validators.map(validator => validator(value)));
@@ -147,17 +177,11 @@ export async function processValue<T>(
     processed.addErrors(...errors);
     // If a schema was provided, execute it and merge the result into the current result.
     if (schema) {
-        if (array) {
-            await Promise.all((input as any[]).map(async (elem, index) => {
-                const schemaResult = await validateSchema(schema, input);
-                if (schemaResult.hasErrors) {
-                    processed.addNested(index, schemaResult);
-                }
-            }));
-        } else {
-            const schemaResult = await validateSchema(schema, input);
-            processed.merge(schemaResult);
-        }
+        const schemaResult = await validateSchema(schema, input);
+        processed.merge(schemaResult);
+    }
+    if (typeof value !== "undefined" && !processed.hasErrors) {
+        processed.value = value;
     }
     return processed;
 }
@@ -284,7 +308,6 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
                 converter,
                 [...fn.validators, ...factoryValidators],
                 fn.validationSchema,
-                fn.array,
             );
         }
         else if (typeof args[2] === "number") {
@@ -294,27 +317,27 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
             options.validatorFactory = fn.validationFactory;
             options.validationSchema = fn.validationSchema;
             options.validators.push(...fn.validators);
-            options.array = fn.array;
             return;
         } else {
+            // Property decorator.
             const propertyType = Reflect.getMetadata("design:type", args[0], args[1]);
             const arrayOfType = Reflect.getMetadata("arrayof", args[0], args[1]);
             getValidatedProperties(args[0]).push({
                 property: args[1],
                 propertyType,
             });
-            // Property decorator.
             const options = getPropertyValidation(args[0], args[1]);
+            if (propertyType === Array && typeof arrayOfType === "undefined") {
+                throw new Error("Decorated property of type array without specifying @arrayOf after @is.");
+            }
             options.converter = typeof converter === "function" ?
                 converter :
                 inferConverter(propertyType, arrayOfType);
             options.validatorFactory = fn.validationFactory;
             options.validationSchema = fn.validationSchema;
             options.validators.push(...fn.validators);
-            options.array = fn.array;
             if (isCustomClass(propertyType) && !options.validationSchema) {
                 if (propertyType === Array) {
-                    options.array = true;
                     options.validationSchema = schemaFrom(arrayOfType);
                 } else {
                     options.validationSchema = schemaFrom(propertyType);
@@ -349,18 +372,22 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
  * @return The corresponding converter.
  */
 export function inferConverter(ctor: Function, arrayOfType?: Function): Converter<any> {
-    if (ctor === Number) {
+    if (ctor === Number || ctor === float) {
         return float;
     }
-    if (ctor === String) {
+    if (ctor === String || ctor === str) {
         return str;
     }
-    if (ctor === Boolean) {
+    if (ctor === Boolean || ctor === bool) {
         return bool;
     }
     if (ctor === Array) {
         if (arrayOfType) {
-            return arr(is(inferConverter(arrayOfType)));
+            const validator = is(inferConverter(arrayOfType));
+            if (isCustomClass(arrayOfType)) {
+                validator.schema(schemaFrom(arrayOfType));
+            }
+            return arr(validator);
         }
         return arr();
     }
