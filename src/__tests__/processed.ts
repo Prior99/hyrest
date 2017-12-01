@@ -74,4 +74,6 @@ test("`Processed.merge`", () => {
         },
     }));
     expect(processed).toMatchSnapshot();
+    processed.merge(undefined);
+    expect(processed).toMatchSnapshot();
 });

@@ -119,6 +119,34 @@ Processed {
 }
 `;
 
+exports[`\`Processed.merge\` 8`] = `
+Processed {
+  "errors": Array [
+    "test",
+    "another test",
+  ],
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [
+        "test",
+        "a second test",
+      ],
+    },
+    "b": Processed {
+      "nested": Object {
+        "c": Processed {
+          "errors": Array [
+            "deeply nested",
+            "another deeply nested one",
+          ],
+        },
+      },
+    },
+  },
+  "value": "test",
+}
+`;
+
 exports[`Adding errors to \`Processed\` 1`] = `
 Processed {
   "errors": Array [
