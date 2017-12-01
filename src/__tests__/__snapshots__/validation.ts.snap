@@ -140,7 +140,25 @@ Processed {
 }
 `;
 
-exports[`The test schema detects a invalid input as invalid 6`] = `Processed {}`;
+exports[`The test schema detects a invalid input as invalid 6`] = `
+Processed {
+  "nested": Object {
+    "f": Processed {
+      "nested": Object {
+        "0": Processed {
+          "nested": Object {
+            "g": Processed {
+              "errors": Array [
+                "String exceeds maximum length of 5.",
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
 
 exports[`The test schema detects a invalid input as invalid 7`] = `
 Processed {

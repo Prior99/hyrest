@@ -106,9 +106,9 @@ test("@is as property decorator", () => {
             },
             d: is(int).validate(required),
             e: is(arr(is(int).validate(oneOf(1, 2, 3)))),
-            f: is(arr(is(obj))).schema({
+            f: is(arr(is(obj).schema({
                 g: is(str).validate(length(1, 5)),
-            }).arr(),
+            }))),
         },
         valid: [
             {

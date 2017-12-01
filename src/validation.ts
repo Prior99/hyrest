@@ -278,8 +278,6 @@ export interface FullValidator<T> {
     validators: Validator<T>[];
     validatorFactory: (ctx: any) => Validator<T>[];
     validationSchema: Schema;
-    arr: () => void;
-    array: boolean;
 }
 
 function isCustomClass(propertyType: Function) {
@@ -360,7 +358,6 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
         fn.validationSchema = schema;
         return fn;
     };
-    fn.arr = () => fn.array = true;
     return fn as FullValidator<T>;
 }
 
