@@ -325,7 +325,7 @@ class User {
 
 To limit the schema to properties marked with the scope `signup`, simply specify it:
 
-```
+```typescript
 @route("POST", "/user")
 public createUser(@body() @is(DataType.obj).schema(schemaFrom(User)).scope(signup) user: User) {
     ...
