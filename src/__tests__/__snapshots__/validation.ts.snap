@@ -4,6 +4,7 @@ exports[`@is as parameter decorator 1`] = `
 Map {
   2 => Object {
     "converter": [Function],
+    "scopeLimit": undefined,
     "validationSchema": undefined,
     "validatorFactory": undefined,
     "validators": Array [
@@ -12,12 +13,14 @@ Map {
   },
   1 => Object {
     "converter": [Function],
+    "scopeLimit": undefined,
     "validationSchema": undefined,
     "validatorFactory": undefined,
     "validators": Array [],
   },
   0 => Object {
     "converter": [Function],
+    "scopeLimit": undefined,
     "validationSchema": undefined,
     "validatorFactory": undefined,
     "validators": Array [],
@@ -28,6 +31,7 @@ Map {
 exports[`@is as property decorator 1`] = `
 Object {
   "converter": [Function],
+  "scopeLimit": undefined,
   "validationSchema": undefined,
   "validatorFactory": undefined,
   "validators": Array [
@@ -40,6 +44,7 @@ Object {
 exports[`@is as property decorator 2`] = `
 Object {
   "converter": [Function],
+  "scopeLimit": undefined,
   "validationSchema": undefined,
   "validatorFactory": undefined,
   "validators": Array [

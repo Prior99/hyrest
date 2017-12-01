@@ -322,7 +322,7 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
                 fn.scopeLimit || args[1],
             );
         }
-        const isParameterDecorator = args[2] === "number";
+        const isParameterDecorator = typeof args[2] === "number";
         const options = isParameterDecorator ?
             getParameterValidation(args[0], args[1], args[2]) :
             getPropertyValidation(args[0], args[1]);
