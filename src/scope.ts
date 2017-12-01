@@ -171,20 +171,38 @@ export function dump<T>(dumpScope: Scope, arg2?: T): T | ((instance: T) => T) {
 
 export function populate<T>(populateScope: Scope, initialClass: Constructable<T>): (data: any) => T;
 export function populate<T>(populateScope: Scope, initialClass: Constructable<T>, data: any): T;
+/**
+ * Populate a structure of classes using an object and a scope.
+ * This will recursively create instances of all classes and populate them with the nested objects in
+ * the input.
+ *
+ * @param populateScope The scope to populate. Only properties included in this scope will be populated.
+ * @param initialClass The class to start populating with.
+ * @param arg3 Populate can be invoked with the input as a third argument or be used as a curried function.
+ *             If this is specified, the non-curried version is used. Otherwise the curried function accepting
+ *             this as an argument is returned. This is usefull for using this inside higher order functions.
+ *
+ * @return A curried function for use in higher order functions if `arg3` is not specified and the populated
+ *         structure otherwise.
+ */
 export function populate<T>(populateScope: Scope, initialClass: Constructable<T>, arg3?: any): T | ((data: T) => T) {
     function internalPopulate<U extends any | any[]>(
         data: any, thisClass: any = initialClass, arrayClass?: Constructable<any>,
     ): U {
+        // Perform population of an array.
         if (thisClass === Array) {
             invariant(Array.isArray(data), "Structure does not match. Array expected.");
             invariant(typeof arrayClass === "function", "Structure does not match. Array expected.");
             return (data as any[]).map(element => internalPopulate(element, arrayClass)) as any as U;
         }
+        // Ignore primitives.
         if (thisClass === Number || thisClass === Boolean || thisClass === String || thisClass === Object) {
             return data;
         }
         invariant(typeof data === "object" && !Array.isArray(data), "Structure does not match. Object expected.");
+        // Instanciate the classe to populate.
         const instance = new thisClass();
+        // Get a list of all properties to populate.
         const propertiesForClass = populateScope.propertiesForClass(thisClass);
         propertiesForClass.forEach(({ property, target, expectedType }) => {
             const dataValue = (data as any)[property];

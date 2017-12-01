@@ -8,10 +8,27 @@ import { Scope } from "./scope";
 import { Processed } from "./processed";
 
 export interface ValidationOptions<T> {
+    /**
+     * The converter to convert the input with.
+     */
     converter?: Converter<T>;
-    readonly validators: Validator<T>[];
+    /**
+     * A list of all validators the check the input with.
+     */
+    validators: Validator<T>[];
+    /**
+     * A factory function to call with the current context of the
+     * decorator which will return a list of validators.
+     */
     validatorFactory?: (ctx: any) => Validator<T>[];
+    /**
+     * An optional schema to match the inputs against.
+     */
     validationSchema?: Schema;
+    /**
+     * An optional scope to limit the schema validation to. Only possible if the
+     * schema was inferred from a class.
+     */
     scopeLimit?: Scope;
 }
 
@@ -276,6 +293,13 @@ export function getPropertyValidation(target: Object, propertyKey: string): Vali
     return options;
 }
 
+/**
+ * Returns all properties on the given target which are decorated with `@is` in any way.
+ *
+ * @param target The instance to retrieve the validated properties from.
+ *
+ * @return A list of validated properties.
+ */
 export function getValidatedProperties(target: Object): ValidatedProperty[] {
     const properties = Reflect.getMetadata("validation:properties", target);
     if (!properties) {
@@ -286,6 +310,15 @@ export function getValidatedProperties(target: Object): ValidatedProperty[] {
     return properties;
 }
 
+/**
+ * Checks if the typescript property type of a decorated property is a primitive
+ * built-in type or a class the user has provided.
+ *
+ * @param propertyType The type of the property to check for.
+ *
+ * @return `true` if the type is a class the user has created and `false` if it was
+ *         a built-in type.
+ */
 function isCustomClass(propertyType: Function) {
     return propertyType !== Number &&
         propertyType !== String &&
@@ -303,22 +336,27 @@ function isCustomClass(propertyType: Function) {
  * @return A decorator for a parameter in a @route method.
  */
 export function is<T>(converter?: Converter<T>): FullValidator<T> {
+    // This function can be called in three ways:
+    // 1. Standalone, providing an input and an optional scope
+    // 2. As a property decorator.
+    // 3. As a parameter decorator.
     const fn: any = (...args: any[]) => {
         if (args.length !== 3) {
             // Called as a function.
+            // Create all factory validators.
+            const { validators, validationSchema } = fn;
             const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : []; //tslint:disable-line
-            return processValue(
-                args[0],
-                converter,
-                [...fn.validators, ...factoryValidators],
-                fn.validationSchema,
-                fn.scopeLimit || args[1],
-            );
+            const scope = fn.scopeLimit || args[1];
+            return processValue(args[0], converter, [...validators, ...factoryValidators], validationSchema, scope);
         }
+        // Either a parameter or property decorator.
         const isParameterDecorator = typeof args[2] === "number";
         const options = isParameterDecorator ?
             getParameterValidation(args[0], args[1], args[2]) :
             getPropertyValidation(args[0], args[1]);
+
+        // Copy all properties set on the function using the builder pattern and `validate` or `schema`, etc.
+        // to the `options` object in the metadata if this was called as a decorator.
         options.converter = converter;
         options.validatorFactory = fn.validationFactory;
         options.validationSchema = fn.validationSchema;
@@ -332,18 +370,23 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
                 property: args[1],
                 propertyType,
             });
+            // Infer the converter if it wasn't defined.
             if (typeof converter === "undefined") {
                 options.converter = inferConverter(propertyType, arrayOfType);
             }
+            // If the user decorated an array but forgot the `@arrayOf` decorator or specified it before `@is`,
+            // fail early.
             if (propertyType === Array && typeof arrayOfType === "undefined") {
                 throw new Error("Decorated property of type array without specifying @arrayOf after @is.");
             }
+            // Infer the schema if the typescript property type was a custom schema.
             if (isCustomClass(propertyType) && !options.validationSchema) {
                 options.validationSchema = schemaFrom(propertyType);
             }
             return;
         }
     };
+    // Create all configuration functions on `fn` for the builder pattern.
     fn.validators = [];
     fn.validate = (...validators: Validator<T>[]) => {
         fn.validators.push(...validators);
