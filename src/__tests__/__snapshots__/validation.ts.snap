@@ -49,6 +49,122 @@ Object {
 }
 `;
 
+exports[`\`processValue\` processes inputs as expected 1`] = `
+Processed {
+  "value": "a",
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 2`] = `
+Processed {
+  "value": "b",
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 3`] = `
+Processed {
+  "errors": Array [
+    "Not one of (a, b).",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 4`] = `
+Processed {
+  "errors": Array [
+    "Not one of (a, b).",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 5`] = `
+Processed {
+  "errors": Array [
+    "Not a valid string.",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 6`] = `
+Processed {
+  "errors": Array [
+    "Not a valid string.",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 7`] = `Processed {}`;
+
+exports[`\`processValue\` processes inputs as expected 8`] = `
+Processed {
+  "errors": Array [
+    "Not a valid string.",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 9`] = `
+Processed {
+  "errors": Array [
+    "Not a valid string.",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 10`] = `
+Processed {
+  "errors": Array [
+    "Not a valid integer.",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 11`] = `
+Processed {
+  "errors": Array [
+    "Not a valid integer.",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 12`] = `
+Processed {
+  "value": 10,
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 13`] = `
+Processed {
+  "errors": Array [
+    "Not a valid integer.",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 14`] = `
+Processed {
+  "errors": Array [
+    "Missing required field.",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 15`] = `
+Processed {
+  "errors": Array [
+    "Not a valid integer.",
+  ],
+}
+`;
+
+exports[`\`processValue\` processes inputs as expected 16`] = `
+Processed {
+  "errors": Array [
+    "Not a valid integer.",
+  ],
+}
+`;
+
 exports[`The test schema detects a invalid input as invalid 1`] = `
 Processed {
   "nested": Object {

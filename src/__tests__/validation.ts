@@ -1,4 +1,4 @@
-import { is, getPropertyValidation, validateSchema, arr } from "../validation";
+import { is, getPropertyValidation, validateSchema, arr, processValue } from "../validation";
 import { int, float, str, obj } from "../converters";
 import { oneOf, required, length } from "../validators";
 
@@ -157,6 +157,25 @@ test("@is as property decorator", () => {
         test("The test schema detects a invalid input as invalid", async () => {
             expect(await validateSchema(testSchema, input)).toMatchSnapshot();
             expect((await validateSchema(testSchema, input)).hasErrors).toBe(true);
+        });
+    });
+});
+
+[
+    {
+        converter: str,
+        validators: [oneOf("a", "b")],
+        inputs: ["a", "b", "c", "", 1, null, undefined, {}, []], // tslint:disable-line
+    },
+    {
+        converter: int,
+        validators: [required],
+        inputs: ["c", "", 10, null, undefined, {}, []], // tslint:disable-line
+    },
+].forEach(testCase => {
+    testCase.inputs.forEach(input => {
+        test("`processValue` processes inputs as expected", async () => {
+            expect(await processValue(input, testCase.converter, testCase.validators)).toMatchSnapshot();
         });
     });
 });

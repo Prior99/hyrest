@@ -148,7 +148,7 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
         }
 
         @route("POST", "/echo")
-        public postTest(@is().schema({ email: is(str).validate(email) }) @body() user: User) {
+        public postEcho(@is().schema({ email: is(str).validate(email) }) @body() user: User) {
             return ok(user, "Everything is okay.");
         }
     }
@@ -197,7 +197,7 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
     expect(responseD.text).toBe(JSON.stringify({
         data: {
             body: {
-                value: {
+                nested: {
                     foo: { errors: ["Unexpected key."] },
                 },
             },

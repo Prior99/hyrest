@@ -156,6 +156,9 @@ export async function processValue<T>(
     // input valid.
     let value: T;
     const conversionResult = converter && await converter(input);
+    if (typeof converter === "undefined") {
+        value = input;
+    }
     if (conversionResult instanceof Processed) {
         processed.merge(conversionResult);
         value = processed.value;
