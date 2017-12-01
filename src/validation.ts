@@ -18,7 +18,10 @@ export interface Schema {
 
 export interface ProcessedInput<T> {
     value?: T;
-    nested?: { [key: string]: Processed<any>; };
+    nested?: {
+        [key: number]: Processed<any> | Processed<any>[];
+        [key: string]: Processed<any> | Processed<any>[];
+    };
     errors?: string[];
 }
 
@@ -39,7 +42,7 @@ export class Processed<T> {
         this.errors.push(...errors);
     }
 
-    public addNested (key: string, nested: Processed<any>) {
+    public addNested (key: string | number, nested: Processed<any>) {
         if (!this.nested) { this.nested = { [key]: nested }; }
         this.nested[key] = nested;
     }
@@ -92,7 +95,7 @@ export async function validateSchema<T extends { [key: string]: any }>(
             result.addNested(key, schemaResult);
         }
     }));
-    if (typeof input !== "undefined" && input !== null) {
+    if (typeof input !== "undefined" && input !== null && !Array.isArray(input)) {
         // Check that no extra keys exist on the input.
         Object.keys(input).forEach(key => {
             if (!Object.keys(validationSchema).includes(key)) {
@@ -107,6 +110,12 @@ export interface SchemaValidator<T> {
     (value: T): Promise<Processed<T>>;
 }
 
+export function arr<T>(value: any): Converted<T[]> {
+    if (typeof value === "undefined") { return { value }; }
+    if (!Array.isArray(value)) { return { error: "Not an array." }; }
+    return { value };
+}
+
 /**
  * Fully processes an unprocessed input value. This means conversion and validation of the value.
  *
@@ -117,7 +126,7 @@ export interface SchemaValidator<T> {
  * @return An object containing all errors and the converted value.
  */
 export async function processValue<T>(
-    input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema,
+    input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema
 ): Promise<Processed<T>> {
     // If a converter existed, grab the error and the value from it. Otherwise just consider the
     // input valid.
@@ -138,8 +147,17 @@ export async function processValue<T>(
     processed.addErrors(...errors);
     // If a schema was provided, execute it and merge the result into the current result.
     if (schema) {
-        const schemaResult = await validateSchema(schema, input);
-        processed.merge(schemaResult);
+        if (array) {
+            await Promise.all((input as any[]).map(async (elem, index) => {
+                const schemaResult = await validateSchema(schema, input);
+                if (schemaResult.hasErrors) {
+                    processed.addNested(index, schemaResult);
+                }
+            }));
+        } else {
+            const schemaResult = await validateSchema(schema, input);
+            processed.merge(schemaResult);
+        }
     }
     return processed;
 }
@@ -236,6 +254,8 @@ export interface FullValidator<T> {
     validators: Validator<T>[];
     validatorFactory: (ctx: any) => Validator<T>[];
     validationSchema: Schema;
+    arr: () => void;
+    array: boolean;
 }
 
 function isCustomClass(propertyType: Function) {
@@ -259,15 +279,22 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
         if (args.length !== 3) {
             // Called as a function.
             const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : []; //tslint:disable-line
-            return processValue(args[0], converter, [...fn.validators, ...factoryValidators], fn.validationSchema);
+            return processValue(
+                args[0],
+                converter,
+                [...fn.validators, ...factoryValidators],
+                fn.validationSchema,
+                fn.array,
+            );
         }
         else if (typeof args[2] === "number") {
             // Parameter decorator.
             const options = getParameterValidation(args[0], args[1], args[2]);
             options.converter = converter;
-            options.validators.push(...fn.validators);
             options.validatorFactory = fn.validationFactory;
             options.validationSchema = fn.validationSchema;
+            options.validators.push(...fn.validators);
+            options.array = fn.array;
             return;
         } else {
             const propertyType = Reflect.getMetadata("design:type", args[0], args[1]);
@@ -281,12 +308,19 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
             options.converter = typeof converter === "function" ?
                 converter :
                 inferConverter(propertyType, arrayOfType);
-            options.validationSchema = fn.validationSchema;
-            if (isCustomClass(propertyType) && !options.validationSchema) {
-                options.validationSchema = schemaFrom(propertyType);
-            }
-            options.validators.push(...fn.validators);
             options.validatorFactory = fn.validationFactory;
+            options.validationSchema = fn.validationSchema;
+            options.validators.push(...fn.validators);
+            options.array = fn.array;
+            if (isCustomClass(propertyType) && !options.validationSchema) {
+                if (propertyType === Array) {
+                    options.array = true;
+                    options.validationSchema = schemaFrom(arrayOfType);
+                } else {
+                    options.validationSchema = schemaFrom(propertyType);
+                }
+
+            }
             return;
         }
     };
@@ -303,6 +337,7 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
         fn.validationSchema = schema;
         return fn;
     };
+    fn.arr = () => fn.array = true;
     return fn as FullValidator<T>;
 }
 

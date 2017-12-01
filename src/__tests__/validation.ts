@@ -1,6 +1,6 @@
 import { is, getPropertyValidation, validateSchema } from "../validation";
-import { int, float, str, obj } from "../converters";
-import { oneOf, required } from "../validators";
+import { int, float, str, obj, arr } from "../converters";
+import { oneOf, required, length } from "../validators";
 
 test("@is as parameter decorator", () => {
     class TestController {
@@ -72,11 +72,43 @@ test("@is as property decorator", () => {
     },
     {
         testSchema: {
+            arraOfArrays: is(arr(
+                is(arr(
+                    is(int).validate(oneOf(5, 6, 7)),
+                )),
+            )),
+        },
+        valid: [
+            {
+                arraOfArrays: [
+                    [5, 6, 7],
+                    [6, 7],
+                    [],
+                ],
+            },
+        ],
+        invalid: [
+            {
+                arraOfArrays: [5],
+            },
+            {
+                arraOfArrays: [
+                    [8],
+                ],
+            },
+        ],
+    },
+    {
+        testSchema: {
             a: is(int).validate(oneOf(1, 2, 3, 4)),
             b: {
                 c: is(int),
             },
             d: is(int).validate(required),
+            e: is(arr(is(int).validate(oneOf(1, 2, 3)))),
+            f: is(arr(is(obj))).schema({
+                g: is(str).validate(length(1, 5)),
+            }).arr(),
         },
         valid: [
             {
@@ -85,6 +117,11 @@ test("@is as property decorator", () => {
                     c: 19,
                 },
                 d: 8,
+            },
+            {
+                d: 8,
+                e: [1, 2, 1, 2, 1],
+                f: [{ g: "foo" }, { g: "bar" }, { g: "bas" }, { g: "baz" } ],
             },
         ],
         invalid: [
@@ -95,6 +132,16 @@ test("@is as property decorator", () => {
                         d: "test",
                     },
                 },
+            },
+            {
+                d: 8,
+                e: [1, 2, 1, 3],
+                f: [{ g: "loremipsum" }],
+            },
+            {
+                d: 8,
+                e: [5, 6, 20],
+                f: [{ g: "test" }],
             },
             undefined,
         ],

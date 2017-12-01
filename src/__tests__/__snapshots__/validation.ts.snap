@@ -3,6 +3,7 @@
 exports[`@is as parameter decorator 1`] = `
 Map {
   2 => Object {
+    "array": undefined,
     "converter": [Function],
     "validationSchema": undefined,
     "validatorFactory": undefined,
@@ -11,12 +12,14 @@ Map {
     ],
   },
   1 => Object {
+    "array": undefined,
     "converter": [Function],
     "validationSchema": undefined,
     "validatorFactory": undefined,
     "validators": Array [],
   },
   0 => Object {
+    "array": undefined,
     "converter": [Function],
     "validationSchema": undefined,
     "validatorFactory": undefined,
@@ -27,6 +30,7 @@ Map {
 
 exports[`@is as property decorator 1`] = `
 Object {
+  "array": undefined,
   "converter": [Function],
   "validationSchema": undefined,
   "validatorFactory": undefined,
@@ -39,6 +43,7 @@ Object {
 
 exports[`@is as property decorator 2`] = `
 Object {
+  "array": undefined,
   "converter": [Function],
   "validationSchema": undefined,
   "validatorFactory": undefined,
@@ -105,7 +110,21 @@ Processed {
 }
 `;
 
-exports[`The test schema detects a invalid input as invalid 4`] = `
+exports[`The test schema detects a invalid input as invalid 4`] = `Processed {}`;
+
+exports[`The test schema detects a invalid input as invalid 5`] = `
+Processed {
+  "nested": Object {
+    "e": Processed {
+      "errors": Array [
+        "Array validation failed: Not one of (1, 2, 3).",
+      ],
+    },
+  },
+}
+`;
+
+exports[`The test schema detects a invalid input as invalid 6`] = `
 Processed {
   "nested": Object {
     "d": Processed {
