@@ -278,12 +278,7 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
                 throw new Error("Decorated property of type array without specifying @arrayOf after @is.");
             }
             if (isCustomClass(propertyType) && !options.validationSchema) {
-                if (propertyType === Array) {
-                    options.validationSchema = schemaFrom(arrayOfType);
-                } else {
-                    options.validationSchema = schemaFrom(propertyType);
-                }
-
+                options.validationSchema = schemaFrom(propertyType);
             }
             return;
         }

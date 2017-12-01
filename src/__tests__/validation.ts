@@ -1,5 +1,5 @@
-import { is, getPropertyValidation, validateSchema, arr, processValue } from "../validation";
-import { int, float, str, obj } from "../converters";
+import { is, getPropertyValidation, validateSchema, arr, processValue, inferConverter } from "../validation";
+import { int, float, str, obj, bool } from "../converters";
 import { oneOf, required, length } from "../validators";
 
 test("@is as parameter decorator", () => {
@@ -221,4 +221,13 @@ test("@is as property decorator", () => {
             expect(await testCase.validator(input)).toMatchSnapshot();
         });
     });
+});
+
+test("`inferConverter`", () => {
+    expect(inferConverter(Number)).toBe(float);
+    expect(inferConverter(String)).toBe(str);
+    expect(inferConverter(Boolean)).toBe(bool);
+    // Array can not be tested this way but is implicitly tested by other tests.
+    expect(inferConverter(Object)).toBe(obj);
+    expect(inferConverter(Function)).toBe(obj);
 });

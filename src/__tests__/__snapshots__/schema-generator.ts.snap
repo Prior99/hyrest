@@ -178,4 +178,33 @@ Processed {
 }
 `;
 
+exports[`the generated schema detects valid inputs as valid with a scope supplied (0) 1`] = `
+Processed {
+  "value": Object {
+    "a": Object {
+      "email": "test@example.com",
+    },
+    "bs": Array [
+      Object {
+        "a": Object {
+          "email": "some@example.com",
+        },
+        "bs": Array [],
+      },
+    ],
+  },
+}
+`;
+
+exports[`the generated schema detects valid inputs as valid with a scope supplied (1) 1`] = `
+Processed {
+  "value": Object {
+    "a": Object {
+      "email": "foo@example.com",
+    },
+    "bs": Array [],
+  },
+}
+`;
+
 exports[`throws an error if decorated incorrectly 1`] = `"Decorated property of type array without specifying @arrayOf after @is."`;

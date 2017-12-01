@@ -73,7 +73,7 @@ beforeEach(() => {
     },
 ].forEach((input, index) => {
     test(`the generated schema detects valid inputs as valid with a scope supplied (${index})`, async () => {
-        expect(await validateSchema(schemaFrom(B), input, scope1)).toEqual({});
+        expect(await is(obj).schema(schemaFrom(B)).scope(scope1)(input)).toMatchSnapshot();
     });
 });
 
@@ -91,7 +91,7 @@ beforeEach(() => {
     },
 ].forEach((input, index) => {
     test(`the generated schema detects invalid inputs as invalid with a scope supplied (${index})`, async () => {
-        expect(await validateSchema(schemaFrom(B), input, scope1)).toMatchSnapshot();
+        expect(await is(obj).schema(schemaFrom(B)).scope(scope1)(input)).toMatchSnapshot();
     });
 });
 
