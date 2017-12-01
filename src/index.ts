@@ -9,6 +9,7 @@ export { ApiError } from "./types";
 export * from "./validators";
 export { is } from "./validation";
 export { dump, createScope, scope, Scope, populate, arrayOf } from "./scope";
+export { schemaFrom } from "./schema-generator";
 
 import * as dataType from "./converters";
 export const DataType = dataType;

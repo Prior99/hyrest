@@ -243,12 +243,94 @@ const UserSchema = {
 @controller()
 class UserControllre {
     @route("POST", "/user")
-    public createUser(@body() @is(DataType.obj).validate(schema(UserSchema)) user: User) {
+    public createUser(@body() @is(DataType.obj).schema(UserSchema) user: User) {
         ...
         return created(user)
     }
 }
 ```
+
+Schemas can be generated from classes. The datatypes can be inferred from the typescript type.
+In order to infer the data type from the property, simply omit the converter from the decorator.
+
+```typescript
+class Game {
+    @is().validate(oneOf(...categories))
+    public category: string;
+}
+
+class User {
+    @is(DataType.int)
+    public age: number;
+
+    @is()
+    public firstName: string;
+
+    @is()
+    public lastName: string;
+
+    @is()
+    public favoriteGame: Game;
+
+    @is().validate(required)
+    public email: string;
+
+    @is().validate(required)
+    public password: string;
+}
+```
+
+Still, all properties included in the schema have to be included by decorating them with `@is`.
+The schema can then be used by using `schemaFrom()`:
+
+```typescript
+@route("POST", "/user")
+public createUser(@body() @is(DataType.obj).schema(schemaFrom(User)) user: User) {
+    ...
+```
+
+This also works for arrays, however it is not possible to infer the array type from the property,
+so `@arrayOf` has to be used:
+
+```typescript
+class User {
+    ...
+
+    @is() @arrayOf(Game)
+    public games: Game[];
+
+    ...
+}
+```
+
+Together with [Scopes](#scopes) schemas can be validated against a subset of properties:
+
+```typescript
+const signup = createScope();
+
+class User {
+    @is()
+    public firstName: string;
+
+    @is()
+    public lastName: string;
+
+    @is().validate(required) @scope(signup)
+    public email: string;
+
+    @is().validate(required) @scope(signup)
+    public password: string;
+}
+```
+
+To limit the schema to properties marked with the scope `signup`, simply specify it:
+
+```
+@route("POST", "/user")
+public createUser(@body() @is(DataType.obj).schema(schemaFrom(User)).scope(signup) user: User) {
+    ...
+```
+
 
 ### What happens when Validation Fails?
 
