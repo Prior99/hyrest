@@ -134,7 +134,7 @@ Processed {
 }
 `;
 
-exports[`the generated schema detects invalid inputs as invalid with a schema supplied (0) 1`] = `
+exports[`the generated schema detects invalid inputs as invalid with a scope supplied (0) 1`] = `
 Processed {
   "nested": Object {
     "as": Processed {
@@ -146,7 +146,7 @@ Processed {
 }
 `;
 
-exports[`the generated schema detects invalid inputs as invalid with a schema supplied (1) 1`] = `
+exports[`the generated schema detects invalid inputs as invalid with a scope supplied (1) 1`] = `
 Processed {
   "nested": Object {
     "a": Processed {
@@ -162,7 +162,7 @@ Processed {
 }
 `;
 
-exports[`the generated schema detects invalid inputs as invalid with a schema supplied (2) 1`] = `
+exports[`the generated schema detects invalid inputs as invalid with a scope supplied (2) 1`] = `
 Processed {
   "nested": Object {
     "a": Processed {

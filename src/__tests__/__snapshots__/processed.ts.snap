@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`\`Processed.merge\` 1`] = `
+Processed {
+  "value": "test",
+}
+`;
+
+exports[`\`Processed.merge\` 2`] = `
+Processed {
+  "errors": Array [
+    "test",
+  ],
+  "value": "test",
+}
+`;
+
+exports[`\`Processed.merge\` 3`] = `
+Processed {
+  "errors": Array [
+    "test",
+  ],
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [
+        "test",
+      ],
+    },
+  },
+  "value": "test",
+}
+`;
+
+exports[`\`Processed.merge\` 4`] = `
+Processed {
+  "errors": Array [
+    "test",
+  ],
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [
+        "test",
+      ],
+    },
+  },
+  "value": "test",
+}
+`;
+
+exports[`\`Processed.merge\` 5`] = `
+Processed {
+  "errors": Array [
+    "test",
+    "another test",
+  ],
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [
+        "test",
+      ],
+    },
+  },
+  "value": "test",
+}
+`;
+
+exports[`\`Processed.merge\` 6`] = `
+Processed {
+  "errors": Array [
+    "test",
+    "another test",
+  ],
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [
+        "test",
+        "a second test",
+      ],
+    },
+    "b": Processed {
+      "nested": Object {
+        "c": Processed {
+          "errors": Array [
+            "deeply nested",
+          ],
+        },
+      },
+    },
+  },
+  "value": "test",
+}
+`;
+
+exports[`\`Processed.merge\` 7`] = `
+Processed {
+  "errors": Array [
+    "test",
+    "another test",
+  ],
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [
+        "test",
+        "a second test",
+      ],
+    },
+    "b": Processed {
+      "nested": Object {
+        "c": Processed {
+          "errors": Array [
+            "deeply nested",
+            "another deeply nested one",
+          ],
+        },
+      },
+    },
+  },
+  "value": "test",
+}
+`;
+
+exports[`Adding errors to \`Processed\` 1`] = `
+Processed {
+  "errors": Array [
+    "test 1",
+    "test 2",
+    "test 3",
+  ],
+}
+`;
+
+exports[`Adding errors to \`Processed\` 2`] = `
+Processed {
+  "errors": Array [
+    "test 1",
+    "test 2",
+    "test 3",
+    "test 4",
+    "test 5",
+  ],
+}
+`;
+
+exports[`Adding nested results to processed 1`] = `
+Processed {
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [
+        "test",
+      ],
+    },
+  },
+}
+`;
+
+exports[`Adding nested results to processed 2`] = `
+Processed {
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [
+        "test",
+      ],
+    },
+    "b": Processed {
+      "errors": Array [
+        "test",
+      ],
+    },
+  },
+}
+`;
+
+exports[`Adding no errors to \`Processed\` 1`] = `Processed {}`;

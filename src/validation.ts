@@ -5,6 +5,7 @@ import { schemaFrom } from "./schema-generator";
 import { Converter, bool, str, float, obj } from "./converters";
 import * as invariant from "invariant";
 import { Scope } from "./scope";
+import { Processed } from "./processed";
 
 export interface ValidationOptions<T> {
     converter?: Converter<T>;
@@ -18,74 +19,29 @@ export interface Schema {
     [key: string]: Schema | FullValidator<any>;
 }
 
-export interface ProcessedInput<T> {
-    value?: T;
-    nested?: {
-        [key: number]: Processed<any> | Processed<any>[];
-        [key: string]: Processed<any> | Processed<any>[];
-    };
-    errors?: string[];
+export interface ValidatedProperty {
+    readonly property: string;
+    readonly propertyType: Function;
 }
 
-export class Processed<T> {
-    constructor(copy?: ProcessedInput<T>) {
-        Object.assign(this, copy);
-    }
-
-    public value?: T;
-    public nested?: { [key: string]: Processed<any>; };
-    public errors?: string[];
-
-    public addErrors (...errors: string[]) {
-        if (errors.length === 0) {
-            return;
-        }
-        if (!this.errors) {
-            this.errors = [...errors];
-            return;
-        }
-        this.errors.push(...errors);
-    }
-
-    public addNested (key: string | number, nested: Processed<any>) {
-        if (!this.nested) { this.nested = { [key]: nested }; }
-        this.nested[key] = nested;
-    }
-
-    public get hasErrors(): boolean {
-        const { errors, nested } = this;
-        const currentHasErrors = Boolean(errors && errors.length > 0);
-        const nestedHasErrors: boolean = Boolean(nested && Object.keys(nested).reduce((result, key) => {
-            return result || nested[key].hasErrors;
-        }, false));
-        return  currentHasErrors || nestedHasErrors;
-    }
-
-    public merge(other: Processed<T>) {
-        if (typeof other === "undefined" || other === null) {
-            return;
-        }
-        if (typeof other.errors !== "undefined") {
-            if (this.errors) {
-                this.errors.push(...other.errors);
-            } else {
-                this.errors = [...other.errors];
-            }
-        }
-        if (typeof other.nested !== "undefined" && other.nested !== null) {
-            Object.keys(other.nested).forEach(key => {
-                if (typeof this.nested === "undefined" || typeof this.nested[key] === "undefined") {
-                    this.addNested(key, other.nested[key]);
-                    return;
-                }
-                this.nested[key].merge(other.nested[key]);
-            });
-        }
-        if (typeof this.value === "undefined" && typeof other.value !== "undefined") {
-            this.value = other.value;
-        }
-    }
+export interface FullValidator<T> {
+    (input: any, scope?: Scope): Processed<T> | Promise<Processed<T>>;
+    (target: Object, propertyKey: string | symbol, index: number): void;
+    validate: (...validators: Validator<T>[]) => FullValidator<T>;
+    schema: (schema: Schema) => FullValidator<T>;
+    validateCtx: (factory: (ctx: any) => Validator<T>[]) => FullValidator<T>;
+    validators: Validator<T>[];
+    validatorFactory: (ctx: any) => Validator<T>[];
+    validationSchema: Schema;
+    scopeLimit?: Scope;
+    scope: (scope: Scope) => FullValidator<T>;
 }
+
+export interface SchemaValidator<T> {
+    (value: T): Promise<Processed<T>>;
+}
+
+type ValidationMap = Map<number, ValidationOptions<any>>;
 
 export async function validateSchema<T extends { [key: string]: any }>(
     validationSchema: Schema, input: T, scope?: Scope,
@@ -121,10 +77,6 @@ export async function validateSchema<T extends { [key: string]: any }>(
         });
     }
     return result;
-}
-
-export interface SchemaValidator<T> {
-    (value: T): Promise<Processed<T>>;
 }
 
 export function arr<T>(validator?: FullValidator<T>): Converter<T[]> {
@@ -197,8 +149,6 @@ export async function processValue<T>(
     return processed;
 }
 
-type ValidationMap = Map<number, ValidationOptions<any>>;
-
 /**
  * Retrieves all the validators and the converter for a given parameter at index `index` on the method with name
  * `propertyKey` on the instance of a controller `target`.
@@ -265,11 +215,6 @@ export function getPropertyValidation(target: Object, propertyKey: string): Vali
     return options;
 }
 
-export interface ValidatedProperty {
-    readonly property: string;
-    readonly propertyType: Function;
-}
-
 export function getValidatedProperties(target: Object): ValidatedProperty[] {
     const properties = Reflect.getMetadata("validation:properties", target);
     if (!properties) {
@@ -280,25 +225,12 @@ export function getValidatedProperties(target: Object): ValidatedProperty[] {
     return properties;
 }
 
-export interface FullValidator<T> {
-    (input: any, scope?: Scope): Processed<T> | Promise<Processed<T>>;
-    (target: Object, propertyKey: string | symbol, index: number): void;
-    validate: (...validators: Validator<T>[]) => FullValidator<T>;
-    schema: (schema: Schema) => FullValidator<T>;
-    validateCtx: (factory: (ctx: any) => Validator<T>[]) => FullValidator<T>;
-    validators: Validator<T>[];
-    validatorFactory: (ctx: any) => Validator<T>[];
-    validationSchema: Schema;
-    scopeLimit?: Scope;
-    scope: (scope: Scope) => FullValidator<T>;
-}
-
 function isCustomClass(propertyType: Function) {
-return propertyType !== Number &&
-    propertyType !== String &&
-    propertyType !== Boolean &&
-    propertyType !== Array &&
-    typeof propertyType === "function";
+    return propertyType !== Number &&
+        propertyType !== String &&
+        propertyType !== Boolean &&
+        propertyType !== Array &&
+        typeof propertyType === "function";
 }
 
 /**
