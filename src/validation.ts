@@ -4,12 +4,14 @@ import { Validator, Validation } from "./validators";
 import { schemaFrom } from "./schema-generator";
 import { Converter, bool, str, float, obj } from "./converters";
 import * as invariant from "invariant";
+import { Scope } from "./scope";
 
 export interface ValidationOptions<T> {
     converter?: Converter<T>;
     readonly validators: Validator<T>[];
     validatorFactory?: (ctx: any) => Validator<T>[];
     validationSchema?: Schema;
+    scopeLimit?: Scope;
 }
 
 export interface Schema {
@@ -86,19 +88,25 @@ export class Processed<T> {
 }
 
 export async function validateSchema<T extends { [key: string]: any }>(
-    validationSchema: Schema, input: T,
+    validationSchema: Schema, input: T, scope?: Scope,
 ): Promise<Processed<T>> {
     const result = new Processed<T>();
+    const origin = Reflect.getMetadata("validation:schema:origin", validationSchema);
+    const classProperties = typeof scope !== "undefined" && scope.propertiesForClass(origin.constructor);
+    const validationKeys = Object.keys(validationSchema).filter(key => {
+        return !classProperties ||
+            classProperties.find(property => property.target === origin && property.property === key);
+    });
     // Iterate over all keys on the validation schema and make sure all the corresponding
     // properties on the object are valid.
-    await Promise.all(Object.keys(validationSchema).map(async key => {
+    await Promise.all(validationKeys.map(async key => {
         const schemaValue = validationSchema[key];
         const inputValue = input ? input[key] : undefined;
         // Get the validation result. If the value from the schema was a function, use it
         // as a validator, otherwise it was a nested schema.
         const schemaResult = typeof schemaValue === "function" ?
-            await schemaValue(inputValue) :
-            await validateSchema(schemaValue, inputValue);
+            await schemaValue(inputValue, scope) :
+            await validateSchema(schemaValue, inputValue, scope);
 
         if (schemaResult.hasErrors) {
             result.addNested(key, schemaResult);
@@ -107,7 +115,7 @@ export async function validateSchema<T extends { [key: string]: any }>(
     if (typeof input !== "undefined" && input !== null && !Array.isArray(input)) {
         // Check that no extra keys exist on the input.
         Object.keys(input).forEach(key => {
-            if (!Object.keys(validationSchema).includes(key)) {
+            if (!validationKeys.includes(key)) {
                 result.addNested(key, new Processed({ errors: [ "Unexpected key." ] }));
             }
         });
@@ -149,7 +157,7 @@ export function arr<T>(validator?: FullValidator<T>): Converter<T[]> {
  * @return An object containing all errors and the converted value.
  */
 export async function processValue<T>(
-    input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema,
+    input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema, scope?: Scope,
 ): Promise<Processed<T>> {
     const processed = new Processed<T>();
     // If a converter existed, grab the error and the value from it. Otherwise just consider the
@@ -180,7 +188,7 @@ export async function processValue<T>(
     processed.addErrors(...errors);
     // If a schema was provided, execute it and merge the result into the current result.
     if (schema) {
-        const schemaResult = await validateSchema(schema, input);
+        const schemaResult = await validateSchema(schema, input, scope);
         processed.merge(schemaResult);
     }
     if (typeof value !== "undefined" && !processed.hasErrors) {
@@ -273,7 +281,7 @@ export function getValidatedProperties(target: Object): ValidatedProperty[] {
 }
 
 export interface FullValidator<T> {
-    (input: any): Processed<T> | Promise<Processed<T>>;
+    (input: any, scope?: Scope): Processed<T> | Promise<Processed<T>>;
     (target: Object, propertyKey: string | symbol, index: number): void;
     validate: (...validators: Validator<T>[]) => FullValidator<T>;
     schema: (schema: Schema) => FullValidator<T>;
@@ -281,6 +289,8 @@ export interface FullValidator<T> {
     validators: Validator<T>[];
     validatorFactory: (ctx: any) => Validator<T>[];
     validationSchema: Schema;
+    scopeLimit?: Scope;
+    scope: (scope: Scope) => FullValidator<T>;
 }
 
 function isCustomClass(propertyType: Function) {
@@ -309,17 +319,19 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
                 converter,
                 [...fn.validators, ...factoryValidators],
                 fn.validationSchema,
+                fn.scopeLimit || args[1],
             );
         }
-        else if (typeof args[2] === "number") {
-            // Parameter decorator.
-            const options = getParameterValidation(args[0], args[1], args[2]);
-            options.converter = converter;
-            options.validatorFactory = fn.validationFactory;
-            options.validationSchema = fn.validationSchema;
-            options.validators.push(...fn.validators);
-            return;
-        } else {
+        const isParameterDecorator = args[2] === "number";
+        const options = isParameterDecorator ?
+            getParameterValidation(args[0], args[1], args[2]) :
+            getPropertyValidation(args[0], args[1]);
+        options.converter = converter;
+        options.validatorFactory = fn.validationFactory;
+        options.validationSchema = fn.validationSchema;
+        options.validators.push(...fn.validators);
+        options.scopeLimit = fn.scopeLimit;
+        if (!isParameterDecorator) {
             // Property decorator.
             const propertyType = Reflect.getMetadata("design:type", args[0], args[1]);
             const arrayOfType = Reflect.getMetadata("arrayof", args[0], args[1]);
@@ -327,16 +339,12 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
                 property: args[1],
                 propertyType,
             });
-            const options = getPropertyValidation(args[0], args[1]);
+            if (typeof converter === "undefined") {
+                options.converter = inferConverter(propertyType, arrayOfType);
+            }
             if (propertyType === Array && typeof arrayOfType === "undefined") {
                 throw new Error("Decorated property of type array without specifying @arrayOf after @is.");
             }
-            options.converter = typeof converter === "function" ?
-                converter :
-                inferConverter(propertyType, arrayOfType);
-            options.validatorFactory = fn.validationFactory;
-            options.validationSchema = fn.validationSchema;
-            options.validators.push(...fn.validators);
             if (isCustomClass(propertyType) && !options.validationSchema) {
                 if (propertyType === Array) {
                     options.validationSchema = schemaFrom(arrayOfType);
@@ -359,6 +367,10 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
     };
     fn.schema = (schema: Schema) => {
         fn.validationSchema = schema;
+        return fn;
+    };
+    fn.scope = (scope: Scope) => {
+        fn.scopeLimit = scope;
         return fn;
     };
     return fn as FullValidator<T>;

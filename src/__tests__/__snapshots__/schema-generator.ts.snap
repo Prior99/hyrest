@@ -134,4 +134,48 @@ Processed {
 }
 `;
 
+exports[`the generated schema detects invalid inputs as invalid with a schema supplied (0) 1`] = `
+Processed {
+  "nested": Object {
+    "as": Processed {
+      "errors": Array [
+        "Unexpected key.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`the generated schema detects invalid inputs as invalid with a schema supplied (1) 1`] = `
+Processed {
+  "nested": Object {
+    "a": Processed {
+      "nested": Object {
+        "anInteger": Processed {
+          "errors": Array [
+            "Unexpected key.",
+          ],
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`the generated schema detects invalid inputs as invalid with a schema supplied (2) 1`] = `
+Processed {
+  "nested": Object {
+    "a": Processed {
+      "nested": Object {
+        "email": Processed {
+          "errors": Array [
+            "String is not a valid email.",
+          ],
+        },
+      },
+    },
+  },
+}
+`;
+
 exports[`throws an error if decorated incorrectly 1`] = `"Decorated property of type array without specifying @arrayOf after @is."`;

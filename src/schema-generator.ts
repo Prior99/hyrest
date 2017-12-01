@@ -3,17 +3,16 @@ import { Schema, getValidatedProperties, getPropertyValidation, is } from "./val
 import { Scope } from "./scope";
 import { Constructable } from "./types";
 
-export function schemaFrom(from: Function, scope?: Scope): Schema {
+export function schemaFrom(from: Function): Schema {
     const properties = getValidatedProperties(from.prototype);
-    return properties.reduce((result, { property, propertyType }) => {
-        if (scope && !scope.propertiesForClass(from).find(meta => meta.property === property)) {
-            return result;
-        }
+    const schema = properties.reduce((result, { property, propertyType }) => {
         const options = getPropertyValidation(from.prototype, property);
-        (result as any)[property] = is(options.converter)
+        result[property] = is(options.converter)
             .validate(...options.validators)
             .validateCtx(options.validatorFactory)
             .schema(options.validationSchema);
         return result;
-    }, {});
+    }, {} as Schema);
+    Reflect.defineMetadata("validation:schema:origin", from.prototype, schema);
+    return schema;
 }

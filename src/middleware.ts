@@ -100,8 +100,8 @@ export function hyrest(...controllerObjects: any[]): Router {
                 const options = getParameterValidation(route.target, route.property, index);
                 const factoryValidators = options.validatorFactory ? options.validatorFactory(controllerObject) : [];
                 const validators = [ ...options.validators, ...factoryValidators ];
-                const { converter, validationSchema } = options;
-                const validationResult = await processValue(arg, converter, validators, validationSchema);
+                const { converter, validationSchema, scopeLimit } = options;
+                const validationResult = await processValue(arg, converter, validators, validationSchema, scopeLimit);
                 processed.push(validationResult);
                 if (!validationResult.hasErrors) {
                     return;
