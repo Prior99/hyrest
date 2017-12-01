@@ -179,3 +179,46 @@ test("@is as property decorator", () => {
         });
     });
 });
+
+[
+    {
+        validator: arr(),
+        tests: [
+            [],
+            [1, 2, 3],
+            {},
+            1,
+            "",
+            "1",
+            null, // tslint:disable-line
+            undefined,
+            true,
+        ],
+    },
+    {
+        validator: arr(is(str)),
+        tests: [
+            [1, 2, 3, 4],
+            ["a", "b", "c"],
+            [],
+            {},
+            12,
+        ],
+    },
+    {
+        validator: arr(is(int).validate(oneOf(1, 2, 3))),
+        tests: [
+            [1, 2, 3],
+            [1, 2],
+            [],
+            {},
+            12,
+        ],
+    },
+].forEach(testCase => {
+    testCase.tests.forEach(input => {
+        test("`arr` works as expected", async () => {
+            expect(await testCase.validator(input)).toMatchSnapshot();
+        });
+    });
+});

@@ -54,6 +54,129 @@ Object {
 }
 `;
 
+exports[`\`arr\` works as expected 1`] = `Processed {}`;
+
+exports[`\`arr\` works as expected 2`] = `Processed {}`;
+
+exports[`\`arr\` works as expected 3`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
+exports[`\`arr\` works as expected 4`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
+exports[`\`arr\` works as expected 5`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
+exports[`\`arr\` works as expected 6`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
+exports[`\`arr\` works as expected 7`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
+exports[`\`arr\` works as expected 8`] = `Processed {}`;
+
+exports[`\`arr\` works as expected 9`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
+exports[`\`arr\` works as expected 10`] = `
+Processed {
+  "nested": Object {
+    "0": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+    "1": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+    "2": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+    "3": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`\`arr\` works as expected 11`] = `Processed {}`;
+
+exports[`\`arr\` works as expected 12`] = `Processed {}`;
+
+exports[`\`arr\` works as expected 13`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
+exports[`\`arr\` works as expected 14`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
+exports[`\`arr\` works as expected 15`] = `Processed {}`;
+
+exports[`\`arr\` works as expected 16`] = `Processed {}`;
+
+exports[`\`arr\` works as expected 17`] = `Processed {}`;
+
+exports[`\`arr\` works as expected 18`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
+exports[`\`arr\` works as expected 19`] = `
+Processed {
+  "errors": Array [
+    "Not an array.",
+  ],
+}
+`;
+
 exports[`\`processValue\` processes inputs as expected 1`] = `
 Processed {
   "value": "a",
