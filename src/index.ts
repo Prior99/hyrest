@@ -7,7 +7,7 @@ export { body, query, param } from "./parameters";
 export { configureController } from "./configure";
 export { ApiError } from "./types";
 export * from "./validators";
-export { is, arr } from "./validation";
+export { is } from "./validation";
 export { dump, createScope, scope, Scope, populate, arrayOf } from "./scope";
 
 import * as dataType from "./converters";

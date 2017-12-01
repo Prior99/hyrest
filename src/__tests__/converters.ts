@@ -1,6 +1,6 @@
-import { int, float, str, obj, bool } from "../converters";
+import { int, float, str, obj, bool, arr } from "../converters";
 import { required, length } from "../validators";
-import { is, arr } from "../validation";
+import { is } from "../validation";
 
 [
     "10",

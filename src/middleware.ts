@@ -11,8 +11,9 @@ import {
     getQueryParameters,
     getUrlParameters,
 } from "./parameters";
-import { getParameterValidation, processValue, Processed } from "./validation";
+import { getParameterValidation, processValue } from "./validation";
 import { Converter } from "./converters";
+import { Processed } from "./processed";
 
 /**
  * A wrapper around a `Route` which also carries the Route's parameter injections.

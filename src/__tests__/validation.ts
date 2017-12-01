@@ -1,5 +1,5 @@
-import { is, getPropertyValidation, validateSchema, arr, processValue, inferConverter } from "../validation";
-import { int, float, str, obj, bool } from "../converters";
+import { is, getPropertyValidation, validateSchema, processValue, inferConverter } from "../validation";
+import { int, float, str, obj, bool, arr } from "../converters";
 import { oneOf, required, length } from "../validators";
 
 test("@is as parameter decorator", () => {

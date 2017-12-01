@@ -1,4 +1,5 @@
-import { FullValidator, Processed } from "./validation";
+import { FullValidator } from "./validation";
+import { Processed } from "./processed";
 
 export interface Converted<T> {
     error?: string;
@@ -75,4 +76,36 @@ export function bool(value: any): Converted<boolean> {
     if (value === "true" || value === "false") { return { value: value === "true" }; }
     if (typeof value !== "boolean") { return { error: "Not a valid boolean." }; }
     return { value };
+}
+
+/**
+ * Makes sure the given input is an array with all elements matching the given criteria.
+ *
+ * @param validator A validator to apply to all element of the array.
+ *
+ * @return The array converter.
+ */
+export function arr<T>(validator?: FullValidator<T>): Converter<T[]> {
+    return async (value: any) => {
+        const processed = new Processed<T[]>();
+        // Ignore `undefined` inputs. This is handled by the `required` validator if intended by
+        // the user.
+        if (typeof value === "undefined") { return processed; }
+        // If the input is not an array at all, don't even try to validate any elements.
+        if (!Array.isArray(value)) {
+            processed.addErrors("Not an array.");
+            return processed;
+        }
+        // Apply the validator (if provided) to all elements and store the results in the `nested`
+        // property of the result. The keys will be the array indices.
+        if (typeof validator !== "undefined"){
+            await Promise.all(value.map(async (elem, index) => {
+                const result = await validator(elem);
+                if (result.hasErrors) {
+                    processed.addNested(index, result);
+                }
+            }));
+        }
+        return processed;
+    };
 }

@@ -2,7 +2,7 @@ import "reflect-metadata";
 
 import { Validator, Validation } from "./validators";
 import { schemaFrom } from "./schema-generator";
-import { Converter, bool, str, float, obj } from "./converters";
+import { Converter, bool, str, float, obj, arr } from "./converters";
 import * as invariant from "invariant";
 import { Scope } from "./scope";
 import { Processed } from "./processed";
@@ -19,36 +19,117 @@ export interface Schema {
     [key: string]: Schema | FullValidator<any>;
 }
 
+/**
+ * Represents one validated property on a class. This is the result stored
+ * in the reflection metadata as retrieved by `getValidatedProperties`.
+ *
+ * @see getValidatedProperties
+ */
 export interface ValidatedProperty {
     readonly property: string;
     readonly propertyType: Function;
 }
 
+/**
+ * A full set of recursive validators featuring schema, array and value validation.
+ */
 export interface FullValidator<T> {
+    /**
+     * Call the validator manually with a value and an optional scope to limit the
+     * validation to.
+     *
+     * @param input The input to validate.
+     * @param scope The scop to limit the validation to. This only works with schemas inferred from classes.
+     *
+     * @see Scope
+     * @see schemaFrom
+     *
+     * @return The result of validating the value.
+     */
     (input: any, scope?: Scope): Processed<T> | Promise<Processed<T>>;
+    /**
+     * Call the function as a property or parameter decorator.
+     */
     (target: Object, propertyKey: string | symbol, index: number): void;
+    /**
+     * Add a set of validators to the validator.
+     *
+     * @param validators A list of validators to add to this validator.
+     *
+     * @return The same instance to use this method as a builder pattern.
+     */
     validate: (...validators: Validator<T>[]) => FullValidator<T>;
+    /**
+     * Set the schema to validate the object with.
+     *
+     * @param schema The schema to use for validation.
+     *
+     * @return The same instance to use this method as a builder pattern.
+     */
     schema: (schema: Schema) => FullValidator<T>;
+    /**
+     * Add a set of validators to the validator using a factory function which receives the current context
+     * of the decorator as an argument.
+     *
+     * @param factory A function taking the current context of the decorator as an argument, returning
+     *                a list of validators.
+     *
+     * @return The same instance to use this method as a builder pattern.
+     */
     validateCtx: (factory: (ctx: any) => Validator<T>[]) => FullValidator<T>;
-    validators: Validator<T>[];
-    validatorFactory: (ctx: any) => Validator<T>[];
-    validationSchema: Schema;
-    scopeLimit?: Scope;
+    /**
+     * Limit the scope of the schema validation to certain properties decorated with `@scope`.
+     * This only works with a schema inferred from a class.
+     *
+     * @param scope The scope to limit the validation to.
+     *
+     * @see Scope
+     * @see schemaFrom
+     *
+     * @return The same instance to use this method as a builder pattern.
+     */
     scope: (scope: Scope) => FullValidator<T>;
+    /**
+     * All validators attached to this validator.
+     */
+    validators: Validator<T>[];
+    /**
+     * An optional factory function to create validators depending on the current context with.
+     */
+    validatorFactory?: (ctx: any) => Validator<T>[];
+    /**
+     * An optional schema to validate the input object with.
+     */
+    validationSchema?: Schema;
+    /**
+     * An optional scope to limit schema validations with schemas inferred from classes with.
+     */
+    scopeLimit?: Scope;
 }
 
-export interface SchemaValidator<T> {
-    (value: T): Promise<Processed<T>>;
-}
-
-type ValidationMap = Map<number, ValidationOptions<any>>;
-
+/**
+ * Performs a schema validation of a given input optionally in the context of a given scope.
+ *
+ * @param validationSchema The schema to validate the input with.
+ * @param input The input to validate with the given schema
+ * @param scope An optional scope to limit the validation to. This only works with schemas
+ *              inferred from classes as it references the `@scope` decorators.
+ *
+ * @see Scope
+ * @see Processed
+ * @see schemaFrom
+ *
+ * @return The result of validating the input.
+ */
 export async function validateSchema<T extends { [key: string]: any }>(
     validationSchema: Schema, input: T, scope?: Scope,
 ): Promise<Processed<T>> {
     const result = new Processed<T>();
+    // The class the schema originated from. Will only be set if the schema was inferred from a class.
     const origin = Reflect.getMetadata("validation:schema:origin", validationSchema);
+    // All properties available in the current scope on the current class.
     const classProperties = typeof scope !== "undefined" && scope.propertiesForClass(origin.constructor);
+    // All keys on the schema that a currently relevant (depending on the scope).
     const validationKeys = Object.keys(validationSchema).filter(key => {
         return !classProperties ||
             classProperties.find(property => property.target === origin && property.property === key);
@@ -77,26 +158,6 @@ export async function validateSchema<T extends { [key: string]: any }>(
         });
     }
     return result;
-}
-
-export function arr<T>(validator?: FullValidator<T>): Converter<T[]> {
-    return async (value: any) => {
-        const processed = new Processed<T[]>();
-        if (typeof value === "undefined") { return processed; }
-        if (!Array.isArray(value)) {
-            processed.addErrors("Not an array.");
-            return processed;
-        }
-        if (typeof validator !== "undefined"){
-            await Promise.all(value.map(async (elem, index) => {
-                const result = await validator(elem);
-                if (result.hasErrors) {
-                    processed.addNested(index, result);
-                }
-            }));
-        }
-        return processed;
-    };
 }
 
 /**
@@ -168,7 +229,7 @@ export function getParameterValidation(
 ): ValidationOptions<any> {
     // Try to retrieve the `Map` of options with the keys being the parameter index and the value being
     // an the options object.
-    const map: ValidationMap = Reflect.getMetadata("validation:parameters", target, propertyKey);
+    const map: Map<number, ValidationOptions<any>> = Reflect.getMetadata("validation:parameters", target, propertyKey);
 
     // If no map has been found then this function has never been called for this method before. A new map needs
     // to be created and an empty options object needs to be attached.
