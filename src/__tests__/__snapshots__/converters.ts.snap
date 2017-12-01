@@ -109,6 +109,78 @@ Processed {
 
 exports[`arr with a specific datatype and input detects it as expected 12`] = `Processed {}`;
 
+exports[`bool handles "", correctly 1`] = `
+Object {
+  "error": "Not a valid boolean.",
+}
+`;
+
+exports[`bool handles "", correctly 2`] = `
+Object {
+  "error": "Not a valid boolean.",
+}
+`;
+
+exports[`bool handles "[object Object]", correctly 1`] = `
+Object {
+  "error": "Not a valid boolean.",
+}
+`;
+
+exports[`bool handles "[object Object]", correctly 2`] = `
+Object {
+  "error": "Not a valid boolean.",
+}
+`;
+
+exports[`bool handles "10", correctly 1`] = `
+Object {
+  "error": "Not a valid boolean.",
+}
+`;
+
+exports[`bool handles "10", correctly 2`] = `
+Object {
+  "error": "Not a valid boolean.",
+}
+`;
+
+exports[`bool handles "false", correctly 1`] = `
+Object {
+  "value": false,
+}
+`;
+
+exports[`bool handles "false", correctly 2`] = `
+Object {
+  "value": false,
+}
+`;
+
+exports[`bool handles "null", correctly 1`] = `
+Object {
+  "error": "Not a valid boolean.",
+}
+`;
+
+exports[`bool handles "true", correctly 1`] = `
+Object {
+  "value": true,
+}
+`;
+
+exports[`bool handles "true", correctly 2`] = `
+Object {
+  "value": true,
+}
+`;
+
+exports[`bool handles "undefined", correctly 1`] = `
+Object {
+  "value": undefined,
+}
+`;
+
 exports[`float handles "" correctly 1`] = `
 Object {
   "error": "Not a valid float.",

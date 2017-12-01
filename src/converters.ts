@@ -72,6 +72,7 @@ export function obj(value: any): Converted<Object> {
  */
 export function bool(value: any): Converted<boolean> {
     if (typeof value === "undefined") { return { value }; }
+    if (value === "true" || value === "false") { return { value: value === "true" }; }
     if (typeof value !== "boolean") { return { error: "Not a valid boolean." }; }
     return { value };
 }

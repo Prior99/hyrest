@@ -1,4 +1,4 @@
-import { int, float, str, obj } from "../converters";
+import { int, float, str, obj, bool } from "../converters";
 import { required, length } from "../validators";
 import { is, arr } from "../validation";
 
@@ -112,5 +112,26 @@ import { is, arr } from "../validation";
         test("arr with a specific datatype and input detects it as expected", async () => {
             expect(await arr(dataType)(value)).toMatchSnapshot();
         });
+    });
+});
+
+[
+    true,
+    false,
+    "true",
+    "false",
+    "",
+    10,
+    {},
+    [],
+    {
+        nested: {},
+    },
+    "10",
+    null, //tslint:disable-line
+    undefined,
+].forEach(input => {
+    test(`bool handles "${input}", correctly`, () => {
+        expect(bool(input)).toMatchSnapshot();
     });
 });
