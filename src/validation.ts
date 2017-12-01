@@ -65,9 +65,13 @@ export interface FullValidator<T> {
      */
     (input: any, scope?: Scope): Processed<T> | Promise<Processed<T>>;
     /**
-     * Call the function as a property or parameter decorator.
+     * Call the function as a parameter decorator.
      */
     (target: Object, propertyKey: string | symbol, index: number): void;
+    /**
+     * Call the function as a property decorator.
+     */
+    (target: Object, propertyKey: string, descriptor?: PropertyDescriptor): void;
     /**
      * Add a set of validators to the validator.
      *

@@ -118,8 +118,8 @@ export function createScope() {
  * @see dump
  * @see populate
  */
-export function scope(...scopes: Scope[]): MethodDecorator {
-    return function<T>(target: Object, property: string, descriptor?: TypedPropertyDescriptor<T>) {
+export function scope(...scopes: Scope[]) {
+    return function<T>(target: Object, property: string, descriptor?: PropertyDescriptor) {
         const expectedType = Reflect.getMetadata("design:type", target, property);
         scopes.forEach(decoratedScope => decoratedScope.registerProperty({
             target, property, expectedType,
@@ -127,8 +127,8 @@ export function scope(...scopes: Scope[]): MethodDecorator {
     };
 }
 
-export function arrayOf<T>(clazz: Constructable<T>): MethodDecorator {
-    return function<U>(target: Object, property: string, descriptor?: TypedPropertyDescriptor<U>) {
+export function arrayOf<T>(clazz: Constructable<T>) {
+    return function(target: Object, property: string, descriptor?: PropertyDescriptor) {
         Reflect.defineMetadata("arrayof", clazz, target, property);
     };
 }

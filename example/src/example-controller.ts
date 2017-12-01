@@ -9,43 +9,45 @@ import {
     is,
     DataType,
     oneOf,
-    schema,
     required,
+    schemaFrom,
+    arrayOf,
+    scope,
+    createScope,
 } from "../../src";
 
-export interface ExamplePostBody {
-    name: string;
-    other: {
-        num1: number;
-        num2: number;
-    };
+const world = createScope();
+const owner = createScope().include(world);
+const create = createScope();
+
+export class Other {
+    @scope(world, create) @is(DataType.int)
+    public num1: number;
+    @scope(owner, create) @is()
+    public num2: number;
 }
 
-export interface ExampleResult {
-    name: string;
-}
+export class Example { // tslint:disable-line
+    @scope(world, create) @is().validate(oneOf("hunter", "jonas"))
+    public name: string;
 
-const ExampleSchema = {
-    name: is(DataType.str).validate(oneOf("hunter", "jonas")),
-    other: is(DataType.obj).validate(schema({
-        num1: is(DataType.int),
-        num2: is(DataType.float),
-    })),
-};
+    @scope(world, create) @is() @arrayOf(Other)
+    public others: Other[];
+    @scope(world) @is()
+    public example?: Example;
+}
 
 @controller({ baseUrl: "http://localhost:9000" })
-export class ExampleController {
+export class ExampleController { // tslint:disable-line
     @route("POST", "/example/:id")
     public postExample(
             @param("id") @is(DataType.int) id: number,
-            @body() @is(DataType.obj).validate(schema(ExampleSchema), required) example: ExamplePostBody,
+            @body() @is(DataType.obj).validate(required).schema(schemaFrom(Example)) example: Example,
             @query("age") @is(DataType.float) age: number,
-            @query("kind") @is(DataType.str).validate(oneOf("a", "b", "c"), required) kind: string): ExampleResult {
+            @query("kind") @is(DataType.str).validate(oneOf("a", "b", "c"), required) kind: string): Example {
         if (age > 10) {
             return badRequest(undefined, "Cannot create example with age > 10.");
         }
-        return created({
-            name: `${id}-${example.name}-${age} (${kind}): ${example.other.num1}/${example.other.num2}`,
-        });
+        return created(example);
     }
 }

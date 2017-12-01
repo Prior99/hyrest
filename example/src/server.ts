@@ -1,5 +1,5 @@
 import * as Express from "express";
-import { hyrest } from "../../src";
+import { hyrest } from "../../src/middleware";
 import * as BodyParser from "body-parser";
 import { ExampleController } from "./example-controller";
 

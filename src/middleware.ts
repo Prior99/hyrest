@@ -103,7 +103,7 @@ export function hyrest(...controllerObjects: any[]): Router {
                 const validators = [ ...options.validators, ...factoryValidators ];
                 const { converter, validationSchema, scopeLimit } = options;
                 const validationResult = await processValue(arg, converter, validators, validationSchema, scopeLimit);
-                processed.push(validationResult);
+                processed[index] = validationResult;
                 if (!validationResult.hasErrors) {
                     return;
                 }
