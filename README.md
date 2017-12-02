@@ -477,7 +477,7 @@ class SomeController {
 Use the `hyrest` middleware to connect your controllers to express:
 
 ```typescript
-import { hyrest } from "hyrest/dist/middleware";
+import { hyrest } from "hyrest/middleware";
 import * as Express from express;
 import * as BodyParser from "body-parser";
 import { UserController } from "./user-controller";
@@ -494,7 +494,7 @@ app.listen(3000);
 ```
 
 Everything else hapens magically.
-**The middleware needs to be directly imported from `dist/middleware` in order to keep the overall bundle
+**The middleware needs to be directly imported from `hyrest/middleware` in order to keep the overall bundle
 independent from express.**
 
 ## Usage as client
