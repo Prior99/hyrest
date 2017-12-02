@@ -153,6 +153,9 @@ export function dump<T>(dumpScope: Scope, arg2?: T): T | ((instance: T) => T) {
         }
         if (typeof instance === "object") {
             const propertiesForClass = dumpScope.propertiesForClass(instance.constructor);
+            console.log(Object.getPrototypeOf(instance))
+            console.log(Object.getPrototypeOf(Object.getPrototypeOf(instance)))
+            console.log(Object.getPrototypeOf(Object.getPrototypeOf(Object.getPrototypeOf(instance))))
             const keys = Object.keys(instance);
             return keys.reduce((result, key) => {
                 if (propertiesForClass.find(({ property }) => property === key)) {

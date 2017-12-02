@@ -263,3 +263,33 @@ test("populating a structure with an `any` or `interface` type", () => {
     expect(populate(scope1, Class1, { test1: false, test2: { test: true } })).toMatchSnapshot();
     expect(populate(scope1, Class1, { test1: {}})).toMatchSnapshot();
 });
+
+test("populating a structure with a setter", () => {
+    const scope1 = createScope();
+    const mock = jest.fn();
+
+    class Class1 {// tslint:disable-line
+        @scope(scope1)
+        public set test(num: number) { mock(num); }
+    }
+    populate(scope1, Class1, { test: 29 });
+    expect(mock).toHaveBeenCalledWith(29);
+});
+
+test("dumping a structure with a getter", () => {
+    const scope1 = createScope();
+
+    class Class1 {// tslint:disable-line
+        @scope(scope1)
+        public get test1() { return 1; }
+    }
+
+    class Class2 extends Class1 {// tslint:disable-line
+        @scope(scope1)
+        public get test2() { return 2; }
+    }
+    expect(dump(scope1, new Class2())).toEqual({
+        test1: 1,
+        test2: 2,
+    });
+});
