@@ -97,7 +97,7 @@ export interface FullValidator<T, TContext> {
      *
      * @return The same instance to use this method as a builder pattern.
      */
-    validateCtx: (factory: (ctx: any) => Validator<T>[]) => FullValidator<T, TContext>;
+    validateCtx: (factory: (ctx: any) => (Validator<T>[] | Validator<T>)) => FullValidator<T, TContext>;
     /**
      * Limit the scope of the schema validation to certain properties decorated with `@scope`.
      * This only works with a schema inferred from a class.
@@ -117,7 +117,7 @@ export interface FullValidator<T, TContext> {
     /**
      * An optional factory function to create validators depending on the current context with.
      */
-    validatorFactory?: (ctx: TContext) => Validator<T>[] | Validator<T>;
+    validatorFactory?: (ctx: TContext) => (Validator<T>[] | Validator<T>);
     /**
      * An optional schema to validate the input object with.
      */
@@ -395,7 +395,7 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         fn.validators.push(...validators);
         return fn;
     };
-    fn.validateCtx = (factory: (ctx: TContext) => Validator<T>[] | Validator<T>) => {
+    fn.validateCtx = (factory: (ctx: TContext) => (Validator<T>[] | Validator<T>)) => {
         fn.validationFactory = factory;
         return fn;
     };

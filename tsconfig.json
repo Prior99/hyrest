@@ -17,6 +17,7 @@
         "dist/",
         "**/__tests__/*",
         "example/",
-        "index.d.ts"
+        "index.d.ts",
+        "middleware.d.ts"
     ]
 }

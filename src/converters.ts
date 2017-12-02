@@ -85,7 +85,7 @@ export function bool(value: any): Converted<boolean> {
  *
  * @return The array converter.
  */
-export function arr<T>(validator?: FullValidator<T>): Converter<T[]> {
+export function arr<T, TContext>(validator?: FullValidator<T, TContext>): Converter<T[]> {
     return async (value: any) => {
         const processed = new Processed<T[]>();
         // Ignore `undefined` inputs. This is handled by the `required` validator if intended by
