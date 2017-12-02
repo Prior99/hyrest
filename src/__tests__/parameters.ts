@@ -1,7 +1,7 @@
 import { body, getBodyParameters, param, getUrlParameters, query, getQueryParameters } from "../parameters";
 
-test("@body()", () => {
-    class TestController { //tslint:disable-line
+test("@body, @param and @query", () => {
+    class TestController { // tslint:disable-line
         public method(@param("param1") param: string, @query("query1") query: string, @body() body: any) {}
     }
 

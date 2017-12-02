@@ -11,7 +11,7 @@ import { oneOf, required, email, length } from "../validators";
             "test",
             {},
             [],
-            null, //tslint:disable-line
+            null, // tslint:disable-line
             undefined,
         ],
     },
@@ -25,7 +25,7 @@ import { oneOf, required, email, length } from "../validators";
             "test",
             {},
             [],
-            null, //tslint:disable-line
+            null, // tslint:disable-line
             undefined,
         ],
     },
@@ -48,7 +48,7 @@ import { oneOf, required, email, length } from "../validators";
 
 [
     undefined,
-    null, //tslint:disable-line
+    null, // tslint:disable-line
     {},
     [],
     9,
@@ -61,7 +61,7 @@ import { oneOf, required, email, length } from "../validators";
 
 [
     undefined,
-    null, //tslint:disable-line
+    null, // tslint:disable-line
     {},
     [],
     9,

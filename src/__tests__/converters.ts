@@ -22,7 +22,7 @@ import { is } from "../validation";
     10.4,
     12397891239817987123123332232,
     "10foo",
-    null, //tslint:disable-line
+    null, // tslint:disable-line
     undefined,
 ].forEach(input => {
     test(`int handles "${input}" correctly`, () => {
@@ -44,7 +44,7 @@ import { is } from "../validation";
     10.9,
     217319823987123987192873123,
     "10foo",
-    null, //tslint:disable-line
+    null, // tslint:disable-line
     undefined,
 ].forEach(input => {
     test(`float handles "${input}" correctly`, () => {
@@ -59,7 +59,7 @@ import { is } from "../validation";
     [],
     "test",
     "10",
-    null, //tslint:disable-line
+    null, // tslint:disable-line
     undefined,
 ].forEach(input => {
     test(`str handles "${input}", correctly`, () => {
@@ -76,7 +76,7 @@ import { is } from "../validation";
         nested: {},
     },
     "10",
-    null, //tslint:disable-line
+    null, // tslint:disable-line
     undefined,
 ].forEach(input => {
     test(`obj handles "${input}", correctly`, () => {
@@ -103,7 +103,7 @@ import { is } from "../validation";
             [ { value: "test" } ], // Snapshot 8.
             [], // Snapshot 9.
             {}, // Snapshot 10.
-            null, //tslint:disable-line
+            null, // tslint:disable-line
             undefined,
         ],
     },
@@ -128,7 +128,7 @@ import { is } from "../validation";
         nested: {},
     },
     "10",
-    null, //tslint:disable-line
+    null, // tslint:disable-line
     undefined,
 ].forEach(input => {
     test(`bool handles "${input}", correctly`, () => {

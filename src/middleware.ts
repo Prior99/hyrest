@@ -14,6 +14,7 @@ import {
 import { getParameterValidation, processValue } from "./validation";
 import { Converter } from "./converters";
 import { Processed } from "./processed";
+import { populate } from "./scope";
 
 /**
  * A wrapper around a `Route` which also carries the Route's parameter injections.
@@ -132,7 +133,17 @@ export function hyrest(...controllerObjects: any[]): Router {
                 }, "Validation failed.");
             } else {
                 try {
-                    data = await routeMethod.apply(controllerObject, processed.map(result => result.value));
+                    const processedArgs = processed.map((result, index) => {
+                        const bodyParameter = bodyParameters.find(param => param.index === index);
+                        const autoPopulate = bodyParameter &&
+                            typeof bodyParameter.scope !== "undefined" &&
+                            typeof bodyParameter.paramType !== "undefined";
+                        if (autoPopulate) {
+                            return populate(bodyParameter.scope, bodyParameter.paramType, result.value);
+                        }
+                        return result.value;
+                    });
+                    data = await routeMethod.apply(controllerObject, processedArgs);
                 } catch (err) {
                     console.error(err);
                     data = internalServerError();

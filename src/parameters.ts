@@ -1,5 +1,10 @@
 import "reflect-metadata";
 
+import { Scope } from "./scope";
+import { Constructable } from "./types";
+import { is, inferConverter } from "./validation";
+import { schemaFrom } from "./schema-generator";
+
 /**
  * A parameter decorated to receive the injected body.
  */
@@ -8,6 +13,15 @@ export interface BodyParameter {
      * The index of the parameter that was decorated.
      */
     readonly index: number;
+    /**
+     * An optional scope to limit populating to. If specified, the decorated parameter
+     * will be populated with the body's input.
+     */
+    readonly scope?: Scope;
+    /**
+     * The type of the paramter to use for populating.
+     */
+    readonly paramType?: Constructable<any>;
 }
 
 /**
@@ -43,14 +57,23 @@ export function getBodyParameters(target: Object, propertyKey: string | symbol):
  * If the parameter is decorated with this decorator, the body of each request will be injected
  * into that particular parameter.
  *
+ * @param scope An optional scope. If specified, the parameter will be populated using this scope and the
+ *              parameter type.
+ *
  * @return A parameter decorator to inject the body.
  */
-export function body(): ParameterDecorator {
+export function body(scope?: Scope): ParameterDecorator {
     return (target: Object, propertyKey: string, index: number) => {
+        const paramType = Reflect.getMetadata("design:paramtypes", target, propertyKey)[index];
         const bodyParameters = getBodyParameters(target, propertyKey);
         bodyParameters.push({
-            index,
+            index, scope, paramType,
         });
+        if (typeof scope !== "undefined" && typeof paramType !== "undefined") {
+            is(inferConverter(paramType))
+                .schema(schemaFrom(paramType))
+                .scope(scope)(target, propertyKey, index);
+        }
     };
 }
 

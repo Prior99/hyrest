@@ -12,8 +12,8 @@ configureController(ExampleController, { mode: ControllerMode.CLIENT });
 const exampleController = new ExampleController();
 
 function prettyPrint(err: ApiError) {
-    console.log(err.statusCode); //tslint:disable-line
-    console.log(JSON.stringify(err.answer, null, 2)); //tslint:disable-line
+    console.log(err.statusCode); // tslint:disable-line
+    console.log(JSON.stringify(err.answer, null, 2)); // tslint:disable-line
 }
 
 async function call() {
@@ -26,7 +26,7 @@ async function call() {
             },
         ],
     };
-    console.log(await exampleController.postExample(8, validBody, 9, "c")); //tslint:disable-line
+    console.log(await exampleController.postExample(8, validBody, 9, "c")); // tslint:disable-line
     try {
         await exampleController.postExample("invalid" as any, validBody, 9, "c");
     } catch (err) {

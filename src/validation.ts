@@ -349,7 +349,7 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
             // Called as a function.
             // Create all factory validators.
             const { validators, validationSchema } = fn;
-            const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : []; //tslint:disable-line
+            const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : []; // tslint:disable-line
             const scope = fn.scopeLimit || args[1];
             return processValue(args[0], converter, [...validators, ...factoryValidators], validationSchema, scope);
         }

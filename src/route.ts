@@ -124,7 +124,7 @@ export function route(method: HTTPMethod, url: string, options?: RouteOptions): 
             }
 
             // Otherwise, just call the original function with the original arguments.
-            return originalFunction.apply(this, args); //tslint:disable-line
+            return originalFunction.apply(this, args); // tslint:disable-line
         };
         return descriptor;
     };

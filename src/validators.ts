@@ -68,7 +68,7 @@ const emailValidationRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+
  */
 export function email(value: string): Validation {
     if (typeof value === "undefined") { return {}; }
-    if (typeof value !== "string" || !value.match(emailValidationRegex)) { //tslint:disable-line
+    if (typeof value !== "string" || !value.match(emailValidationRegex)) { // tslint:disable-line
         return { error: `String is not a valid email.` };
     }
     return {};

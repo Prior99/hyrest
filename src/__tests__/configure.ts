@@ -35,7 +35,7 @@ import { configureController, controller, ControllerMode } from "..";
 });
 
 test("`configureController` throws an error when called with a non-@controller", () => {
-    class NotAController {} //tslint:disable-line
+    class NotAController {} // tslint:disable-line
     expect(() => configureController(NotAController, {})).toThrowErrorMatchingSnapshot();
 });
 

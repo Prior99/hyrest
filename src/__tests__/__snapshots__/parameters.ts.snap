@@ -1,14 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`@body() 1`] = `
+exports[`@body, @param and @query 1`] = `
 Array [
   Object {
     "index": 2,
+    "paramType": [Function],
+    "scope": undefined,
   },
 ]
 `;
 
-exports[`@body() 2`] = `
+exports[`@body, @param and @query 2`] = `
 Array [
   Object {
     "index": 0,
@@ -17,7 +19,7 @@ Array [
 ]
 `;
 
-exports[`@body() 3`] = `
+exports[`@body, @param and @query 3`] = `
 Array [
   Object {
     "index": 1,

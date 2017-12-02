@@ -159,6 +159,17 @@ class UserController {
 }
 ```
 
+It is possible to automatically perform a [schema validation ](#schema-validation) and [populate
+the parameter with the correct type](#populating) limited to a [scope](#scopes) with only `@body`:
+
+```typescript
+...
+@route("POST", "/signup")
+public postSignup(@body(signupScope) user: User) {
+    // `user` is now validated against `User` and a propert instance of `User`.
+}
+```
+
 ## Validation
 
 Of course it is important to validate all input. The library itself is typesafe but the REST

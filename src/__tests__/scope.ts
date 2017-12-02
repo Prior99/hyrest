@@ -112,7 +112,7 @@ test("populating a marked and nested structure", () => {
 test("populating and dumping a circular structure", () => {
     const scope1 = createScope();
     const scope2 = createScope();
-    class Circular { //tslint:disable-line
+    class Circular { // tslint:disable-line
         @scope(scope1)
         public property1: string;
 
@@ -183,12 +183,12 @@ test("populating and dumping a circular structure", () => {
 test("populating a structure with an (un-)typed array", () => {
     const scope1 = createScope();
 
-    class Untyped {//tslint:disable-line
+    class Untyped {// tslint:disable-line
         @scope(scope1)
         public test: string[];
     }
 
-    class Typed {//tslint:disable-line
+    class Typed {// tslint:disable-line
         @scope(scope1) @arrayOf(String)
         public test: string[];
     }
@@ -205,12 +205,12 @@ test("populating a structure with an (un-)typed array", () => {
 test("populating a structure with a not matching input", () => {
     const scope1 = createScope();
 
-    class Class1 {//tslint:disable-line
+    class Class1 {// tslint:disable-line
         @scope(scope1)
         public test: boolean;
     }
 
-    class Class2 {//tslint:disable-line
+    class Class2 {// tslint:disable-line
         @scope(scope1)
         public test: Class1;
     }
@@ -225,12 +225,12 @@ test("populating a structure with a not matching input", () => {
 test("populating a structure with a not matching input", () => {
     const scope1 = createScope();
 
-    class Class1 {//tslint:disable-line
+    class Class1 {// tslint:disable-line
         @scope(scope1)
         public test: boolean;
     }
 
-    class Class2 {//tslint:disable-line
+    class Class2 {// tslint:disable-line
         @scope(scope1)
         public test: Class1;
     }
@@ -249,7 +249,7 @@ test("populating a structure with an `any` or `interface` type", () => {
         test: boolean;
     }
 
-    class Class1 {//tslint:disable-line
+    class Class1 {// tslint:disable-line
         @scope(scope1)
         public test1: any;
 

@@ -3,9 +3,10 @@ import { controller, ControllerMode } from "../controller";
 import { route } from "../route";
 import { body, param, query } from "../parameters";
 import { float, int, str } from "../converters";
-import { required, email } from "../validators";
+import { required, email, length } from "../validators";
 import { is } from "../validation";
 import { ok, created } from "../answers";
+import { createScope, scope } from "../scope";
 import * as request from "supertest";
 import * as Express from "express";
 import * as BodyParser from "body-parser";
@@ -75,14 +76,14 @@ test("The `hyrest` middleware handles requests correctly", async () => {
 });
 
 test("The `hyrest` middleware throws when adding a non-@controller object", () => {
-    class NotAController {} //tslint:disable-line
+    class NotAController {} // tslint:disable-line
 
     expect(() => hyrest(new NotAController())).toThrow();
 });
 
 test("The `hyrest` middleware reacts to all http methods", async () => {
     @controller({ mode: ControllerMode.SERVER })
-    class TestController2 { //tslint:disable-line
+    class TestController2 { // tslint:disable-line
         @route("GET", "/get")
         public getGet() { return ok(); }
 
@@ -124,7 +125,7 @@ test("The `hyrest` middleware reacts to all http methods", async () => {
 
 test("The `hyrest` middleware throws with an invalid HTTP method", () => {
     @controller()
-    class TestController3 { //tslint:disable-line
+    class TestController3 { // tslint:disable-line
         @route("INVALID" as any, "/invalid")
         public invalid() { return ok(); }
     }
@@ -134,7 +135,7 @@ test("The `hyrest` middleware throws with an invalid HTTP method", () => {
 
 test("The `hyrest` middleware handles invalid requests correctly", async () => {
     @controller({ mode: ControllerMode.SERVER })
-    class TestController4 { //tslint:disable-line
+    class TestController4 { // tslint:disable-line
         @route("GET", "/user/:id")
         public getTest(
                 @is(int) @param("id") id: number,
@@ -221,7 +222,7 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
 test("The `hyrest` middleware preserves `this`", async () => {
     const mock = jest.fn();
     @controller({ mode: ControllerMode.SERVER })
-    class TestController5 { //tslint:disable-line
+    class TestController5 { // tslint:disable-line
         @route("GET", "/get")
         public getGet() {
             mock(this);
@@ -245,7 +246,7 @@ test("The `hyrest` middleware preserves `this`", async () => {
 test("The `hyrest` middleware preserves `this` in the @is decorator", async () => {
     const mock = jest.fn();
     @controller({ mode: ControllerMode.SERVER })
-    class TestController6 { //tslint:disable-line
+    class TestController6 { // tslint:disable-line
         @bind
         private validate() {
             mock(this);
@@ -269,4 +270,64 @@ test("The `hyrest` middleware preserves `this` in the @is decorator", async () =
         .expect(200)
         .set("content-type", "application/json");
     expect(mock.mock.calls[0][0]).toBe(instance);
+});
+
+test("@body with a scope", async () => {
+    const login = createScope();
+    const signup = createScope().include(login);
+
+    class User { // tslint:disable-line
+        @scope(login) @is().validate(email, required)
+        public email: string;
+
+        @scope(signup) @is().validate(length(5, 100), required)
+        public username: string;
+
+        @scope(login) @is().validate(length(8, 100), required)
+        public password: string;
+    }
+
+    const mockSignup = jest.fn();
+    const mockLogin = jest.fn();
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController7 { // tslint:disable-line
+        @bind @route("POST", "/signup")
+        public postSignup(@body(signup) user: User) {
+            mockSignup(user);
+            return ok(user);
+        }
+
+        @bind @route("POST", "/login")
+        public postLogin(@body(login) user: User) {
+            mockLogin(user);
+            return ok(user);
+        }
+    }
+
+    const instance = new TestController7();
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(hyrest(instance));
+
+    const responseA = await request(http)
+        .post("/signup")
+        .expect(200)
+        .set("content-type", "application/json")
+        .send({ email: "test@example.com", username: "testtest", password: "asdfsadf" });
+    expect(mockSignup.mock.calls[0][0]).toMatchSnapshot();
+
+    const responseB = await request(http)
+        .post("/login")
+        .expect(200)
+        .set("content-type", "application/json")
+        .send({ email: "test@example.com", password: "asdfsadf" });
+    expect(mockLogin.mock.calls[0][0]).toMatchSnapshot();
+
+    const responseC = await request(http)
+        .post("/login")
+        .expect(422)
+        .set("content-type", "application/json")
+        .send({ email: "test@example.com", password: "asdfsadf", username: "testtest" });
+    expect(mockLogin.mock.calls[1]).toBeUndefined();
 });
