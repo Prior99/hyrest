@@ -29,6 +29,6 @@ test("`allKeys`", () => {
     c.c = 1;
     c.b = 0;
     expect(allKeys(c)).toEqual([
-        "testC", "testB", "testA",
+        "c", "b", "testC", "testB", "testA",
     ]);
 });

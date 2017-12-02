@@ -8,12 +8,17 @@
  */
 export function allKeys(obj: Object) {
     let current = obj;
-    const keys = [];
-    while (current !== null) { // tslint:disable-line
-        const theseKeys = Object.keys(current);
-        keys.push(...);
-        theseKeys.forEach(key => console.log(Reflect.getOwnPropertyDescriptor(current, key)))
+    const keys = Object.keys(obj);
+    while (true) {
         current = Object.getPrototypeOf(current);
+        if (current === null) { // tslint:disable-line
+            break;
+        }
+        Object.keys(current).forEach(key => {
+            if (typeof Reflect.getOwnPropertyDescriptor(current, key).get !== "undefined") {
+                keys.push(key);
+            }
+        });
     }
     return keys;
 }
