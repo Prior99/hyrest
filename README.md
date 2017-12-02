@@ -30,7 +30,7 @@ is transparent, type-safe and as easy calling a method.
          * [Custom Validators](#custom-validators)
          * [How about validation against my database?](#how-about-validation-against-my-database)
          * [How about validation against my database from the frontend?](#how-about-validation-against-my-database-from-the-frontend)
-         * [What if I need to access "this" from my validator?](#what-if-i-need-to-access-this-from-my-validator)
+         * [What if I need to access my application's context from my validator?](#what-if-i-need-to-access-my-applications-context-from-my-validator)
      * [Usage as express middleware](#usage-as-express-middleware)
      * [Usage as client](#usage-as-client)
      * [Scopes](#scopes)
@@ -444,22 +444,29 @@ class ValidationController {
 Afterwards just use the method as a validator in any schema or decorator. The frontend will call
 the REST endpoint and the server will perform the check on the database.
 
-### What if I need to access "this" from my validator?
+### What if I need to access my application's context from my validator?
 
-Another method called `validateCtx` exists, which takes a factory with the current `this` context
-passed in as the first argument.
+Another method called `validateCtx` exists, which takes a factory with the context passed in as the
+first argument. It is possible to specify the context by calling `.context(obj)` on the hyrest
+middleware. This way a context object can be passed through to the validation.
+
+```typescript
+app.use(hyrest(...controllers).context({
+    validator: (value: string) => {
+        ...
+    }
+}));
+```
+
+The factory can either return an array of validators or a single validator.
 
 ```typescript
 import { controller, route, body, DataType } from "hyrest";
 
 @controller()
 class SomeController {
-    private validator(value: string) {
-        console.log(this); // Current instance on which the route was called.
-        ...
-    }
     @route("POST", "/validate/email")
-    public validateEmail(@body() @is(DataType.str).validateCtx(ctx => [ctx.validator]) value: string) {
+    public validateEmail(@body() @is(DataType.str).validateCtx(ctx => ctx.validator) value: string) {
         ...
     }
 }
