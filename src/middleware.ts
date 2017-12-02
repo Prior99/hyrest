@@ -49,6 +49,10 @@ function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
     }, []);
 }
 
+export interface HyrestBuilder<T> {
+    context: (contextObject: T) => Router & HyrestBuilder<T>;
+}
+
 /**
  * A middleware to use with express. Takes a list of controllers as arguments. All controllers will be attached
  * to react and will receive requests.
@@ -62,7 +66,8 @@ function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
  *
  * @return An express router.
  */
-export function hyrest(...controllerObjects: any[]): Router {
+export function hyrest<TContext>(...controllerObjects: any[]): Router & HyrestBuilder<TContext> {
+    let context: TContext;
     // Get the actual `Controller` instances for each @controller decorated object.
     // Throws an error if an instance of a class not decorated with @controller has been passed.
     const controllers = controllerObjects.map(controllerObject => {
@@ -100,10 +105,12 @@ export function hyrest(...controllerObjects: any[]): Router {
             let errorEncountered = false;
             await Promise.all(args.map(async (arg, index) => {
                 const options = getParameterValidation(route.target, route.property, index);
-                const factoryValidators = options.validatorFactory ? options.validatorFactory(controllerObject) : [];
+                const factoryResult = options.validatorFactory ? options.validatorFactory(context) : [];
+                const factoryValidators = Array.isArray(factoryResult) ? factoryResult : [factoryResult]; // tslint:disable-line
                 const validators = [ ...options.validators, ...factoryValidators ];
                 const { converter, validationSchema, scopeLimit } = options;
                 const validationResult = await processValue(arg, converter, validators, validationSchema, scopeLimit);
+
                 processed[index] = validationResult;
                 if (!validationResult.hasErrors) {
                     return;
@@ -175,5 +182,9 @@ export function hyrest(...controllerObjects: any[]): Router {
             default: throw new Error(`Unknown HTTP method ${route.method}. Take a look at ${route.property}.`);
         }
     });
-    return router;
+    (router as any).context = (newContext: TContext) => {
+        context = newContext;
+        return router;
+    };
+    return router as (Router & HyrestBuilder<TContext>);
 }

@@ -243,18 +243,26 @@ test("The `hyrest` middleware preserves `this`", async () => {
     expect(mock.mock.calls[0][0]).toBe(instance);
 });
 
-test("The `hyrest` middleware preserves `this` in the @is decorator", async () => {
+test("The `hyrest` middleware performs a context validation", async () => {
     const mock = jest.fn();
+    mock.mockReturnValue({});
+    const context = {
+        validate1: mock,
+        validate2: mock,
+        validate3: async (id: string) => {
+            mock(id);
+            return { error: "Something went wrong." };
+        },
+    };
     @controller({ mode: ControllerMode.SERVER })
     class TestController6 { // tslint:disable-line
-        @bind
-        private validate() {
-            mock(this);
-            return {};
+        @route("GET", "/get/:id")
+        public getGet(@param("id") @is(str).validateCtx(ctx => ctx.validate1)) {
+            return ok();
         }
 
-        @bind @route("GET", "/get/:id")
-        public getGet(@param("id") @is(str).validateCtx(ctx => [ctx.validate])) {
+        @route("GET", "/get/array/:id")
+        public getArray(@param("id") @is(str).validateCtx(ctx => [ctx.validate2, ctx.validate3])) {
             return ok();
         }
     }
@@ -263,13 +271,20 @@ test("The `hyrest` middleware preserves `this` in the @is decorator", async () =
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(hyrest(instance));
+    http.use(hyrest(instance).context(context));
 
     const responseA = await request(http)
         .get("/get/some-id")
         .expect(200)
         .set("content-type", "application/json");
-    expect(mock.mock.calls[0][0]).toBe(instance);
+    expect(mock.mock.calls[0][0]).toBe("some-id");
+
+    const responseB = await request(http)
+        .get("/get/array/some-id")
+        .expect(422)
+        .set("content-type", "application/json");
+    expect(mock.mock.calls[1][0]).toBe("some-id");
+    expect(mock.mock.calls[2][0]).toBe("some-id");
 });
 
 test("@body with a scope and a route with `.dump()`", async () => {

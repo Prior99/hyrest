@@ -20,7 +20,7 @@ export interface ValidationOptions<T> {
      * A factory function to call with the current context of the
      * decorator which will return a list of validators.
      */
-    validatorFactory?: (ctx: any) => Validator<T>[];
+    validatorFactory?: (ctx: any) => Validator<T>[] | Validator<T>;
     /**
      * An optional schema to match the inputs against.
      */
@@ -33,7 +33,7 @@ export interface ValidationOptions<T> {
 }
 
 export interface Schema {
-    [key: string]: Schema | FullValidator<any>;
+    [key: string]: Schema | FullValidator<any, any>;
 }
 
 /**
@@ -50,7 +50,7 @@ export interface ValidatedProperty {
 /**
  * A full set of recursive validators featuring schema, array and value validation.
  */
-export interface FullValidator<T> {
+export interface FullValidator<T, TContext> {
     /**
      * Call the validator manually with a value and an optional scope to limit the
      * validation to.
@@ -79,7 +79,7 @@ export interface FullValidator<T> {
      *
      * @return The same instance to use this method as a builder pattern.
      */
-    validate: (...validators: Validator<T>[]) => FullValidator<T>;
+    validate: (...validators: Validator<T>[]) => FullValidator<T, TContext>;
     /**
      * Set the schema to validate the object with.
      *
@@ -87,7 +87,7 @@ export interface FullValidator<T> {
      *
      * @return The same instance to use this method as a builder pattern.
      */
-    schema: (schema: Schema) => FullValidator<T>;
+    schema: (schema: Schema) => FullValidator<T, TContext>;
     /**
      * Add a set of validators to the validator using a factory function which receives the current context
      * of the decorator as an argument.
@@ -97,7 +97,7 @@ export interface FullValidator<T> {
      *
      * @return The same instance to use this method as a builder pattern.
      */
-    validateCtx: (factory: (ctx: any) => Validator<T>[]) => FullValidator<T>;
+    validateCtx: (factory: (ctx: any) => Validator<T>[]) => FullValidator<T, TContext>;
     /**
      * Limit the scope of the schema validation to certain properties decorated with `@scope`.
      * This only works with a schema inferred from a class.
@@ -109,7 +109,7 @@ export interface FullValidator<T> {
      *
      * @return The same instance to use this method as a builder pattern.
      */
-    scope: (scope: Scope) => FullValidator<T>;
+    scope: (scope: Scope) => FullValidator<T, TContext>;
     /**
      * All validators attached to this validator.
      */
@@ -117,7 +117,7 @@ export interface FullValidator<T> {
     /**
      * An optional factory function to create validators depending on the current context with.
      */
-    validatorFactory?: (ctx: any) => Validator<T>[];
+    validatorFactory?: (ctx: TContext) => Validator<T>[] | Validator<T>;
     /**
      * An optional schema to validate the input object with.
      */
@@ -339,7 +339,7 @@ function isCustomClass(propertyType: Function) {
  *
  * @return A decorator for a parameter in a @route method.
  */
-export function is<T>(converter?: Converter<T>): FullValidator<T> {
+export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TContext> {
     // This function can be called in three ways:
     // 1. Standalone, providing an input and an optional scope
     // 2. As a property decorator.
@@ -349,9 +349,8 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
             // Called as a function.
             // Create all factory validators.
             const { validators, validationSchema } = fn;
-            const factoryValidators = fn.validatorFactory ? fn.ValidatorFactory(this) : []; // tslint:disable-line
             const scope = fn.scopeLimit || args[1];
-            return processValue(args[0], converter, [...validators, ...factoryValidators], validationSchema, scope);
+            return processValue(args[0], converter, [...validators], validationSchema, scope);
         }
         // Either a parameter or property decorator.
         const isParameterDecorator = typeof args[2] === "number";
@@ -396,7 +395,7 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
         fn.validators.push(...validators);
         return fn;
     };
-    fn.validateCtx = (factory: (ctx: any) => Validator<T>[]) => {
+    fn.validateCtx = (factory: (ctx: TContext) => Validator<T>[] | Validator<T>) => {
         fn.validationFactory = factory;
         return fn;
     };
@@ -408,7 +407,7 @@ export function is<T>(converter?: Converter<T>): FullValidator<T> {
         fn.scopeLimit = scope;
         return fn;
     };
-    return fn as FullValidator<T>;
+    return fn as FullValidator<T, TContext>;
 }
 
 /**
