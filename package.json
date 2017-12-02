@@ -1,6 +1,6 @@
 {
   "name": "hyrest",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "A hybrid REST library for the frontend and backend.",
   "main": "dist/index.js",
   "author": "Frederick Gnodtke",
@@ -21,7 +21,9 @@
     "src",
     "LICENSE",
     "README.md",
-    "example"
+    "example",
+    "middleware.js",
+    "middleware.d.ts"
   ],
   "jest": {
     "coverageThreshold": {
