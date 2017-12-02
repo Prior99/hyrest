@@ -333,4 +333,10 @@ test("@body with a scope and a route with `.dump()`", async () => {
         .set("content-type", "application/json")
         .send({ email: "test@example.com", password: "asdfsadf", username: "testtest" });
     expect(mockLogin.mock.calls[1]).toBeUndefined();
+
+    const responseD = await request(http)
+        .post("/login")
+        .expect(422)
+        .set("content-type", "application/json");
+    expect(mockLogin.mock.calls[2]).toBeUndefined();
 });

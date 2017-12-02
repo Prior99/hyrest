@@ -3,6 +3,7 @@ import "reflect-metadata";
 import { Scope } from "./scope";
 import { Constructable } from "./types";
 import { is, inferConverter } from "./validation";
+import { required } from "./validators";
 import { schemaFrom } from "./schema-generator";
 
 /**
@@ -72,7 +73,8 @@ export function body(scope?: Scope): ParameterDecorator {
         if (typeof scope !== "undefined" && typeof paramType !== "undefined") {
             is(inferConverter(paramType))
                 .schema(schemaFrom(paramType))
-                .scope(scope)(target, propertyKey, index);
+                .scope(scope)
+                .validate(required)(target, propertyKey, index);
         }
     };
 }
