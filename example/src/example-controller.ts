@@ -39,10 +39,10 @@ export class Example { // tslint:disable-line
 
 @controller({ baseUrl: "http://localhost:9000" })
 export class ExampleController { // tslint:disable-line
-    @route("POST", "/example/:id")
+    @route("POST", "/example/:id").dump(Example, world)
     public postExample(
             @param("id") @is(DataType.int) id: number,
-            @body() @is(DataType.obj).validate(required).schema(schemaFrom(Example)) example: Example,
+            @body(world) example: Example,
             @query("age") @is(DataType.float) age: number,
             @query("kind") @is(DataType.str).validate(oneOf("a", "b", "c"), required) kind: string): Example {
         if (age > 10) {
