@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { HTTPMethod, Params } from "./types";
+import { HTTPMethod, Params, Constructable } from "./types";
 import { ControllerMode, Controller } from "./controller";
 import {
     QueryParameter,
@@ -10,6 +10,7 @@ import {
     getQueryParameters,
     getUrlParameters,
 } from "./parameters";
+import { Scope } from "./scope";
 
 /**
  * Additional options which can be passed to a Route.
@@ -42,6 +43,34 @@ export interface Route {
      * Additional configuration options for this route.
      */
     readonly options?: RouteOptions;
+    /**
+     * An optional scope to use for dumping, stored using `.dump(...)`.
+     */
+    readonly scope?: Scope;
+    /**
+     * An optional type to use for dumping, stored using `dump(...)`.
+     */
+    readonly returnType?: Constructable<any>;
+}
+
+export interface RouteFunction {
+    /**
+     * Method decorator signature.
+     */
+    <T>(target: Object, property: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+    /**
+     * An optional scope to use for dumping, stored using `.dump(...)`.
+     */
+    scope?: Scope;
+    /**
+     * An optional type to use for dumping, stored using `dump(...)`.
+     */
+    returnType?: Constructable<any>;
+    /**
+     * Call this function to have the route automatically dump the data using the scope and type
+     * and populate it again on the client side.
+     */
+    dump: (returnType: Constructable<any>, scope: Scope) => RouteFunction;
 }
 
 /**
@@ -82,10 +111,11 @@ export function getRoutes(target: Object): Route[] {
  *
  * @return A method decorator.
  */
-export function route(method: HTTPMethod, url: string, options?: RouteOptions): MethodDecorator {
-    return function (target: Object, property: string, descriptor: PropertyDescriptor) {
+export function route(method: HTTPMethod, url: string, options?: RouteOptions): RouteFunction {
+    const fn: any = function (target: Object, property: string, descriptor: PropertyDescriptor) {
+        const { scope, returnType } = fn;
         // Insert the new `Route` into the reflection metadata.
-        const routeMeta = { target, property, method, url, options };
+        const routeMeta = { target, property, method, url, options, scope, returnType };
         const routes = getRoutes(target);
         routes.push(routeMeta);
 
@@ -128,4 +158,10 @@ export function route(method: HTTPMethod, url: string, options?: RouteOptions): 
         };
         return descriptor;
     };
+    fn.dump = (returnType: Constructable<any>, scope: Scope) => {
+        fn.returnType = returnType;
+        fn.scope = scope;
+        return fn;
+    };
+    return fn as RouteFunction;
 }

@@ -272,7 +272,7 @@ test("The `hyrest` middleware preserves `this` in the @is decorator", async () =
     expect(mock.mock.calls[0][0]).toBe(instance);
 });
 
-test("@body with a scope", async () => {
+test("@body with a scope and a route with `.dump()`", async () => {
     const login = createScope();
     const signup = createScope().include(login);
 
@@ -291,13 +291,16 @@ test("@body with a scope", async () => {
     const mockLogin = jest.fn();
     @controller({ mode: ControllerMode.SERVER })
     class TestController7 { // tslint:disable-line
-        @bind @route("POST", "/signup")
+        @bind @route("POST", "/signup").dump(User, signup)
         public postSignup(@body(signup) user: User) {
             mockSignup(user);
-            return ok(user);
+            return ok({
+                ...user,
+                dangling: "Not present in snapshot.",
+            });
         }
 
-        @bind @route("POST", "/login")
+        @bind @route("POST", "/login").dump(User, login)
         public postLogin(@body(login) user: User) {
             mockLogin(user);
             return ok(user);

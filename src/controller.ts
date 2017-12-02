@@ -5,6 +5,7 @@ import { Route } from "./route";
 import { Params, ApiError, HTTPMethod } from "./types";
 import { compile } from "path-to-regexp";
 import { isBrowser } from "./is-browser";
+import { populate } from "./scope";
 
 export enum ControllerMode {
     SERVER = "server",
@@ -143,7 +144,11 @@ export class Controller {
 
             // If the response's status code was a 2xx status code, return the response as it succeeded.
             if (response.ok) {
-                return answer.data;
+                const routeData = answer.data;
+                if (typeof route.returnType !== "undefined" && typeof route.scope !== "undefined") {
+                    return populate(route.scope, route.returnType, routeData);
+                }
+                return routeData;
             }
 
             // Otherwise, create an error and handle it according to the controller's configuration.

@@ -6,6 +6,8 @@ Array [
     "method": "GET",
     "options": undefined,
     "property": "method",
+    "returnType": undefined,
+    "scope": undefined,
     "target": TestController {
       "method": [Function],
     },

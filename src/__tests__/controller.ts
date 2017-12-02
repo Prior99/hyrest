@@ -2,6 +2,9 @@ import "isomorphic-fetch";
 
 import { Controller } from "../controller";
 import { ApiError, HTTPMethod  } from "../types";
+import { scope, createScope } from "../scope";
+import { is } from "../validation";
+import { email, length, required } from "../validators";
 
 let controller: Controller;
 
@@ -97,4 +100,41 @@ test("`wrappedFetch` with a non-2xx status code", async () => {
 
     await expect(controller.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
     expect(mockErrorHandler).toHaveBeenCalledWith(error);
+});
+
+test("`wrappedFetch` with a `.dump()` route", async () => {
+    const login = createScope();
+
+    class User { // tslint:disable-line
+        @scope(login) @is().validate(email, required)
+        public email: string;
+
+        @scope(login) @is().validate(length(8, 100), required)
+        public password: string;
+    }
+
+    const routeWithScope = {
+        target: controller,
+        property: "thisMethodDoesNotExist",
+        url: "/user/:id/other/:other",
+        method: "GET" as HTTPMethod,
+        scope: login,
+        returnType: User,
+    };
+
+    global.fetch = jest.fn();
+    global.fetch.mockReturnValue({
+        json: () => ({
+            message: "Everything went well.",
+            data: {
+                email: "test@example.com",
+                password: "asdfsadf",
+            },
+        }),
+        ok: true,
+    });
+
+    const result = await controller.wrappedFetch(routeWithScope, urlParameters, body, query);
+    expect(result).toMatchSnapshot();
+    expect(result.constructor).toBe(User);
 });

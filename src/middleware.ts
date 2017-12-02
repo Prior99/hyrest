@@ -14,7 +14,7 @@ import {
 import { getParameterValidation, processValue } from "./validation";
 import { Converter } from "./converters";
 import { Processed } from "./processed";
-import { populate } from "./scope";
+import { populate, dump } from "./scope";
 
 /**
  * A wrapper around a `Route` which also carries the Route's parameter injections.
@@ -143,7 +143,12 @@ export function hyrest(...controllerObjects: any[]): Router {
                         }
                         return result.value;
                     });
-                    data = await routeMethod.apply(controllerObject, processedArgs);
+                    const routeResult = await routeMethod.apply(controllerObject, processedArgs);
+                    if (typeof route.scope !== "undefined" && typeof route.returnType !== "undefined") {
+                        data = dump(route.scope, routeResult);
+                    } else {
+                        data = routeResult;
+                    }
                 } catch (err) {
                     console.error(err);
                     data = internalServerError();

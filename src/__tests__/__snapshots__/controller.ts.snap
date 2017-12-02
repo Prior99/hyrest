@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`\`wrappedFetch\` with a \`.dump()\` route 1`] = `
+User {
+  "email": "test@example.com",
+  "password": "asdfsadf",
+}
+`;

@@ -170,6 +170,18 @@ public postSignup(@body(signupScope) user: User) {
 }
 ```
 
+The other direction can also be automated. Call `.dump(Type, scope)` on the route decorator to have
+it be automatically populated on the client side and safely dumped on the server side:
+
+```typescript
+...
+@route("POST", "/signup").dump(User, signupScope)
+public postSignup(@body(signupScope) user: User) {
+}
+
+// When this route is called on the frontend, the returned value is actually a `User`.
+```
+
 ## Validation
 
 Of course it is important to validate all input. The library itself is typesafe but the REST
