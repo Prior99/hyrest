@@ -12,7 +12,7 @@ export enum ControllerMode {
     CLIENT = "client",
 }
 
-function getDefaultControllerMode() {
+export function getDefaultControllerMode() {
     return isBrowser() ? ControllerMode.CLIENT : ControllerMode.SERVER;
 }
 

@@ -116,20 +116,21 @@ export function hyrest<TContext>(...controllerObjects: any[]): Router & HyrestBu
                     return;
                 }
                 errorEncountered = true;
+                // Argument can only either be ...
                 if (bodyParameters.find(param => param.index === index)) {
+                    // ... an injected body.
                     bodyError = validationResult;
                     return;
                 }
                 const queryParameter = queryParameters.find(param => param.index === index);
                 if (queryParameter) {
+                    // ... an injected query parameter.
                     queryErrors[queryParameter.name] = validationResult;
                     return;
                 }
+                // ... or an injected url parameter.
                 const urlParameter = urlParameters.find(param => param.index === index);
-                if (urlParameter) {
-                    paramErrors[urlParameter.name] = validationResult;
-                    return;
-                }
+                paramErrors[urlParameter.name] = validationResult;
             }));
 
             if (errorEncountered) {

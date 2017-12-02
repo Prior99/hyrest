@@ -227,7 +227,13 @@ test("`inferConverter`", () => {
     expect(inferConverter(Number)).toBe(float);
     expect(inferConverter(String)).toBe(str);
     expect(inferConverter(Boolean)).toBe(bool);
-    // Array can not be tested this way but is implicitly tested by other tests.
     expect(inferConverter(Object)).toBe(obj);
     expect(inferConverter(Function)).toBe(obj);
+
+    const stringArrayConverter = inferConverter(Array, String);
+    const workingStringArrayConverter = arr(is(str));
+    const correctArray = ["a", "b"];
+    const incorrectArray = [1, 2];
+    expect(stringArrayConverter(correctArray)).toEqual(workingStringArrayConverter(correctArray));
+    expect(stringArrayConverter(incorrectArray)).toEqual(workingStringArrayConverter(incorrectArray));
 });

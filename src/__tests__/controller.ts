@@ -1,10 +1,11 @@
 import "isomorphic-fetch";
 
-import { Controller } from "../controller";
+import { Controller, getDefaultControllerMode } from "../controller";
 import { ApiError, HTTPMethod  } from "../types";
 import { scope, createScope } from "../scope";
 import { is } from "../validation";
 import { email, length, required } from "../validators";
+import { ControllerMode } from "../";
 
 let controller: Controller;
 
@@ -81,26 +82,42 @@ test("`wrappedFetch` with broken json", async () => {
     expect(mockErrorHandler).toHaveBeenCalledWith(error);
 });
 
-test("`wrappedFetch` with a non-2xx status code", async () => {
-    const mockCall = jest.fn();
-    global.fetch = mockCall;
+describe("`wrappedFetch` with a non-2xx status code", () => {
     const error = new ApiError(400, { message: "Something went wrong." });
-    mockCall.mockReturnValue({
-        json: () => ({
-            message: "Something went wrong.",
-        }),
-        ok: false,
-        status: 400,
-    });
-    const mockErrorHandler = jest.fn();
 
-    controller.configure({
-        errorHandler: mockErrorHandler,
+    beforeEach(() => {
+        const mockCall = jest.fn();
+        global.fetch = mockCall;
+        mockCall.mockReturnValue({
+            json: () => ({
+                message: "Something went wrong.",
+            }),
+            ok: false,
+            status: 400,
+        });
     });
 
-    await expect(controller.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
-    expect(mockErrorHandler).toHaveBeenCalledWith(error);
+    test("with no error handler", async () => {
+        await expect(controller.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
+    });
+
+    test("with throwing disabled", async () => {
+        controller.configure({ throwOnError: false });
+        await expect(controller.wrappedFetch(route, urlParameters, body, query)).resolves;
+    });
+
+    test("with an error handler attached", async () => {
+        const mockErrorHandler = jest.fn();
+
+        controller.configure({
+            errorHandler: mockErrorHandler,
+        });
+
+        await expect(controller.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
+        expect(mockErrorHandler).toHaveBeenCalledWith(error);
+    });
 });
+
 
 test("`wrappedFetch` with a `.dump()` route", async () => {
     const login = createScope();
@@ -137,4 +154,11 @@ test("`wrappedFetch` with a `.dump()` route", async () => {
     const result = await controller.wrappedFetch(routeWithScope, urlParameters, body, query);
     expect(result).toMatchSnapshot();
     expect(result.constructor).toBe(User);
+});
+
+test("`getDefaultControllerMode()`", () => {
+    expect(getDefaultControllerMode()).toBe(ControllerMode.CLIENT);
+    delete global.document;
+    delete global.window;
+    expect(getDefaultControllerMode()).toBe(ControllerMode.SERVER);
 });

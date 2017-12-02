@@ -36,7 +36,7 @@ export class ApiError extends Error {
     public answer: Answer<any>;
 
     constructor(statusCode: number, answer: Answer<any>) {
-        super();
+        super()/* istanbul ignore next */;
         Error.captureStackTrace(this, ApiError);
         this.statusCode = statusCode;
         this.answer = answer;
