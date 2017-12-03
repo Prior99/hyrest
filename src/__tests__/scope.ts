@@ -293,3 +293,44 @@ test("dumping a structure with a getter", () => {
         test2: 2,
     });
 });
+
+test("dumping an array", () => {
+    const scope1 = createScope();
+
+    class Class1 {// tslint:disable-line
+        constructor(test: string) {
+            this.test = test;
+        }
+
+        @scope(scope1)
+        public test: string;
+    }
+    expect(dump(scope1, [
+        new Class1("a"),
+        new Class1("b"),
+        new Class1("c"),
+    ])).toEqual([
+        { test: "a" },
+        { test: "b" },
+        { test: "c" },
+    ]);
+});
+
+test("populating an array", () => {
+    const scope1 = createScope();
+
+    class Class1 {// tslint:disable-line
+        @scope(scope1)
+        public test: string;
+    }
+    const aInstance = new Class1();
+    aInstance.test = "a";
+    const bInstance = new Class1();
+    bInstance.test = "b";
+    const cInstance = new Class1();
+    cInstance.test = "c";
+    const expected = [ aInstance, bInstance, cInstance ];
+    const input = [ { test: "a" }, { test: "b" }, { test: "c" } ];
+    expect(populate(scope1, Array, Class1, input)).toEqual(expected);
+    expect(populate(scope1, Array, Class1)(input)).toEqual(expected);
+});

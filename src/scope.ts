@@ -181,6 +181,10 @@ export function dump<T>(dumpScope: Scope, arg2?: T): T | ((instance: T) => T) {
 
 export function populate<T>(populateScope: Scope, initialClass: Constructable<T>): (data: any) => T;
 export function populate<T>(populateScope: Scope, initialClass: Constructable<T>, data: any): T;
+export function populate<T>(
+    populateScope: Scope, initialClass: Constructable<T>, arrayType: Constructable<T>): (data: any) => T;
+export function populate<T>(
+    populateScope: Scope, initialClass: Constructable<T>, arrayType: Constructable<T>, data: any): T;
 /**
  * Populate a structure of classes using an object and a scope.
  * This will recursively create instances of all classes and populate them with the nested objects in
@@ -191,19 +195,24 @@ export function populate<T>(populateScope: Scope, initialClass: Constructable<T>
  * @param arg3 Populate can be invoked with the input as a third argument or be used as a curried function.
  *             If this is specified, the non-curried version is used. Otherwise the curried function accepting
  *             this as an argument is returned. This is usefull for using this inside higher order functions.
+ *             It can also be invoked with an additional array type.
+ * @param arg4 When populating an array, an additional array type must be specified as the thrid argument
+ *             and the data is specified as the fourth argument instead.
  *
  * @return A curried function for use in higher order functions if `arg3` is not specified and the populated
  *         structure otherwise.
  */
-export function populate<T>(populateScope: Scope, initialClass: Constructable<T>, arg3?: any): T | ((data: T) => T) {
+export function populate<T>(
+    populateScope: Scope, initialClass: Constructable<T>, arg3?: any, arg4?: any,
+): T | ((data: T) => T) {
     function internalPopulate<U extends any | any[]>(
-        data: any, thisClass: any = initialClass, arrayClass?: Constructable<any>,
+        data: any, thisClass: any, arrayClass: Constructable<any>,
     ): U {
         // Perform population of an array.
         if (thisClass === Array) {
             invariant(Array.isArray(data), "Structure does not match. Array expected.");
-            invariant(typeof arrayClass === "function", "Structure does not match. Array expected.");
-            return (data as any[]).map(element => internalPopulate(element, arrayClass)) as any as U;
+            invariant(typeof arrayClass === "function", "Array type not specified.");
+            return (data as any[]).map(element => internalPopulate(element, arrayClass, undefined)) as any as U;
         }
         // Ignore primitives.
         if (thisClass === Number || thisClass === Boolean || thisClass === String || thisClass === Object) {
@@ -230,8 +239,18 @@ export function populate<T>(populateScope: Scope, initialClass: Constructable<T>
         });
         return instance;
     }
+    // `arg3` can either be array type or data.
     if (typeof arg3 !== "undefined") {
-        return internalPopulate(arg3);
+        // `arg3 is the array type and `arg4` is the data.
+        if (typeof arg4 !== "undefined") {
+            return internalPopulate(arg4, initialClass, arg3);
+        }
+        // If `arg3` is a `Constructable`: It's the array type and a curried version shall be returned.
+        if (typeof arg3 === "function") {
+            return (data: any) => internalPopulate(data, initialClass, arg3);
+        }
+        // `arg3 is simply the data and no array type is specified.
+        return internalPopulate(arg3, initialClass, undefined);
     }
-    return internalPopulate;
+    return (data: any) => internalPopulate(data, initialClass, undefined);
 }
