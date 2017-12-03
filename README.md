@@ -729,6 +729,9 @@ Of course, populate also has a curried version available for easy use in higher 
 populate(signup, User)(input)
 ```
 
+It is possible to transform properties before populating a field using `@transform(input => output)`.
+This is for example usefull to encrypt a password or similar. This also applies to parameters.
+
 #### Populating Arrays
 
 Arrays can also be populated, but a special `arrayOf` decorator is necessary to infer the type of

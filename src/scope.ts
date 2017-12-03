@@ -3,6 +3,7 @@ import "reflect-metadata";
 import { Constructable } from "./types";
 import * as invariant from "invariant";
 import { allKeys } from "./all-keys";
+import { getTransforms } from "./transform";
 
 export interface PropertyMeta {
     /**
@@ -219,7 +220,13 @@ export function populate<T>(populateScope: Scope, initialClass: Constructable<T>
                 return;
             }
             const nextOverrideClass = Reflect.getMetadata("arrayof", target, property);
-            (instance as any)[property] = internalPopulate(dataValue, expectedType, nextOverrideClass);
+            const transforms = getTransforms(target, property);
+            const populated = internalPopulate(dataValue, expectedType, nextOverrideClass);
+            if (transforms.propertyTransform) {
+                (instance as any)[property] = transforms.propertyTransform(populated);
+            } else {
+                (instance as any)[property] = populated;
+            }
         });
         return instance;
     }

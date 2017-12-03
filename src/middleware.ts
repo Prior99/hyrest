@@ -15,6 +15,7 @@ import { getParameterValidation, processValue } from "./validation";
 import { Converter } from "./converters";
 import { Processed } from "./processed";
 import { populate, dump } from "./scope";
+import { getTransforms } from "./transform";
 
 /**
  * A wrapper around a `Route` which also carries the Route's parameter injections.
@@ -142,6 +143,7 @@ export function hyrest<TContext>(...controllerObjects: any[]): Router & HyrestBu
                 }, "Validation failed.");
             } else {
                 try {
+                    const transformOptions = getTransforms(route.target, route.property);
                     const processedArgs = processed.map((result, index) => {
                         const bodyParameter = bodyParameters.find(param => param.index === index);
                         const autoPopulate = bodyParameter &&
@@ -149,6 +151,10 @@ export function hyrest<TContext>(...controllerObjects: any[]): Router & HyrestBu
                             typeof bodyParameter.paramType !== "undefined";
                         if (autoPopulate) {
                             return populate(bodyParameter.scope, bodyParameter.paramType, result.value);
+                        }
+                        const parameterTranform = transformOptions.parameterTransforms.get(index);
+                        if (parameterTranform) {
+                            return parameterTranform(result.value);
                         }
                         return result.value;
                     });

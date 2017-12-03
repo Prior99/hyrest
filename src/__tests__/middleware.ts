@@ -5,6 +5,7 @@ import { body, param, query } from "../parameters";
 import { float, int, str } from "../converters";
 import { required, email, length, only } from "../validators";
 import { is } from "../validation";
+import { transform } from "../transform";
 import { ok, created } from "../answers";
 import { createScope, scope, arrayOf } from "../scope";
 import * as request from "supertest";
@@ -490,4 +491,39 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
         .expect(200)
         .set("content-type", "application/json")
         .send({ email: "invalid", pets: [ { name: "short" } ] });
+});
+
+test("transforming properties", async () => {
+    const signup = createScope();
+    const mock = jest.fn();
+
+    class User { // tslint:disable-line
+        @is()
+        @transform(password => `***${password.substr(3, password.length)}`)
+        @scope(signup)
+        public password: string;
+    }
+
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController10 { // tslint:disable-line
+        @route("POST", "/signup/:sth")
+        public postSignup(
+            @body(signup) user: User,
+            @is() @transform(s => s.toLowerCase()) @param("sth") sth: string,
+        ) {
+            mock(user.password, sth);
+            return ok("Everything is okay.");
+        }
+    }
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(hyrest(new TestController10()));
+
+    const responseA = await request(http)
+        .post("/signup/UPPERCASE")
+        .expect(200)
+        .set("content-type", "application/json")
+        .send({ password: "secret" });
+    expect(mock).toHaveBeenCalledWith("***ret", "uppercase");
 });
