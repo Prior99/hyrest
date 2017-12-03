@@ -146,6 +146,9 @@ export class Controller {
             if (response.ok) {
                 const routeData = answer.data;
                 if (typeof route.returnType !== "undefined" && typeof route.scope !== "undefined") {
+                    if (Array.isArray(routeData)) {
+                        return populate(route.scope, Array, route.returnType, routeData);
+                    }
                     return populate(route.scope, route.returnType, routeData);
                 }
                 return routeData;

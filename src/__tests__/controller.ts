@@ -162,3 +162,43 @@ test("`getDefaultControllerMode()`", () => {
     delete global.window;
     expect(getDefaultControllerMode()).toBe(ControllerMode.SERVER);
 });
+
+test("`wrappedFetch` with a `.dump()` route and an array", async () => {
+    const login = createScope();
+
+    class User { // tslint:disable-line
+        @scope(login) @is().validate(email, required)
+        public email: string;
+    }
+
+    const routeWithScope = {
+        target: controller,
+        property: "thisMethodDoesNotExist",
+        url: "/user/:id/other/:other",
+        method: "GET" as HTTPMethod,
+        scope: login,
+        returnType: User,
+    };
+
+    global.fetch = jest.fn();
+    global.fetch.mockReturnValue({
+        json: () => ({
+            message: "Everything went well.",
+            data: [
+                {
+                    email: "test1@example.com",
+                },
+                {
+                    email: "test2@example.com",
+                },
+                {
+                    email: "test3@example.com",
+                },
+            ],
+        }),
+        ok: true,
+    });
+
+    const result = await controller.wrappedFetch(routeWithScope, urlParameters, body, query);
+    expect(result).toMatchSnapshot();
+});
