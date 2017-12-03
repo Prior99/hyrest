@@ -7,7 +7,7 @@ import { required, email, length, only } from "../validators";
 import { is } from "../validation";
 import { transform } from "../transform";
 import { ok, created } from "../answers";
-import { createScope, scope, arrayOf } from "../scope";
+import { createScope, scope, specify } from "../scope";
 import * as request from "supertest";
 import * as Express from "express";
 import * as BodyParser from "body-parser";
@@ -385,7 +385,7 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
             mock(c);
             return email;
         })
-        @scope(signup) @arrayOf(Name)
+        @scope(signup) @specify(() => Name)
         public names: Name[];
     }
 
@@ -459,7 +459,7 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
         public email: string;
 
         @is()
-        @scope(signup, login) @arrayOf(Pet)
+        @scope(signup, login) @specify(() => Pet)
         public pets: Pet[];
     }
 

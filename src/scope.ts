@@ -4,6 +4,7 @@ import { Constructable } from "./types";
 import * as invariant from "invariant";
 import { allKeys } from "./all-keys";
 import { getTransforms } from "./transform";
+import { isCustomClass } from "./validation";
 
 export interface PropertyMeta {
     /**
@@ -98,7 +99,7 @@ export class Scope {
     public propertiesForClass(clazz: Function) {
         return this.properties.filter(property => {
             let current = clazz;
-            while (current !== null) { // tslint:disable-line
+            while (current !== null && typeof current !== "undefined") { // tslint:disable-line
                 if (property.target.constructor === current) {
                     return true;
                 }
@@ -137,9 +138,9 @@ export function scope(...scopes: Scope[]) {
     };
 }
 
-export function arrayOf<T>(clazz: Constructable<T>) {
+export function specify<T>(factory: () => Constructable<any> | Constructable<any>[]) {
     return function(target: Object, property: string, descriptor?: PropertyDescriptor) {
-        Reflect.defineMetadata("arrayof", clazz, target, property);
+        Reflect.defineMetadata("specifytype", factory, target, property);
     };
 }
 
@@ -192,9 +193,6 @@ export function populate<T>(
  *
  * @param populateScope The scope to populate. Only properties included in this scope will be populated.
  * @param initialClass The class to start populating with.
- * @param arg3 Populate can be invoked with the input as a third argument or be used as a curried function.
- *             If this is specified, the non-curried version is used. Otherwise the curried function accepting
- *             this as an argument is returned. This is usefull for using this inside higher order functions.
  *             It can also be invoked with an additional array type.
  * @param arg4 When populating an array, an additional array type must be specified as the thrid argument
  *             and the data is specified as the fourth argument instead.
@@ -206,31 +204,33 @@ export function populate<T>(
     populateScope: Scope, initialClass: Constructable<T>, arg3?: any, arg4?: any,
 ): T | ((data: T) => T) {
     function internalPopulate<U extends any | any[]>(
-        data: any, thisClass: any, arrayClass: Constructable<any>,
+        data: any, thisClass: any, specifiedClass: Constructable<any>,
     ): U {
         // Perform population of an array.
         if (thisClass === Array) {
             invariant(Array.isArray(data), "Structure does not match. Array expected.");
-            invariant(typeof arrayClass === "function", "Array type not specified.");
-            return (data as any[]).map(element => internalPopulate(element, arrayClass, undefined)) as any as U;
+            invariant(typeof specifiedClass === "function", "Array type not specified.");
+            return (data as any[]).map(element => internalPopulate(element, specifiedClass, undefined)) as any as U;
         }
+        const guardedClass = thisClass || specifiedClass;
         // Ignore primitives.
-        if (thisClass === Number || thisClass === Boolean || thisClass === String || thisClass === Object) {
+        if (guardedClass === Number || guardedClass === Boolean || guardedClass === String || guardedClass === Object) {
             return data;
         }
         invariant(typeof data === "object" && !Array.isArray(data), "Structure does not match. Object expected.");
         // Instanciate the classe to populate.
-        const instance = new thisClass();
+        const instance = new guardedClass();
         // Get a list of all properties to populate.
-        const propertiesForClass = populateScope.propertiesForClass(thisClass);
+        const propertiesForClass = populateScope.propertiesForClass(guardedClass);
         propertiesForClass.forEach(({ property, target, expectedType }) => {
             const dataValue = (data as any)[property];
             if (typeof dataValue === "undefined") {
                 return;
             }
-            const nextOverrideClass = Reflect.getMetadata("arrayof", target, property);
+            const specifyTypeCreator = Reflect.getMetadata("specifytype", target, property);
+            const specifyType = specifyTypeCreator && specifyTypeCreator();
             const transforms = getTransforms(target, property);
-            const populated = internalPopulate(dataValue, expectedType, nextOverrideClass);
+            const populated = internalPopulate(dataValue, expectedType, specifyType);
             if (transforms.propertyTransform) {
                 (instance as any)[property] = transforms.propertyTransform(populated);
             } else {

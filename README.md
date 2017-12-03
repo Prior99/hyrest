@@ -313,13 +313,13 @@ public createUser(@body() @is(DataType.obj).schema(schemaFrom(User)) user: User)
 ```
 
 This also works for arrays, however it is not possible to infer the array type from the property,
-so `@arrayOf` has to be used:
+so `@specify` has to be used:
 
 ```typescript
 class User {
     ...
 
-    @is() @arrayOf(Game)
+    @is() @specify(() => Game)
     public games: Game[];
 
     ...
@@ -734,20 +734,20 @@ This is for example usefull to encrypt a password or similar. This also applies 
 
 #### Populating Arrays
 
-Arrays can also be populated, but a special `arrayOf` decorator is necessary to infer the type of
+Arrays can also be populated, but a special `specify` decorator is necessary to infer the type of
 the array's elements:
 
 ```typescript
-import { scope, arrayOf } from "hyrest";
+import { scope, specify } from "hyrest";
 
 class User {
-    @scope(signup) @arrayOf(User)
+    @scope(signup) @specify(() => User)
     public friends: User[];
 
-    @scope(signup) @arrayOf(Pet)
+    @scope(signup) @specify(() => Pet)
     public pets: Pet[];
 
-    @scope(signup) @arrayOf(String)
+    @scope(signup) @specify(() => String)
     public favoriteColors: string[];
 }
 ```

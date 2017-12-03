@@ -11,7 +11,7 @@ import {
     oneOf,
     required,
     schemaFrom,
-    arrayOf,
+    specify,
     scope,
     createScope,
 } from "../../src";
@@ -31,7 +31,7 @@ export class Example { // tslint:disable-line
     @scope(world, create) @is().validate(oneOf("hunter", "jonas"))
     public name: string;
 
-    @scope(world, create) @is() @arrayOf(Other)
+    @scope(world, create) @is() @specify(() => Other)
     public others: Other[];
     @scope(world) @is()
     public example?: Example;
@@ -42,7 +42,7 @@ export class ExampleController { // tslint:disable-line
     @route("POST", "/example/:id").dump(Example, world)
     public postExample(
             @param("id") @is(DataType.int) id: number,
-            @body(world) example: Example,
+            @body(create) example: Example,
             @query("age") @is(DataType.float) age: number,
             @query("kind") @is(DataType.str).validate(oneOf("a", "b", "c"), required) kind: string): Example {
         if (age > 10) {

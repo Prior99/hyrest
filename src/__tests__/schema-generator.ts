@@ -1,5 +1,5 @@
 import { schemaFrom } from "../schema-generator";
-import { createScope, scope, arrayOf, Scope } from "../scope";
+import { createScope, scope, specify, Scope } from "../scope";
 import { is, validateSchema } from "../validation";
 import { email, oneOf, required } from "../validators";
 import { int, str, obj, arr } from "../converters";
@@ -25,10 +25,10 @@ beforeEach(() => {
         @scope(scope1) @is().validate(required)
         public a: _A;
 
-        @scope(scope2) @is() @arrayOf(_A)
+        @scope(scope2) @is() @specify(() => _A)
         public as: _A[];
 
-        @scope(scope1, scope2) @is() @arrayOf(_B)
+        @scope(scope1, scope2) @is() @specify(() => _B)
         public bs: _B[];
     }
 
@@ -140,7 +140,7 @@ beforeEach(() => {
 test("throws an error if decorated incorrectly", () => {
     expect(() => {
         class C { // tslint:disable-line
-            @arrayOf(str) @is()
+            @specify(() => String) @is()
             public test: string[];
         }
     }).toThrowErrorMatchingSnapshot();

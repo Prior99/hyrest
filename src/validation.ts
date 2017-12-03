@@ -328,7 +328,7 @@ export function getValidatedProperties(target: Object): ValidatedProperty[] {
  * @return `true` if the type is a class the user has created and `false` if it was
  *         a built-in type.
  */
-function isCustomClass(propertyType: Function) {
+export function isCustomClass(propertyType: Function) {
     return propertyType !== Number &&
         propertyType !== String &&
         propertyType !== Boolean &&
@@ -377,19 +377,20 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         if (!isParameterDecorator) {
             // Property decorator.
             const propertyType = Reflect.getMetadata("design:type", args[0], args[1]);
-            const arrayOfType = Reflect.getMetadata("arrayof", args[0], args[1]);
+            const specifyTypeCreator = Reflect.getMetadata("specifytype", args[0], args[1]);
+            const specifyType = specifyTypeCreator && specifyTypeCreator();
             getValidatedProperties(args[0]).push({
                 property: args[1],
                 propertyType,
             });
             // Infer the converter if it wasn't defined.
             if (typeof converter === "undefined") {
-                options.converter = inferConverter(propertyType, arrayOfType);
+                options.converter = inferConverter(propertyType, specifyType);
             }
-            // If the user decorated an array but forgot the `@arrayOf` decorator or specified it before `@is`,
+            // If the user decorated an array but forgot the `@specify` decorator or specified it before `@is`,
             // fail early.
-            if (propertyType === Array && typeof arrayOfType === "undefined") {
-                throw new Error("Decorated property of type array without specifying @arrayOf after @is.");
+            if (propertyType === Array && typeof specifyType === "undefined") {
+                throw new Error("Decorated property of type array without specifying @specify after @is.");
             }
             // Infer the schema if the typescript property type was a custom schema.
             if (isCustomClass(propertyType) && !options.validationSchema) {
@@ -426,7 +427,7 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
  *
  * @return The corresponding converter.
  */
-export function inferConverter(ctor: Function, arrayOfType?: Function): Converter<any> {
+export function inferConverter(ctor: Function, specifyType?: Function): Converter<any> {
     if (ctor === Number || ctor === float) {
         return float;
     }
@@ -437,10 +438,10 @@ export function inferConverter(ctor: Function, arrayOfType?: Function): Converte
         return bool;
     }
     if (ctor === Array) {
-        if (arrayOfType) {
-            const validator = is(inferConverter(arrayOfType));
-            if (isCustomClass(arrayOfType)) {
-                validator.schema(schemaFrom(arrayOfType));
+        if (specifyType) {
+            const validator = is(inferConverter(specifyType));
+            if (isCustomClass(specifyType)) {
+                validator.schema(schemaFrom(specifyType));
             }
             return arr(validator);
         }

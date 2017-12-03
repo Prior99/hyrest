@@ -1,4 +1,4 @@
-import { Scope, scope, createScope, dump, populate, arrayOf } from "../scope";
+import { Scope, scope, createScope, dump, populate, specify } from "../scope";
 
 
 let permissive, restricted: Scope;
@@ -34,7 +34,7 @@ beforeEach(() => {
         @scope(restricted)
         public d: number;
 
-        @scope(permissive) @arrayOf(_B)
+        @scope(permissive) @specify(() => _B)
         public bs: _B[];
     };
     A = _A;
@@ -125,7 +125,7 @@ test("populating and dumping a circular structure", () => {
         @scope(scope2)
         public circular2: Circular;
 
-        @scope(scope1, scope2) @arrayOf(Circular)
+        @scope(scope1, scope2) @specify(() => Circular)
         public circularArray: Circular[];
     }
 
@@ -189,7 +189,7 @@ test("populating a structure with an (un-)typed array", () => {
     }
 
     class Typed {// tslint:disable-line
-        @scope(scope1) @arrayOf(String)
+        @scope(scope1) @specify(() => String)
         public test: string[];
     }
 
@@ -333,4 +333,28 @@ test("populating an array", () => {
     const input = [ { test: "a" }, { test: "b" }, { test: "c" } ];
     expect(populate(scope1, Array, Class1, input)).toEqual(expected);
     expect(populate(scope1, Array, Class1)(input)).toEqual(expected);
+});
+
+test("populating a cyclic dependency", () => {
+    const scope1 = createScope();
+
+    class Class1 {// tslint:disable-line
+        @scope(scope1) @specify(() => Class2)
+        public class2: undefined;
+    }
+
+    class Class2 {// tslint:disable-line
+        @scope(scope1) @specify(() => Class1)
+        public class1: undefined;
+    }
+
+    expect(populate(scope1, Class1, {
+        class2: {
+            class1: {
+                class2: {
+                    class1: {},
+                },
+            },
+        },
+    })).toMatchSnapshot();
 });

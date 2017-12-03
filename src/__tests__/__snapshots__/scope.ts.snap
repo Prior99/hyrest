@@ -112,6 +112,18 @@ Object {
 }
 `;
 
+exports[`populating a cyclic dependency 1`] = `
+Class1 {
+  "class2": Class2 {
+    "class1": Class1 {
+      "class2": Class2 {
+        "class1": Class1 {},
+      },
+    },
+  },
+}
+`;
+
 exports[`populating a marked and nested structure 1`] = `
 _C {
   "bs": Array [

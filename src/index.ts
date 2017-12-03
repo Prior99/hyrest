@@ -8,7 +8,7 @@ export { configureController } from "./configure";
 export { ApiError } from "./types";
 export * from "./validators";
 export { is } from "./validation";
-export { dump, createScope, scope, Scope, populate, arrayOf } from "./scope";
+export { dump, createScope, scope, Scope, populate, specify } from "./scope";
 export { schemaFrom } from "./schema-generator";
 export { transform } from "./transform";
 

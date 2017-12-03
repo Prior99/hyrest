@@ -207,4 +207,5 @@ Processed {
 }
 `;
 
-exports[`throws an error if decorated incorrectly 1`] = `"Decorated property of type array without specifying @arrayOf after @is."`;
+exports[`throws an error if decorated incorrectly 1`] = `"Decorated property of type array without specifying @specify after @is."`;
+
