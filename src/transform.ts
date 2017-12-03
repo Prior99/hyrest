@@ -44,7 +44,7 @@ export function getTransforms(target: Object, propertyKey: string | symbol): Tra
  * @return A decorator which can be used to decorate properties and parameters.
  */
 export function transform<T, U>(transformer: Transformer<T, U>) {
-    return function(target: Object, property: string | symbol, arg3: PropertyDescriptor | number) {
+    return (target: Object, property: string | symbol, arg3?: any) => {
         const transforms = getTransforms(target, property);
         if (typeof arg3 === "number") {
             // Called as a parameter decorator.
