@@ -1,12 +1,17 @@
 import { FullValidator } from "./validation";
 import { Processed } from "./processed";
+import { Scope } from "./scope";
 
 export interface Converted<T> {
     error?: string;
     value?: T;
 }
 
-export type Converter<T> = (input: any) => Converted<T> | Promise<Converted<T>> | Processed<T> | Promise<Processed<T>>;
+export type Converter<T> = (input: any, scope?: Scope, context?: any) =>
+    Converted<T> |
+    Promise<Converted<T>> |
+    Processed<T> |
+    Promise<Processed<T>>;
 
 /**
  * Converts the given input to an integer if possible.
@@ -86,7 +91,7 @@ export function bool(value: any): Converted<boolean> {
  * @return The array converter.
  */
 export function arr<T, TContext>(validator?: FullValidator<T, TContext>): Converter<T[]> {
-    return async (value: any) => {
+    return async (value: any, scope?: Scope, context?: any) => {
         const processed = new Processed<T[]>();
         // Ignore `undefined` inputs. This is handled by the `required` validator if intended by
         // the user.
@@ -100,7 +105,7 @@ export function arr<T, TContext>(validator?: FullValidator<T, TContext>): Conver
         // property of the result. The keys will be the array indices.
         if (typeof validator !== "undefined"){
             await Promise.all(value.map(async (elem, index) => {
-                const result = await validator(elem);
+                const result = await validator(elem, { scope, context });
                 if (result.hasErrors) {
                     processed.addNested(index, result);
                 }

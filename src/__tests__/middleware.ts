@@ -6,7 +6,7 @@ import { float, int, str } from "../converters";
 import { required, email, length } from "../validators";
 import { is } from "../validation";
 import { ok, created } from "../answers";
-import { createScope, scope } from "../scope";
+import { createScope, scope, arrayOf } from "../scope";
 import * as request from "supertest";
 import * as Express from "express";
 import * as BodyParser from "body-parser";
@@ -360,6 +360,16 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
     const signup = createScope();
     const ctx = {};
     const mock = jest.fn();
+    const mockName = jest.fn();
+
+    class Name { // tslint:disable-line
+        @is().validateCtx(c => {
+            mockName(c);
+            return length(10, 100);
+        })
+        @scope(signup)
+        public name: string;
+    }
 
     class User { // tslint:disable-line
         @is().validateCtx(c => {
@@ -368,6 +378,13 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
         })
         @scope(signup)
         public email: string;
+
+        @is().validateCtx(c => {
+            mock(c);
+            return email;
+        })
+        @scope(signup) @arrayOf(Name)
+        public names: Name[];
     }
 
     @controller({ mode: ControllerMode.SERVER })
@@ -386,7 +403,7 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
         .post("/user")
         .expect(422)
         .set("content-type", "application/json")
-        .send({ email: "invalid" });
+        .send({ email: "invalid", names: [ { name: "Test 1" }, { name: "Test 2" } ] });
     expect(responseA.text).toBe(JSON.stringify({
         data: {
             body: {
@@ -394,10 +411,29 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
                     email: {
                         errors: ["String is not a valid email."],
                     },
+                    names: {
+                        nested: {
+                            0: {
+                                nested: {
+                                    name: {
+                                        errors: ["String is shorter than 10."],
+                                    },
+                                },
+                            },
+                            1: {
+                                nested: {
+                                    name: {
+                                        errors: ["String is shorter than 10."],
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
         message: "Validation failed.",
     }));
     expect(mock).toHaveBeenCalledWith(ctx);
+    expect(mockName).toHaveBeenCalledWith(ctx);
 });

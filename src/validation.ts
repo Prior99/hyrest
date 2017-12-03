@@ -202,7 +202,7 @@ export async function processValue<T>(
     // If a converter existed, grab the error and the value from it. Otherwise just consider the
     // input valid.
     let value: T;
-    const conversionResult = converter && await converter(input);
+    const conversionResult = converter && await converter(input, scope, context);
     if (typeof converter === "undefined") {
         value = input;
     }

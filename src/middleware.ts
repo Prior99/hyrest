@@ -109,7 +109,8 @@ export function hyrest<TContext>(...controllerObjects: any[]): Router & HyrestBu
                 const factoryValidators = Array.isArray(factoryResult) ? factoryResult : [factoryResult]; // tslint:disable-line
                 const validators = [ ...options.validators, ...factoryValidators ];
                 const { converter, validationSchema, scopeLimit } = options;
-                const validationResult = await processValue(arg, converter, validators, validationSchema, scopeLimit, context);
+                const validationResult =
+                    await processValue(arg, converter, validators, validationSchema, scopeLimit, context);
 
                 processed[index] = validationResult;
                 if (!validationResult.hasErrors) {
