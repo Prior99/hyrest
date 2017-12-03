@@ -220,7 +220,7 @@ export async function processValue<T>(
         value = conversionResult.value;
     }
     // Execute each validator for the given input and accumulate all their results.
-    const validationResults = await Promise.all(validators.map(validator => validator(value)));
+    const validationResults = await Promise.all(validators.map(validator => validator(value, scope)));
     const errors = validationResults
         .filter(result => typeof result.error !== "undefined")
         .map(result => result.error);

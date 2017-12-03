@@ -354,6 +354,12 @@ public createUser(@body() @is(DataType.obj).schema(schemaFrom(User)).scope(signu
     ...
 ```
 
+It is also possible to limit individual validators to certain scopes using `only`. Just wrap the
+validator in `only`, specifying a scope:
+
+```typescript
+only(signup, email)
+```
 
 ### What happens when Validation Fails?
 

@@ -1,8 +1,10 @@
+import { Scope } from "./scope";
+
 export interface Validation {
     error?: string;
 }
 
-export type Validator<T> = (input: T) => Validation | Promise<Validation>;
+export type Validator<T> = (input: T, scope?: Scope) => Validation | Promise<Validation>;
 
 /**
  * Enforces `input` to be one of the values specified in `options`.
@@ -72,4 +74,21 @@ export function email(value: string): Validation {
         return { error: `String is not a valid email.` };
     }
     return {};
+}
+
+/**
+ * Limits a validator to a given scope. The validator will only be executed if the scope matches.
+ *
+ * @param onlyScope The scope to limit the validator to.
+ * @param validator The validator to execute if the scope matches.
+ *
+ * @return A validator only executed if the scope matches.
+ */
+export function only<T>(onlyScope: Scope, validator: Validator<T>): Validator<T> {
+    return (value: T, currentScope: Scope) => {
+        if (currentScope === onlyScope) {
+            return validator(value);
+        }
+        return {};
+    };
 }

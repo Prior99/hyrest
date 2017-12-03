@@ -3,7 +3,7 @@ import { controller, ControllerMode } from "../controller";
 import { route } from "../route";
 import { body, param, query } from "../parameters";
 import { float, int, str } from "../converters";
-import { required, email, length } from "../validators";
+import { required, email, length, only } from "../validators";
 import { is } from "../validation";
 import { ok, created } from "../answers";
 import { createScope, scope, arrayOf } from "../scope";
@@ -358,6 +358,7 @@ test("@body with a scope and a route with `.dump()`", async () => {
 
 test("The `hyrest` middleware handles invalid requests correctly with a schema context validation", async () => {
     const signup = createScope();
+    const alwaysValid = createScope();
     const ctx = {};
     const mock = jest.fn();
     const mockName = jest.fn();
@@ -436,4 +437,57 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
     }));
     expect(mock).toHaveBeenCalledWith(ctx);
     expect(mockName).toHaveBeenCalledWith(ctx);
+});
+
+test("The `hyrest` middleware handles invalid requests correctly with a schema context validation", async () => {
+    const signup = createScope();
+    const login = createScope();
+    const ctx = {};
+
+    class Pet { // tslint:disable-line
+        @is().validateCtx(c => {
+            return only(signup, length(10, 100));
+        })
+        @scope(signup, login)
+        public name: string;
+    }
+
+    class User { // tslint:disable-line
+        @is().validate(only(signup, email))
+        @scope(signup, login)
+        public email: string;
+
+        @is()
+        @scope(signup, login) @arrayOf(Pet)
+        public pets: Pet[];
+    }
+
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController9 { // tslint:disable-line
+        @route("POST", "/signup")
+        public postSignup(@body(signup) user: User) {
+            return ok("Everything is okay.");
+        }
+
+        @route("POST", "/login")
+        public postLogin(@body(login) user: User) {
+            return ok("Everything is okay.");
+        }
+    }
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(hyrest(new TestController9()).context(ctx));
+
+    const responseA = await request(http)
+        .post("/signup")
+        .expect(422)
+        .set("content-type", "application/json")
+        .send({ email: "invalid", pets: [ { name: "short" } ] });
+
+    const responseB = await request(http)
+        .post("/login")
+        .expect(200)
+        .set("content-type", "application/json")
+        .send({ email: "invalid", pets: [ { name: "short" } ] });
 });
