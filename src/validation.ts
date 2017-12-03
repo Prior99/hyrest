@@ -63,7 +63,7 @@ export interface FullValidator<T, TContext> {
      *
      * @return The result of validating the value.
      */
-    (input: any, scope?: Scope): Processed<T> | Promise<Processed<T>>;
+    (input: any, options: { scope?: Scope; context?: any; }): Processed<T> | Promise<Processed<T>>;
     /**
      * Call the function as a parameter decorator.
      */
@@ -143,7 +143,7 @@ export interface FullValidator<T, TContext> {
  * @return The result of validating the input.
  */
 export async function validateSchema<T extends { [key: string]: any }>(
-    validationSchema: Schema, input: T, scope?: Scope,
+    validationSchema: Schema, input: T, scope?: Scope, context?: any,
 ): Promise<Processed<T>> {
     const result = new Processed<T>();
     // The class the schema originated from. Will only be set if the schema was inferred from a class.
@@ -163,8 +163,8 @@ export async function validateSchema<T extends { [key: string]: any }>(
         // Get the validation result. If the value from the schema was a function, use it
         // as a validator, otherwise it was a nested schema.
         const schemaResult = typeof schemaValue === "function" ?
-            await schemaValue(inputValue, scope) :
-            await validateSchema(schemaValue, inputValue, scope);
+            await schemaValue(inputValue, { scope, context }) :
+            await validateSchema(schemaValue, inputValue, scope, context);
 
         if (schemaResult.hasErrors) {
             result.addNested(key, schemaResult);
@@ -191,7 +191,12 @@ export async function validateSchema<T extends { [key: string]: any }>(
  * @return An object containing all errors and the converted value.
  */
 export async function processValue<T>(
-    input: any, converter: Converter<T>, validators: Validator<T>[], schema?: Schema, scope?: Scope,
+    input: any,
+    converter: Converter<T>,
+    validators: Validator<T>[],
+    schema?: Schema,
+    scope?: Scope,
+    context?: any,
 ): Promise<Processed<T>> {
     const processed = new Processed<T>();
     // If a converter existed, grab the error and the value from it. Otherwise just consider the
@@ -222,7 +227,7 @@ export async function processValue<T>(
     processed.addErrors(...errors);
     // If a schema was provided, execute it and merge the result into the current result.
     if (schema) {
-        const schemaResult = await validateSchema(schema, input, scope);
+        const schemaResult = await validateSchema(schema, input, scope, context);
         processed.merge(schemaResult);
     }
     if (typeof value !== "undefined" && !processed.hasErrors) {
@@ -348,9 +353,13 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         if (args.length !== 3) {
             // Called as a function.
             // Create all factory validators.
-            const { validators, validationSchema } = fn;
-            const scope = fn.scopeLimit || args[1];
-            return processValue(args[0], converter, [...validators], validationSchema, scope);
+            const { validators, validationSchema, validationFactory } = fn;
+            const scope = fn.scopeLimit || (args[1] && args[1].scope);
+            const context = args[1] && args[1].context;
+            const factoryResult = validationFactory ? validationFactory(context) : [];
+            const factoryValidators = Array.isArray(factoryResult) ? factoryResult : [factoryResult];
+            const allValidators = [...validators, ...factoryValidators];
+            return processValue(args[0], converter, allValidators, validationSchema, scope, context);
         }
         // Either a parameter or property decorator.
         const isParameterDecorator = typeof args[2] === "number";

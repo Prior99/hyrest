@@ -355,3 +355,49 @@ test("@body with a scope and a route with `.dump()`", async () => {
         .set("content-type", "application/json");
     expect(mockLogin.mock.calls[2]).toBeUndefined();
 });
+
+test("The `hyrest` middleware handles invalid requests correctly with a schema context validation", async () => {
+    const signup = createScope();
+    const ctx = {};
+    const mock = jest.fn();
+
+    class User { // tslint:disable-line
+        @is().validateCtx(c => {
+            mock(c);
+            return email;
+        })
+        @scope(signup)
+        public email: string;
+    }
+
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController8 { // tslint:disable-line
+        @route("POST", "/user")
+        public postTest(@body(signup) user: User) {
+            return ok("Everything is okay.");
+        }
+    }
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(hyrest(new TestController8()).context(ctx));
+
+    const responseA = await request(http)
+        .post("/user")
+        .expect(422)
+        .set("content-type", "application/json")
+        .send({ email: "invalid" });
+    expect(responseA.text).toBe(JSON.stringify({
+        data: {
+            body: {
+                nested: {
+                    email: {
+                        errors: ["String is not a valid email."],
+                    },
+                },
+            },
+        },
+        message: "Validation failed.",
+    }));
+    expect(mock).toHaveBeenCalledWith(ctx);
+});
