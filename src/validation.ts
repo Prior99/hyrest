@@ -327,18 +327,23 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
     // schema was inferred from a class.
     let scopeLimit: Scope;
     let fullValidator: FullValidator<T, TContext>;
+    let propertyType: Function;
     const invoke = (value: T, options?: FullValidatorIvokationOptions<TContext>) => {
         const guardedScopeLimit = scopeLimit ? scopeLimit : options.scope;
         const context = options && options.context;
         const factoryResult = validatorFactory ? validatorFactory(context) : [];
         const factoryValidators = Array.isArray(factoryResult) ? factoryResult : [factoryResult];
         const allValidators = [...validators, ...factoryValidators];
+        // Infer the schema if the typescript property type was a custom schema.
+        if (typeof propertyType !== "undefined" && isCustomClass(propertyType) && !validationSchema) {
+            validationSchema = schemaFrom(propertyType);
+        }
         return processValue(value, converter, allValidators, validationSchema, guardedScopeLimit, context);
     };
     const propertyDecorator = (target: Object, property: string | symbol, descriptor: PropertyDescriptor) => {
         const options = getPropertyValidation(target, property);
         options.fullValidator = fullValidator;
-        const propertyType = Reflect.getMetadata("design:type", target, property);
+        propertyType = Reflect.getMetadata("design:type", target, property);
         const specifyTypeCreator = Reflect.getMetadata("specifytype", target, property);
         const specifyType = specifyTypeCreator && specifyTypeCreator();
         getValidatedProperties(target).push({
@@ -353,10 +358,6 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         // fail early.
         if (propertyType === Array && typeof specifyType === "undefined") {
             throw new Error("Decorated property of type array without specifying @specify after @is.");
-        }
-        // Infer the schema if the typescript property type was a custom schema.
-        if (isCustomClass(propertyType) && !validationSchema) {
-            validationSchema = schemaFrom(propertyType);
         }
         return;
     };
