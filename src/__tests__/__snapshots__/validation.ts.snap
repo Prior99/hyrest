@@ -1,5 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`@is as parameter decorator infers the converter 1`] = `
+Processed {
+  "value": "test",
+}
+`;
+
+exports[`\`@is\` with no chance to infer the type 1`] = `"Cannot infer type. Perhaps a cyclic dependency? Use @specify or provide a converter."`;
+
+exports[`\`@is\` with the type specified explicitly in a parameter 1`] = `
+Processed {
+  "nested": Object {
+    "test": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+  },
+}
+`;
+
 exports[`\`arr\` works as expected 1`] = `Processed {}`;
 
 exports[`\`arr\` works as expected 2`] = `Processed {}`;
@@ -239,6 +259,12 @@ Processed {
 }
 `;
 
+exports[`\`processValue\` without a converter 1`] = `
+Processed {
+  "value": "test",
+}
+`;
+
 exports[`The test schema detects a invalid input as invalid 1`] = `
 Processed {
   "nested": Object {
@@ -339,7 +365,7 @@ Processed {
           "nested": Object {
             "g": Processed {
               "errors": Array [
-                "String exceeds maximum length of 5.",
+                "Exceeds maximum length of 5.",
               ],
             },
           },

@@ -48,13 +48,13 @@ exports[`email detects "undefined" as expected 1`] = `Object {}`;
 
 exports[`length detects "" as expected with [object Object] 1`] = `
 Object {
-  "error": "String is shorter than 5.",
+  "error": "Shorter than minimum length of 5.",
 }
 `;
 
 exports[`length detects "" as expected with [object Object] 2`] = `
 Object {
-  "error": "String is shorter than 5.",
+  "error": "Shorter than minimum length of 5.",
 }
 `;
 
@@ -66,13 +66,13 @@ exports[`length detects "[object Object]" as expected with [object Object] 1`] =
 
 exports[`length detects "1" as expected with [object Object] 1`] = `
 Object {
-  "error": "String is shorter than 5.",
+  "error": "Shorter than minimum length of 5.",
 }
 `;
 
 exports[`length detects "1" as expected with [object Object] 2`] = `
 Object {
-  "error": "String is shorter than 5.",
+  "error": "Shorter than minimum length of 5.",
 }
 `;
 
@@ -92,25 +92,25 @@ Object {
 
 exports[`length detects "reallylongtextthatexceeds10" as expected with [object Object] 1`] = `
 Object {
-  "error": "String exceeds maximum length of 10.",
+  "error": "Exceeds maximum length of 10.",
 }
 `;
 
 exports[`length detects "reallylongtextthatexceeds10" as expected with [object Object] 2`] = `
 Object {
-  "error": "String exceeds maximum length of 10.",
+  "error": "Exceeds maximum length of 10.",
 }
 `;
 
 exports[`length detects "test" as expected with [object Object] 1`] = `
 Object {
-  "error": "String is shorter than 5.",
+  "error": "Shorter than minimum length of 5.",
 }
 `;
 
 exports[`length detects "test" as expected with [object Object] 2`] = `
 Object {
-  "error": "String is shorter than 5.",
+  "error": "Shorter than minimum length of 5.",
 }
 `;
 

@@ -7,7 +7,7 @@ Processed {
   "nested": Object {
     "3": Processed {
       "errors": Array [
-        "String is shorter than 1.",
+        "Shorter than minimum length of 1.",
       ],
     },
   },

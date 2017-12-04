@@ -1,6 +1,19 @@
 import { is, getPropertyValidation, validateSchema, processValue, inferConverter } from "../validation";
 import { int, float, str, obj, bool, arr } from "../converters";
 import { oneOf, required, length } from "../validators";
+import { specify } from "../scope";
+
+test("@is as parameter decorator infers the converter", async () => {
+    class TestController {
+        public method(@is() parameter1: string) {
+            return;
+        }
+    }
+
+    const controller = new TestController();
+    const metadata = Reflect.getMetadata("validation:parameters", controller, "method");
+    expect(await metadata.get(0).fullValidator("test", {})).toMatchSnapshot();
+});
 
 test("@is as parameter decorator", () => {
     const is1 = is(int);
@@ -8,7 +21,7 @@ test("@is as parameter decorator", () => {
     const is3 = is(str).validate(oneOf("a", "b"));
 
     class TestController {
-        public method(@is1 parameter1, @is2 parameter2, @is3 parameter3) {
+        public method(@is1 parameter1: number, @is2 parameter2: number, @is3 parameter3: string) {
             return;
         }
     }
@@ -238,4 +251,31 @@ test("`inferConverter`", () => {
     const incorrectArray = [1, 2];
     expect(stringArrayConverter(correctArray)).toEqual(workingStringArrayConverter(correctArray));
     expect(stringArrayConverter(incorrectArray)).toEqual(workingStringArrayConverter(incorrectArray));
+
+    const workingUnknownArrayConverter = arr();
+    const unknownArrayConverter = inferConverter(Array);
+    expect(unknownArrayConverter(correctArray)).toEqual(workingUnknownArrayConverter(correctArray));
+    expect(unknownArrayConverter(incorrectArray)).toEqual(workingUnknownArrayConverter(incorrectArray));
+});
+
+test("`processValue` without a converter", async () => {
+    expect(await processValue("test", undefined, [])).toMatchSnapshot();
+});
+
+test("`@is` with no chance to infer the type", () => {
+    expect(() => is()("test", { context: {} })).toThrowErrorMatchingSnapshot();
+});
+
+test("`@is` with the type specified explicitly in a parameter", async () => {
+    class B { // tslint:disable-line
+        @is()
+        public test: string;
+    }
+    class A { // tslint:disable-line
+        public method(@is() @specify(() => B) param: undefined) {
+        }
+    }
+    const a = new A();
+    const metadata = Reflect.getMetadata("validation:parameters", a, "method");
+    expect(await metadata.get(0).fullValidator({ test: 9 }, {})).toMatchSnapshot();
 });

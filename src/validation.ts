@@ -1,10 +1,11 @@
+import { Constructable } from "./types";
 import "reflect-metadata";
 
 import { Validator, Validation } from "./validators";
 import { schemaFrom } from "./schema-generator";
 import { Converter, bool, str, float, obj, arr } from "./converters";
 import * as invariant from "invariant";
-import { Scope } from "./scope";
+import { Scope, getSpecifiedType, TypeCreator } from "./scope";
 import { Processed } from "./processed";
 
 export interface ValidationOptions<T, TContext> {
@@ -328,42 +329,55 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
     let scopeLimit: Scope;
     let fullValidator: FullValidator<T, TContext>;
     let propertyType: Function;
+    let specifyTypeCreator: TypeCreator;
     const invoke = (value: T, options?: FullValidatorIvokationOptions<TContext>) => {
         const guardedScopeLimit = scopeLimit ? scopeLimit : options.scope;
         const context = options && options.context;
         const factoryResult = validatorFactory ? validatorFactory(context) : [];
         const factoryValidators = Array.isArray(factoryResult) ? factoryResult : [factoryResult];
         const allValidators = [...validators, ...factoryValidators];
-        // Infer the schema if the typescript property type was a custom schema.
-        if (typeof propertyType !== "undefined" && isCustomClass(propertyType) && !validationSchema) {
-            validationSchema = schemaFrom(propertyType);
+        const typeUnknown = typeof propertyType === "undefined" &&
+            typeof converter === "undefined" &&
+            typeof specifyTypeCreator === "undefined";
+        const specifyType = specifyTypeCreator && specifyTypeCreator();
+        if (typeUnknown) {
+            throw new Error("Cannot infer type. Perhaps a cyclic dependency? Use @specify or provide a converter.");
         }
-        return processValue(value, converter, allValidators, validationSchema, guardedScopeLimit, context);
+        // Infer the converter if it wasn't defined.
+        const guardedConverter = typeof converter !== "undefined" ?
+            converter :
+            inferConverter(propertyType, specifyType);
+        // Infer the schema if the typescript property type was a custom schema.
+        const inferSchema = typeof (propertyType || specifyType) !== "undefined" &&
+            isCustomClass(propertyType || specifyType) &&
+            !validationSchema &&
+            guardedConverter === obj;
+        if (inferSchema) {
+            validationSchema = schemaFrom(propertyType || specifyType);
+        }
+        return processValue(value, guardedConverter, allValidators, validationSchema, guardedScopeLimit, context);
     };
     const propertyDecorator = (target: Object, property: string | symbol, descriptor: PropertyDescriptor) => {
         const options = getPropertyValidation(target, property);
         options.fullValidator = fullValidator;
         propertyType = Reflect.getMetadata("design:type", target, property);
-        const specifyTypeCreator = Reflect.getMetadata("specifytype", target, property);
-        const specifyType = specifyTypeCreator && specifyTypeCreator();
+        specifyTypeCreator = getSpecifiedType(target, property).property;
+        // If the user decorated an array but forgot the `@specify` decorator or specified it before `@is`,
+        // fail early.
+        if (propertyType === Array && typeof specifyTypeCreator === "undefined") {
+            throw new Error("Decorated property of type array without specifying @specify after @is.");
+        }
         getValidatedProperties(target).push({
             property,
             propertyType,
         });
-        // Infer the converter if it wasn't defined.
-        if (typeof converter === "undefined") {
-            converter = inferConverter(propertyType, specifyType);
-        }
-        // If the user decorated an array but forgot the `@specify` decorator or specified it before `@is`,
-        // fail early.
-        if (propertyType === Array && typeof specifyType === "undefined") {
-            throw new Error("Decorated property of type array without specifying @specify after @is.");
-        }
         return;
     };
     const parameterDecorator = (target: Object, property: string | symbol, index: number) => {
         const options = getParameterValidation(target, property, index);
         options.fullValidator = fullValidator;
+        propertyType = Reflect.getMetadata("design:paramtypes", target, property)[index];
+        specifyTypeCreator = getSpecifiedType(target, property).params.get(index);
     };
     // This function can be called in three ways:
     // 1. Standalone, providing an input and an optional scope

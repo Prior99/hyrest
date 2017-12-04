@@ -43,16 +43,16 @@ export function length(min: number, max: number): Validator<string>;
  *
  * @return A validator which checks the length of the input string.
  */
-export function length(arg1: { max: number, min: number } | number, arg2?: number): Validator<string> {
+export function length(arg1: { max: number, min: number } | number, arg2?: number): Validator<string | any[]> {
     const { min, max } = typeof arg1 === "object" ? arg1 : { min: arg1, max: arg2 };
-    return (value: string) => {
+    return (value: string | any[]) => {
         if (typeof value === "undefined") { return {}; }
         if (value === null) { return { error: "Cannot determine length of null." }; }
         if (typeof max !== "undefined" && value.length > max) {
-            return { error: `String exceeds maximum length of ${max}.` };
+            return { error: `Exceeds maximum length of ${max}.` };
         }
         if (typeof min !== "undefined" && value.length < min) {
-            return { error: `String is shorter than ${min}.` };
+            return { error: `Shorter than minimum length of ${min}.` };
         }
         return {};
     };

@@ -97,7 +97,7 @@ import { oneOf, required, email, length } from "../validators";
 });
 
 test("length with the input as args", () => {
-    expect(length(1, 5)("")).toEqual({ error: `String is shorter than 1.` });
+    expect(length(1, 5)("")).toEqual({ error: `Shorter than minimum length of 1.` });
     expect(length(1, 5)("test")).toEqual({});
-    expect(length(1, 5)("toolong")).toEqual({ error: `String exceeds maximum length of 5.` });
+    expect(length(1, 5)("toolong")).toEqual({ error: `Exceeds maximum length of 5.` });
 });

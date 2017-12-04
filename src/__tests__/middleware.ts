@@ -418,14 +418,14 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
                             0: {
                                 nested: {
                                     name: {
-                                        errors: ["String is shorter than 10."],
+                                        errors: ["Shorter than minimum length of 10."],
                                     },
                                 },
                             },
                             1: {
                                 nested: {
                                     name: {
-                                        errors: ["String is shorter than 10."],
+                                        errors: ["Shorter than minimum length of 10."],
                                     },
                                 },
                             },

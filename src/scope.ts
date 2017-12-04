@@ -6,6 +6,19 @@ import { allKeys } from "./all-keys";
 import { getTransforms } from "./transform";
 import { isCustomClass } from "./validation";
 
+export type TypeCreator = () => Constructable<any>;
+
+export interface SpecifiedTypes {
+    /**
+     * Types specified for method's parameters.
+     */
+    params: Map<number, TypeCreator>;
+    /**
+     * The type specified for the property itself.
+     */
+    property?: TypeCreator;
+}
+
 export interface PropertyMeta {
     /**
      * The prototype of the class on which the property was decorated.
@@ -138,9 +151,42 @@ export function scope(...scopes: Scope[]) {
     };
 }
 
-export function specify<T>(factory: () => Constructable<any> | Constructable<any>[]) {
-    return function(target: Object, property: string, descriptor?: PropertyDescriptor) {
-        Reflect.defineMetadata("specifytype", factory, target, property);
+/**
+ * Returns the specified types for a property and its parameters. Is always guaranteed to
+ * return an object. If non existed, a new one is created.
+ *
+ * @param target The target object of which to get the specified types.
+ * @param property The property on `target` on which to get the specified types.
+ *
+ * @return An object containing the type of the property and a map for all its parameters.
+ */
+export function getSpecifiedType(target: Object, property: string | symbol): SpecifiedTypes {
+    let specified = Reflect.getMetadata("specifytype", target, property);
+    if (typeof specified === "undefined") {
+        specified = {
+            params: new Map(),
+        };
+        Reflect.defineMetadata("specifytype", specified, target, property);
+    }
+    return specified;
+}
+
+/**
+ * Help to specify the type of a property or paramter. Might be necessary for arrays and cyclic
+ * depdendencies.
+ *
+ * @param factory A function with no arguments returning the desired type.
+ *
+ * @return A decorator for a property or a parameter.
+ */
+export function specify<T>(factory: TypeCreator) {
+    return function(target: Object, property: string | symbol, arg3?: any) {
+        const specified = getSpecifiedType(target, property);
+        if (typeof arg3 === "number") {
+            specified.params.set(arg3, factory);
+            return;
+        }
+        specified.property = factory;
     };
 }
 
@@ -227,7 +273,7 @@ export function populate<T>(
             if (typeof dataValue === "undefined") {
                 return;
             }
-            const specifyTypeCreator = Reflect.getMetadata("specifytype", target, property);
+            const specifyTypeCreator = getSpecifiedType(target, property).property;
             const specifyType = specifyTypeCreator && specifyTypeCreator();
             const transforms = getTransforms(target, property);
             const populated = internalPopulate(dataValue, expectedType, specifyType);
