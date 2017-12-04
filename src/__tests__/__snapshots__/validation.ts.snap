@@ -20,6 +20,48 @@ Processed {
 }
 `;
 
+exports[`\`@is\` with an array 1`] = `
+Processed {
+  "nested": Object {
+    "test": Processed {
+      "errors": Array [
+        "Shorter than minimum length of 2.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`\`@is\` with an array 2`] = `
+Processed {
+  "value": Object {
+    "test": Array [
+      Object {
+        "test": 8,
+      },
+      Object {
+        "test": 10,
+      },
+      Object {
+        "test": 11,
+      },
+    ],
+  },
+}
+`;
+
+exports[`\`@is\` with an array 3`] = `
+Processed {
+  "nested": Object {
+    "test": Processed {
+      "errors": Array [
+        "Missing required field.",
+      ],
+    },
+  },
+}
+`;
+
 exports[`\`arr\` works as expected 1`] = `Processed {}`;
 
 exports[`\`arr\` works as expected 2`] = `Processed {}`;

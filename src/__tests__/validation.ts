@@ -279,3 +279,26 @@ test("`@is` with the type specified explicitly in a parameter", async () => {
     const metadata = Reflect.getMetadata("validation:parameters", a, "method");
     expect(await metadata.get(0).fullValidator({ test: 9 }, {})).toMatchSnapshot();
 });
+
+test("`@is` with an array", async () => {
+    class C { // tslint:disable-line
+        @is() public test: number;
+    }
+    class B { // tslint:disable-line
+        @is().validate(length(2, 10), required) @specify(() => C) public test: C[];
+    }
+    class A { // tslint:disable-line
+        public method(@is() param: B) {
+        }
+    }
+    const a = new A();
+    const metadata = Reflect.getMetadata("validation:parameters", a, "method");
+    const vali = await metadata.get(0).fullValidator;
+    expect(await vali({
+        test: [],
+    }, {})).toMatchSnapshot();
+    expect(await vali({
+        test: [{ test: 8 }, { test: 10 }, { test: 11 }],
+    }, {})).toMatchSnapshot();
+    expect(await vali({}, {})).toMatchSnapshot();
+});

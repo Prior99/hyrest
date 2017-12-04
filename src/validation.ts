@@ -349,13 +349,11 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
             inferConverter(propertyType, specifyType);
         // Infer the schema if the typescript property type was a custom schema.
         const inferSchema = typeof (propertyType || specifyType) !== "undefined" &&
-            isCustomClass(propertyType || specifyType) &&
+            (isCustomClass(specifyType) || isCustomClass(processValue)) &&
             !validationSchema &&
             guardedConverter === obj;
-        if (inferSchema) {
-            validationSchema = schemaFrom(propertyType || specifyType);
-        }
-        return processValue(value, guardedConverter, allValidators, validationSchema, guardedScopeLimit, context);
+        const guardedSchema = inferSchema ? schemaFrom(propertyType || specifyType) : validationSchema;
+        return processValue(value, guardedConverter, allValidators, guardedSchema, guardedScopeLimit, context);
     };
     const propertyDecorator = (target: Object, property: string | symbol, descriptor: PropertyDescriptor) => {
         const options = getPropertyValidation(target, property);
