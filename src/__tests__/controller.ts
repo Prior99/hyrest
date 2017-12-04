@@ -1,16 +1,16 @@
 import "isomorphic-fetch";
 
-import { Controller, getDefaultControllerMode } from "../controller";
+import { Controller, getDefaultControllerMode, controller } from "../controller";
 import { ApiError, HTTPMethod  } from "../types";
 import { scope, createScope } from "../scope";
 import { is } from "../validation";
 import { email, length, required } from "../validators";
 import { ControllerMode } from "../";
 
-let controller: Controller;
+let exampleController: Controller;
 
 beforeEach(() => {
-    controller = new Controller({
+    exampleController = new Controller({
         baseUrl: "http://example.com",
     });
 });
@@ -36,6 +36,24 @@ const route = {
     method: "GET" as HTTPMethod,
 };
 
+test("@controller and @controller()", () => {
+    @controller
+    class A { // tslint:disable-line
+    }
+
+    @controller()
+    class B { // tslint:disable-line
+    }
+
+    @controller({ mode: ControllerMode.SERVER})
+    class C { // tslint:disable-line
+    }
+
+    expect(Reflect.getMetadata("api:controller", A)).toMatchSnapshot();
+    expect(Reflect.getMetadata("api:controller", B)).toMatchSnapshot();
+    expect(Reflect.getMetadata("api:controller", C)).toMatchSnapshot();
+});
+
 test("`wrappedFetch` with a successfull response", async () => {
     const mock = jest.fn();
     global.fetch = mock;
@@ -49,7 +67,7 @@ test("`wrappedFetch` with a successfull response", async () => {
         ok: true,
     });
 
-    const result = await controller.wrappedFetch(route, urlParameters, body, query);
+    const result = await exampleController.wrappedFetch(route, urlParameters, body, query);
 
     const headers = new Headers();
     headers.append("content-type", "application/json");
@@ -74,11 +92,11 @@ test("`wrappedFetch` with broken json", async () => {
     });
     const mockErrorHandler = jest.fn();
 
-    controller.configure({
+    exampleController.configure({
         errorHandler: mockErrorHandler,
     });
 
-    await expect(controller.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
+    await expect(exampleController.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
     expect(mockErrorHandler).toHaveBeenCalledWith(error);
 });
 
@@ -98,22 +116,22 @@ describe("`wrappedFetch` with a non-2xx status code", () => {
     });
 
     test("with no error handler", async () => {
-        await expect(controller.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
+        await expect(exampleController.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
     });
 
     test("with throwing disabled", async () => {
-        controller.configure({ throwOnError: false });
-        await expect(controller.wrappedFetch(route, urlParameters, body, query)).resolves;
+        exampleController.configure({ throwOnError: false });
+        await expect(exampleController.wrappedFetch(route, urlParameters, body, query)).resolves;
     });
 
     test("with an error handler attached", async () => {
         const mockErrorHandler = jest.fn();
 
-        controller.configure({
+        exampleController.configure({
             errorHandler: mockErrorHandler,
         });
 
-        await expect(controller.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
+        await expect(exampleController.wrappedFetch(route, urlParameters, body, query)).rejects.toEqual(error);
         expect(mockErrorHandler).toHaveBeenCalledWith(error);
     });
 });
@@ -151,7 +169,7 @@ test("`wrappedFetch` with a `.dump()` route", async () => {
         ok: true,
     });
 
-    const result = await controller.wrappedFetch(routeWithScope, urlParameters, body, query);
+    const result = await exampleController.wrappedFetch(routeWithScope, urlParameters, body, query);
     expect(result).toMatchSnapshot();
     expect(result.constructor).toBe(User);
 });
@@ -172,7 +190,7 @@ test("`wrappedFetch` with a `.dump()` route and an array", async () => {
     }
 
     const routeWithScope = {
-        target: controller,
+        target: exampleController,
         property: "thisMethodDoesNotExist",
         url: "/user/:id/other/:other",
         method: "GET" as HTTPMethod,
@@ -199,6 +217,6 @@ test("`wrappedFetch` with a `.dump()` route and an array", async () => {
         ok: true,
     });
 
-    const result = await controller.wrappedFetch(routeWithScope, urlParameters, body, query);
+    const result = await exampleController.wrappedFetch(routeWithScope, urlParameters, body, query);
     expect(result).toMatchSnapshot();
 });

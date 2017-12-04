@@ -180,9 +180,15 @@ export class Controller {
  *
  * @return The decorated class.
  */
-export function controller<Decorated extends Function>(options?: ControllerOptions): ClassDecorator {
-    return function(target: Decorated): Decorated {
+export function controller<T extends Function>(arg1?: ControllerOptions | T): ((target: T) => T) | T {
+    let decorator: (target: T) => T;
+    const options = typeof arg1 === "object" ? arg1 : undefined;
+    decorator = function(target: T): T {
         Reflect.defineMetadata("api:controller", new Controller(options), target);
         return target;
-    } as ClassDecorator;
+    };
+    if (typeof arg1 === "function") {
+        return decorator(arg1 as T);
+    }
+    return decorator;
 }

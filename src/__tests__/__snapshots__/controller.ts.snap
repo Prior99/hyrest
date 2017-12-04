@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`@controller and @controller() 1`] = `
+Controller {
+  "mode": "client",
+  "throwOnError": true,
+}
+`;
+
+exports[`@controller and @controller() 2`] = `
+Controller {
+  "mode": "client",
+  "throwOnError": true,
+}
+`;
+
+exports[`@controller and @controller() 3`] = `
+Controller {
+  "mode": "server",
+  "throwOnError": true,
+}
+`;
+
 exports[`\`wrappedFetch\` with a \`.dump()\` route 1`] = `
 User {
   "email": "test@example.com",
