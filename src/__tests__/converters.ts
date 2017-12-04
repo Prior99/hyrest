@@ -115,6 +115,17 @@ import { is } from "../validation";
     });
 });
 
+test("arr with a validator and an empty array", async () => {
+    expect(await arr(is(obj).schema({ test: is(str) }))([])).toMatchSnapshot();
+});
+
+test("arr with a validator and a non-empty array", async () => {
+    expect(await arr(is(obj).schema({ test: is(str) }))([
+        { test: "a" },
+        { test: "b" },
+    ])).toMatchSnapshot();
+});
+
 [
     true,
     false,

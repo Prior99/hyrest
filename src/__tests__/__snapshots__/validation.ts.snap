@@ -6,20 +6,6 @@ Processed {
 }
 `;
 
-exports[`\`@is\` with no chance to infer the type 1`] = `"Cannot infer type. Perhaps a cyclic dependency? Use @specify or provide a converter."`;
-
-exports[`\`@is\` with the type specified explicitly in a parameter 1`] = `
-Processed {
-  "nested": Object {
-    "test": Processed {
-      "errors": Array [
-        "Not a valid string.",
-      ],
-    },
-  },
-}
-`;
-
 exports[`\`@is\` with an array 1`] = `
 Processed {
   "nested": Object {
@@ -62,9 +48,35 @@ Processed {
 }
 `;
 
-exports[`\`arr\` works as expected 1`] = `Processed {}`;
+exports[`\`@is\` with no chance to infer the type 1`] = `"Cannot infer type. Perhaps a cyclic dependency? Use @specify or provide a converter."`;
 
-exports[`\`arr\` works as expected 2`] = `Processed {}`;
+exports[`\`@is\` with the type specified explicitly in a parameter 1`] = `
+Processed {
+  "nested": Object {
+    "test": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`\`arr\` works as expected 1`] = `
+Processed {
+  "value": Array [],
+}
+`;
+
+exports[`\`arr\` works as expected 2`] = `
+Processed {
+  "value": Array [
+    1,
+    2,
+    3,
+  ],
+}
+`;
 
 exports[`\`arr\` works as expected 3`] = `
 Processed {
@@ -143,9 +155,21 @@ Processed {
 }
 `;
 
-exports[`\`arr\` works as expected 11`] = `Processed {}`;
+exports[`\`arr\` works as expected 11`] = `
+Processed {
+  "value": Array [
+    "a",
+    "b",
+    "c",
+  ],
+}
+`;
 
-exports[`\`arr\` works as expected 12`] = `Processed {}`;
+exports[`\`arr\` works as expected 12`] = `
+Processed {
+  "value": Array [],
+}
+`;
 
 exports[`\`arr\` works as expected 13`] = `
 Processed {
@@ -163,13 +187,44 @@ Processed {
 }
 `;
 
-exports[`\`arr\` works as expected 15`] = `Processed {}`;
+exports[`\`arr\` works as expected 15`] = `
+Processed {
+  "value": Array [
+    1,
+    2,
+    3,
+  ],
+}
+`;
 
-exports[`\`arr\` works as expected 16`] = `Processed {}`;
+exports[`\`arr\` works as expected 16`] = `
+Processed {
+  "value": Array [
+    1,
+    2,
+  ],
+}
+`;
 
-exports[`\`arr\` works as expected 17`] = `Processed {}`;
+exports[`\`arr\` works as expected 17`] = `
+Processed {
+  "nested": Object {
+    "3": Processed {
+      "errors": Array [
+        "Not one of (1, 2, 3).",
+      ],
+    },
+  },
+}
+`;
 
 exports[`\`arr\` works as expected 18`] = `
+Processed {
+  "value": Array [],
+}
+`;
+
+exports[`\`arr\` works as expected 19`] = `
 Processed {
   "errors": Array [
     "Not an array.",
@@ -177,7 +232,7 @@ Processed {
 }
 `;
 
-exports[`\`arr\` works as expected 19`] = `
+exports[`\`arr\` works as expected 20`] = `
 Processed {
   "errors": Array [
     "Not an array.",

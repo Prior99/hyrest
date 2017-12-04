@@ -104,13 +104,19 @@ export function arr<T, TContext>(validator?: FullValidator<T, TContext>): Conver
         // Apply the validator (if provided) to all elements and store the results in the `nested`
         // property of the result. The keys will be the array indices.
         if (typeof validator !== "undefined"){
-            await Promise.all(value.map(async (elem, index) => {
+            const results = await Promise.all(value.map(async (elem, index) => {
                 const result = await validator(elem, { scope, context });
                 if (result.hasErrors) {
                     processed.addNested(index, result);
                 }
+                return result;
             }));
+            if (!results.find(result => result.hasErrors)) {
+                processed.value = results.map(result => result.value);
+            }
+            return processed;
         }
+        processed.value = value;
         return processed;
     };
 }

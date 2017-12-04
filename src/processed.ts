@@ -7,6 +7,10 @@ export interface ProcessedInput<T> {
     errors?: string[];
 }
 
+export interface MergeOptions {
+    skipValue?: boolean;
+}
+
 /**
  * Represents the result of a full validation of a value, array or schema.
  */
@@ -76,7 +80,7 @@ export class Processed<T> {
      *
      * @param other The other value to merge into this one.
      */
-    public merge(other: Processed<T>) {
+    public merge(other: Processed<T>, options?: MergeOptions) {
         if (typeof other === "undefined" || other === null) {
             return;
         }
@@ -100,8 +104,9 @@ export class Processed<T> {
                 this.nested[key].merge(other.nested[key]);
             });
         }
-        // Coopy the value if our value is not set but the other value is set.
-        if (typeof this.value === "undefined" && typeof other.value !== "undefined") {
+        const skipValue = Boolean(options && options.skipValue);
+        // Copy the value if our value is not set but the other value is set.
+        if (typeof this.value === "undefined" && typeof other.value !== "undefined" && !skipValue) {
             this.value = other.value;
         }
     }

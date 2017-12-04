@@ -171,8 +171,11 @@ export async function processValue<T>(
         value = input;
     }
     if (conversionResult instanceof Processed) {
-        processed.merge(conversionResult);
-        value = processed.value;
+        // Value might exist on `conversionResult` but it is not yet safe to attach the value
+        // to the result which is being returned. All validators need to be executed first.
+        // The value will be attached later and will be delete for now.
+        processed.merge(conversionResult, { skipValue: true });
+        value = conversionResult.value;
     }
     else if (typeof conversionResult !== "undefined") {
         if (conversionResult.error) {
