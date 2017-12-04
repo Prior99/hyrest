@@ -48,6 +48,26 @@ Processed {
 }
 `;
 
+exports[`\`@is\` with an array and a failed validation inside 1`] = `
+Processed {
+  "nested": Object {
+    "test": Processed {
+      "nested": Object {
+        "0": Processed {
+          "nested": Object {
+            "test": Processed {
+              "errors": Array [
+                "Not one of (1, 2, 3).",
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
 exports[`\`@is\` with no chance to infer the type 1`] = `"Cannot infer type. Perhaps a cyclic dependency? Use @specify or provide a converter."`;
 
 exports[`\`@is\` with the type specified explicitly in a parameter 1`] = `

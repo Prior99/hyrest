@@ -294,12 +294,33 @@ test("`@is` with an array", async () => {
     }
     const a = new A();
     const metadata = Reflect.getMetadata("validation:parameters", a, "method");
-    const vali = await metadata.get(0).fullValidator;
-    expect(await vali({
+    const validator = await metadata.get(0).fullValidator;
+    expect(await validator({
         test: [],
     }, {})).toMatchSnapshot();
-    expect(await vali({
+    expect(await validator({
         test: [{ test: 8 }, { test: 10 }, { test: 11 }],
     }, {})).toMatchSnapshot();
-    expect(await vali({}, {})).toMatchSnapshot();
+    expect(await validator({}, {})).toMatchSnapshot();
+});
+
+test("`@is` with an array and a failed validation inside", async () => {
+    class C { // tslint:disable-line
+        @is().validate(oneOf(1, 2, 3)) public test: number;
+    }
+    class B { // tslint:disable-line
+        @is().validate(required) @specify(() => C) public test: C[];
+    }
+    class A { // tslint:disable-line
+        public method(@is() param: B) {
+        }
+    }
+    const a = new A();
+    const metadata = Reflect.getMetadata("validation:parameters", a, "method");
+    const validator = await metadata.get(0).fullValidator;
+    expect(await validator({
+        test: [
+            { test: 7 },
+        ],
+    }, {})).toMatchSnapshot();
 });

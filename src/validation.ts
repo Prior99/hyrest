@@ -175,6 +175,9 @@ export async function processValue<T>(
         // to the result which is being returned. All validators need to be executed first.
         // The value will be attached later and will be delete for now.
         processed.merge(conversionResult, { skipValue: true });
+        if (processed.hasErrors) {
+            return processed;
+        }
         value = conversionResult.value;
     }
     else if (typeof conversionResult !== "undefined") {
