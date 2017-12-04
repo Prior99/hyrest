@@ -1,3 +1,4 @@
+import { Constructable } from "./types";
 import "isomorphic-fetch";
 import "reflect-metadata";
 
@@ -172,6 +173,8 @@ export class Controller {
     }
 }
 
+export function controller(options?: ControllerOptions): ClassDecorator;
+export function controller<U, T extends Constructable<U>>(target: T): T;
 /**
  * Decorate an individual class as an Api controller.
  *
@@ -180,7 +183,7 @@ export class Controller {
  *
  * @return The decorated class.
  */
-export function controller<T extends Function>(arg1?: ControllerOptions | T): ((target: T) => T) | T {
+export function controller<T extends Function>(arg1: ControllerOptions | T): ClassDecorator | T {
     let decorator: (target: T) => T;
     const options = typeof arg1 === "object" ? arg1 : undefined;
     decorator = function(target: T): T {
@@ -190,5 +193,5 @@ export function controller<T extends Function>(arg1?: ControllerOptions | T): ((
     if (typeof arg1 === "function") {
         return decorator(arg1 as T);
     }
-    return decorator;
+    return decorator as ClassDecorator;
 }
