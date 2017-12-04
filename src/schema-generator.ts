@@ -18,10 +18,7 @@ export function schemaFrom(from: Function): Schema {
         const options = getPropertyValidation(from.prototype, property);
         // Create a new full validatior and store it on the object which will be returned as the newly
         // created schema.
-        result[property] = is(options.converter)
-            .validate(...options.validators)
-            .validateCtx(options.validatorFactory)
-            .schema(options.validationSchema);
+        result[property] = options.fullValidator;
         return result;
     }, {} as Schema);
     // Set the original class as metadata on the object for later use with scoped validation.

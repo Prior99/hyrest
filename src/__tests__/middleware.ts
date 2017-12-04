@@ -440,15 +440,13 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
     expect(mockName).toHaveBeenCalledWith(ctx);
 });
 
-test("The `hyrest` middleware handles invalid requests correctly with a schema context validation", async () => {
+test("The `hyrest` middleware handles `only()` correctly", async () => {
     const signup = createScope();
     const login = createScope();
     const ctx = {};
 
     class Pet { // tslint:disable-line
-        @is().validateCtx(c => {
-            return only(signup, length(10, 100));
-        })
+        @is().validateCtx(c => { return only(signup, length(10, 100)); })
         @scope(signup, login)
         public name: string;
     }

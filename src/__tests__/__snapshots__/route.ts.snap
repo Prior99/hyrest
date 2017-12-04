@@ -8,9 +8,7 @@ Array [
     "property": "method",
     "returnType": undefined,
     "scope": undefined,
-    "target": TestController {
-      "method": [Function],
-    },
+    "target": TestController {},
     "url": "/get",
   },
 ]

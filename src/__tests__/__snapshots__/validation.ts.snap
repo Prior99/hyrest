@@ -1,59 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`@is as parameter decorator 1`] = `
-Map {
-  2 => Object {
-    "converter": [Function],
-    "scopeLimit": undefined,
-    "validationSchema": undefined,
-    "validatorFactory": undefined,
-    "validators": Array [
-      [Function],
-    ],
-  },
-  1 => Object {
-    "converter": [Function],
-    "scopeLimit": undefined,
-    "validationSchema": undefined,
-    "validatorFactory": undefined,
-    "validators": Array [],
-  },
-  0 => Object {
-    "converter": [Function],
-    "scopeLimit": undefined,
-    "validationSchema": undefined,
-    "validatorFactory": undefined,
-    "validators": Array [],
-  },
-}
-`;
-
-exports[`@is as property decorator 1`] = `
-Object {
-  "converter": [Function],
-  "scopeLimit": undefined,
-  "validationSchema": undefined,
-  "validatorFactory": undefined,
-  "validators": Array [
-    [Function],
-    [Function],
-  ],
-}
-`;
-
-exports[`@is as property decorator 2`] = `
-Object {
-  "converter": [Function],
-  "scopeLimit": undefined,
-  "validationSchema": undefined,
-  "validatorFactory": undefined,
-  "validators": Array [
-    [Function],
-    [Function],
-  ],
-}
-`;
-
 exports[`\`arr\` works as expected 1`] = `Processed {}`;
 
 exports[`\`arr\` works as expected 2`] = `Processed {}`;

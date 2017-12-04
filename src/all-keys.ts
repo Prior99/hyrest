@@ -14,7 +14,10 @@ export function allKeys(obj: Object) {
         if (current === null) { // tslint:disable-line
             break;
         }
-        Object.keys(current).forEach(key => {
+        Object.getOwnPropertyNames(current).forEach(key => {
+            if (key === "__proto__" || key === "prototype") {
+                return;
+            }
             if (typeof Reflect.getOwnPropertyDescriptor(current, key).get !== "undefined") {
                 keys.push(key);
             }

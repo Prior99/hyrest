@@ -105,13 +105,10 @@ export function hyrest<TContext>(...controllerObjects: any[]): Router & HyrestBu
             const paramErrors: { [key: string]: Processed<any> } = {};
             let errorEncountered = false;
             await Promise.all(args.map(async (arg, index) => {
-                const options = getParameterValidation(route.target, route.property, index);
-                const factoryResult = options.validatorFactory ? options.validatorFactory(context) : [];
-                const factoryValidators = Array.isArray(factoryResult) ? factoryResult : [factoryResult]; // tslint:disable-line
-                const validators = [ ...options.validators, ...factoryValidators ];
-                const { converter, validationSchema, scopeLimit } = options;
-                const validationResult =
-                    await processValue(arg, converter, validators, validationSchema, scopeLimit, context);
+                const { fullValidator } = getParameterValidation(route.target, route.property, index);
+                const validationResult = fullValidator ?
+                    await fullValidator(arg, { context }) :
+                    new Processed({ value: arg });
 
                 processed[index] = validationResult;
                 if (!validationResult.hasErrors) {

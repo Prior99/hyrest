@@ -7,29 +7,8 @@ import * as invariant from "invariant";
 import { Scope } from "./scope";
 import { Processed } from "./processed";
 
-export interface ValidationOptions<T> {
-    /**
-     * The converter to convert the input with.
-     */
-    converter?: Converter<T>;
-    /**
-     * A list of all validators the check the input with.
-     */
-    validators: Validator<T>[];
-    /**
-     * A factory function to call with the current context of the
-     * decorator which will return a list of validators.
-     */
-    validatorFactory?: (ctx: any) => Validator<T>[] | Validator<T>;
-    /**
-     * An optional schema to match the inputs against.
-     */
-    validationSchema?: Schema;
-    /**
-     * An optional scope to limit the schema validation to. Only possible if the
-     * schema was inferred from a class.
-     */
-    scopeLimit?: Scope;
+export interface ValidationOptions<T, TContext> {
+    fullValidator?: FullValidator<T, TContext>;
 }
 
 export interface Schema {
@@ -43,7 +22,7 @@ export interface Schema {
  * @see getValidatedProperties
  */
 export interface ValidatedProperty {
-    readonly property: string;
+    readonly property: string | symbol;
     readonly propertyType: Function;
 }
 
@@ -63,7 +42,7 @@ export interface FullValidator<T, TContext> {
      *
      * @return The result of validating the value.
      */
-    (input: any, options: { scope?: Scope; context?: any; }): Processed<T> | Promise<Processed<T>>;
+    (input: any, options: FullValidatorIvokationOptions<TContext>): Processed<T> | Promise<Processed<T>>;
     /**
      * Call the function as a parameter decorator.
      */
@@ -79,7 +58,7 @@ export interface FullValidator<T, TContext> {
      *
      * @return The same instance to use this method as a builder pattern.
      */
-    validate: (...validators: Validator<T>[]) => FullValidator<T, TContext>;
+    validate?: (...validators: Validator<T>[]) => FullValidator<T, TContext>;
     /**
      * Set the schema to validate the object with.
      *
@@ -87,7 +66,7 @@ export interface FullValidator<T, TContext> {
      *
      * @return The same instance to use this method as a builder pattern.
      */
-    schema: (schema: Schema) => FullValidator<T, TContext>;
+    schema?: (schema: Schema) => FullValidator<T, TContext>;
     /**
      * Add a set of validators to the validator using a factory function which receives the current context
      * of the decorator as an argument.
@@ -97,7 +76,7 @@ export interface FullValidator<T, TContext> {
      *
      * @return The same instance to use this method as a builder pattern.
      */
-    validateCtx: (factory: (ctx: any) => (Validator<T>[] | Validator<T>)) => FullValidator<T, TContext>;
+    validateCtx?: (factory: (ctx: any) => (Validator<T>[] | Validator<T>)) => FullValidator<T, TContext>;
     /**
      * Limit the scope of the schema validation to certain properties decorated with `@scope`.
      * This only works with a schema inferred from a class.
@@ -109,23 +88,7 @@ export interface FullValidator<T, TContext> {
      *
      * @return The same instance to use this method as a builder pattern.
      */
-    scope: (scope: Scope) => FullValidator<T, TContext>;
-    /**
-     * All validators attached to this validator.
-     */
-    validators: Validator<T>[];
-    /**
-     * An optional factory function to create validators depending on the current context with.
-     */
-    validatorFactory?: (ctx: TContext) => (Validator<T>[] | Validator<T>);
-    /**
-     * An optional schema to validate the input object with.
-     */
-    validationSchema?: Schema;
-    /**
-     * An optional scope to limit schema validations with schemas inferred from classes with.
-     */
-    scopeLimit?: Scope;
+    scope?: (scope: Scope) => FullValidator<T, TContext>;
 }
 
 /**
@@ -250,18 +213,19 @@ export async function processValue<T>(
  * @return An options object to which new validators and a converter can be appended. Is always guaranteed to return
  *         an options object.
  */
-export function getParameterValidation(
+export function getParameterValidation<T, TContext>(
     target: Object, propertyKey: string | symbol, index: number,
-): ValidationOptions<any> {
+): ValidationOptions<T, TContext> {
     // Try to retrieve the `Map` of options with the keys being the parameter index and the value being
     // an the options object.
-    const map: Map<number, ValidationOptions<any>> = Reflect.getMetadata("validation:parameters", target, propertyKey);
+    const map: Map<number, ValidationOptions<T, TContext>> =
+        Reflect.getMetadata("validation:parameters", target, propertyKey);
 
     // If no map has been found then this function has never been called for this method before. A new map needs
     // to be created and an empty options object needs to be attached.
     if (!map) {
-        const newMap = new Map<number, ValidationOptions<any>>();
-        const newOptions: ValidationOptions<any> = { validators: [] };
+        const newMap = new Map<number, ValidationOptions<T, TContext>>();
+        const newOptions: ValidationOptions<T, TContext> = {};
         newMap.set(index, newOptions);
 
         // Define the new key on the reflection metadatas.
@@ -274,7 +238,7 @@ export function getParameterValidation(
 
     // If no options are present, a new object needs to be created and inserted into the map.
     if (!options) {
-        const newOptions: ValidationOptions<any> = { validators: [] };
+        const newOptions: ValidationOptions<T, TContext> = {};
         map.set(index, newOptions);
         return newOptions;
     }
@@ -292,10 +256,12 @@ export function getParameterValidation(
  * @return An array of options objects to which new validators and a converter can be appended.
  * Is always guaranteed to return an array.
  */
-export function getPropertyValidation(target: Object, propertyKey: string): ValidationOptions<any> {
+export function getPropertyValidation<T, TContext>(
+    target: Object, propertyKey: string | symbol,
+): ValidationOptions<T, TContext> {
     const options = Reflect.getMetadata("validation:property", target, propertyKey);
     if (!options) {
-        const newOptions: ValidationOptions<any> = { validators: [] };
+        const newOptions: ValidationOptions<T, TContext> = {};
         Reflect.defineMetadata("validation:property", newOptions, target, propertyKey);
         return newOptions;
     }
@@ -336,6 +302,11 @@ export function isCustomClass(propertyType: Function) {
         typeof propertyType === "function";
 }
 
+export interface FullValidatorIvokationOptions<TContext> {
+    scope?: Scope;
+    context: TContext;
+}
+
 /**
  * This decorator can be applied to a parameter in a `@route` and will make sure that the input
  * can be converted to the given data type and will then convert it.
@@ -345,79 +316,87 @@ export function isCustomClass(propertyType: Function) {
  * @return A decorator for a parameter in a @route method.
  */
 export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TContext> {
+    // A list of all validators the check the input with.
+    const validators: Validator<T>[] = [];
+    // A factory function to call with the current context of the
+    // decorator which will return a list of validators.
+    let validatorFactory: (ctx: any) => Validator<T>[] | Validator<T>;
+    // An optional schema to match the inputs against.
+    let validationSchema: Schema;
+    // An optional scope to limit the schema validation to. Only possible if the
+    // schema was inferred from a class.
+    let scopeLimit: Scope;
+    let fullValidator: FullValidator<T, TContext>;
+    const invoke = (value: T, options?: FullValidatorIvokationOptions<TContext>) => {
+        const guardedScopeLimit = scopeLimit ? scopeLimit : options.scope;
+        const context = options && options.context;
+        const factoryResult = validatorFactory ? validatorFactory(context) : [];
+        const factoryValidators = Array.isArray(factoryResult) ? factoryResult : [factoryResult];
+        const allValidators = [...validators, ...factoryValidators];
+        return processValue(value, converter, allValidators, validationSchema, guardedScopeLimit, context);
+    };
+    const propertyDecorator = (target: Object, property: string | symbol, descriptor: PropertyDescriptor) => {
+        const options = getPropertyValidation(target, property);
+        options.fullValidator = fullValidator;
+        const propertyType = Reflect.getMetadata("design:type", target, property);
+        const specifyTypeCreator = Reflect.getMetadata("specifytype", target, property);
+        const specifyType = specifyTypeCreator && specifyTypeCreator();
+        getValidatedProperties(target).push({
+            property,
+            propertyType,
+        });
+        // Infer the converter if it wasn't defined.
+        if (typeof converter === "undefined") {
+            converter = inferConverter(propertyType, specifyType);
+        }
+        // If the user decorated an array but forgot the `@specify` decorator or specified it before `@is`,
+        // fail early.
+        if (propertyType === Array && typeof specifyType === "undefined") {
+            throw new Error("Decorated property of type array without specifying @specify after @is.");
+        }
+        // Infer the schema if the typescript property type was a custom schema.
+        if (isCustomClass(propertyType) && !validationSchema) {
+            validationSchema = schemaFrom(propertyType);
+        }
+        return;
+    };
+    const parameterDecorator = (target: Object, property: string | symbol, index: number) => {
+        const options = getParameterValidation(target, property, index);
+        options.fullValidator = fullValidator;
+    };
     // This function can be called in three ways:
     // 1. Standalone, providing an input and an optional scope
     // 2. As a property decorator.
     // 3. As a parameter decorator.
-    const fn: any = (...args: any[]) => {
+    fullValidator = (...args: any[]) => {
         if (args.length !== 3) {
-            // Called as a function.
-            // Create all factory validators.
-            const { validators, validationSchema, validationFactory } = fn;
-            const scope = fn.scopeLimit || (args[1] && args[1].scope);
-            const context = args[1] && args[1].context;
-            const factoryResult = validationFactory ? validationFactory(context) : [];
-            const factoryValidators = Array.isArray(factoryResult) ? factoryResult : [factoryResult];
-            const allValidators = [...validators, ...factoryValidators];
-            return processValue(args[0], converter, allValidators, validationSchema, scope, context);
+            return invoke(args[0] as T, args[1] as FullValidatorIvokationOptions<TContext>);
         }
         // Either a parameter or property decorator.
-        const isParameterDecorator = typeof args[2] === "number";
-        const options = isParameterDecorator ?
-            getParameterValidation(args[0], args[1], args[2]) :
-            getPropertyValidation(args[0], args[1]);
-
-        // Copy all properties set on the function using the builder pattern and `validate` or `schema`, etc.
-        // to the `options` object in the metadata if this was called as a decorator.
-        options.converter = converter;
-        options.validatorFactory = fn.validationFactory;
-        options.validationSchema = fn.validationSchema;
-        options.validators.push(...fn.validators);
-        options.scopeLimit = fn.scopeLimit;
-        if (!isParameterDecorator) {
-            // Property decorator.
-            const propertyType = Reflect.getMetadata("design:type", args[0], args[1]);
-            const specifyTypeCreator = Reflect.getMetadata("specifytype", args[0], args[1]);
-            const specifyType = specifyTypeCreator && specifyTypeCreator();
-            getValidatedProperties(args[0]).push({
-                property: args[1],
-                propertyType,
-            });
-            // Infer the converter if it wasn't defined.
-            if (typeof converter === "undefined") {
-                options.converter = inferConverter(propertyType, specifyType);
-            }
-            // If the user decorated an array but forgot the `@specify` decorator or specified it before `@is`,
-            // fail early.
-            if (propertyType === Array && typeof specifyType === "undefined") {
-                throw new Error("Decorated property of type array without specifying @specify after @is.");
-            }
-            // Infer the schema if the typescript property type was a custom schema.
-            if (isCustomClass(propertyType) && !options.validationSchema) {
-                options.validationSchema = schemaFrom(propertyType);
-            }
+        if (typeof args[2] === "number") {
+            parameterDecorator(args[0], args[1], args[2]);
             return;
         }
+        propertyDecorator(args[0], args[1], args[2]);
     };
-    // Create all configuration functions on `fn` for the builder pattern.
-    fn.validators = [];
-    fn.validate = (...validators: Validator<T>[]) => {
-        fn.validators.push(...validators);
-        return fn;
+    // Create all configuration functions on `fullValidator` for the builder pattern.
+    fullValidator.validate = (...newValidators: Validator<T>[]) => {
+        validators.push(...newValidators);
+        return fullValidator;
     };
-    fn.validateCtx = (factory: (ctx: TContext) => (Validator<T>[] | Validator<T>)) => {
-        fn.validationFactory = factory;
-        return fn;
+    fullValidator.validateCtx = (factory: (ctx: TContext) => (Validator<T>[] | Validator<T>)) => {
+        validatorFactory = factory;
+        return fullValidator;
     };
-    fn.schema = (schema: Schema) => {
-        fn.validationSchema = schema;
-        return fn;
+    fullValidator.schema = (schema: Schema) => {
+        validationSchema = schema;
+        return fullValidator;
     };
-    fn.scope = (scope: Scope) => {
-        fn.scopeLimit = scope;
-        return fn;
+    fullValidator.scope = (scope: Scope) => {
+        scopeLimit = scope;
+        return fullValidator;
     };
-    return fn as FullValidator<T, TContext>;
+    return fullValidator;
 }
 
 /**

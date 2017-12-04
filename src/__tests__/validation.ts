@@ -3,40 +3,42 @@ import { int, float, str, obj, bool, arr } from "../converters";
 import { oneOf, required, length } from "../validators";
 
 test("@is as parameter decorator", () => {
+    const is1 = is(int);
+    const is2 = is(float);
+    const is3 = is(str).validate(oneOf("a", "b"));
+
     class TestController {
-        public method(
-                @is(int) parameter1,
-                @is(float) parameter2,
-                @is(str).validate(oneOf("a", "b")) parameter3) {
+        public method(@is1 parameter1, @is2 parameter2, @is3 parameter3) {
             return;
         }
     }
 
     const controller = new TestController();
 
-    const converters = Reflect.getMetadata("validation:parameters", controller, "method");
-    expect(converters).toMatchSnapshot();
-    expect(converters.get(0).converter("20")).toEqual({ value: 20 });
+    const metadata = Reflect.getMetadata("validation:parameters", controller, "method");
+    const expected = new Map();
+    expected.set(0, { fullValidator: is1 });
+    expected.set(1, { fullValidator: is2 });
+    expected.set(2, { fullValidator: is3 });
+    expect(metadata).toEqual(expected);
 });
 
 test("@is as property decorator", () => {
-    class TestController {
-        @is(str).validate(oneOf("a", "b"), required)
-        public test1: string;
+    const is1 = is(str).validate(oneOf("a", "b"), required);
+    const is2 = is(int).validate(oneOf(1, 2, 3), required);
 
-        @is(int).validate(oneOf(1, 2, 3), required)
-        public test2: number;
+    class TestController { // tslint:disable-line
+        @is1 public test1: string;
+        @is2 public test2: number;
     }
 
     const controller = new TestController();
 
-    const converter1 = Reflect.getMetadata("validation:property", controller, "test1");
-    expect(converter1).toMatchSnapshot();
-    expect(converter1.converter("a")).toEqual({ value: "a" });
-    const converter2 = Reflect.getMetadata("validation:property", controller, "test2");
-    expect(converter2).toMatchSnapshot();
-    expect(converter2.converter("2")).toEqual({ value: 2 });
-    expect(getPropertyValidation(controller, "test2")).toEqual(converter2);
+    const metadata1 = Reflect.getMetadata("validation:property", controller, "test1");
+    expect(metadata1).toEqual({ fullValidator: is1 });
+    const metadata2 = Reflect.getMetadata("validation:property", controller, "test2");
+    expect(metadata2).toEqual({ fullValidator: is2 });
+    expect(getPropertyValidation(controller, "test2")).toEqual(metadata2);
 });
 
 [
