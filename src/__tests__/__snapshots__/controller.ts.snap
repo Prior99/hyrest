@@ -2,6 +2,7 @@
 
 exports[`@controller and @controller() 1`] = `
 Controller {
+  "authorizationMode": "unauthorized",
   "mode": "client",
   "throwOnError": true,
 }
@@ -9,6 +10,7 @@ Controller {
 
 exports[`@controller and @controller() 2`] = `
 Controller {
+  "authorizationMode": "unauthorized",
   "mode": "client",
   "throwOnError": true,
 }
@@ -16,6 +18,7 @@ Controller {
 
 exports[`@controller and @controller() 3`] = `
 Controller {
+  "authorizationMode": "unauthorized",
   "mode": "server",
   "throwOnError": true,
 }
