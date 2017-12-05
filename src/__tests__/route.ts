@@ -7,7 +7,9 @@ test("`route()` throws when decorating a method on a non-@controller class", () 
     expect(() => {
         class NotAController {
             @route("GET", "/get")
-            public method() {}
+            public method() {
+                return;
+            }
         }
 
         const noController = new NotAController();
@@ -19,7 +21,9 @@ test("`route()` registers on a class", () => {
     @controller()
     class TestController {
         @route("GET", "/get")
-        public method() {}
+        public method() {
+            return;
+        }
     }
 
     const test = new TestController();
@@ -30,7 +34,9 @@ test("when calling the route with the controller in `CLIENT` mode", () => {
     @controller({ mode: ControllerMode.CLIENT })
     class TestController {
         @route("GET", "/get/:id")
-        public method(@param("id") id: string, @body() thing: any, @query("search") search: string) {}
+        public method(@param("id") id: string, @body() thing: any, @query("search") search: string) {
+            return;
+        }
     }
 
     const mock = jest.fn();
@@ -58,7 +64,9 @@ test("when calling the route with the controller in `CLIENT` mode with no inject
     @controller({ mode: ControllerMode.CLIENT })
     class TestController {
         @route("GET", "/get/:id")
-        public method() {}
+        public method() {
+            return;
+        }
     }
 
     const mock = jest.fn();

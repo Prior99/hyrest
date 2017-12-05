@@ -2,7 +2,7 @@ import { oneOf, required, email, length } from "../validators";
 
 [
     {
-        options: [1, 2, 3, 5],
+        options: [1, 2, 3, 5] as any[],
         values: [
             0,
             27,
@@ -16,7 +16,7 @@ import { oneOf, required, email, length } from "../validators";
         ],
     },
     {
-        options: ["a", "b", "c"],
+        options: ["a", "b", "c"] as any,
         values: [
             0,
             27,
@@ -40,7 +40,7 @@ import { oneOf, required, email, length } from "../validators";
         });
     });
     test("oneOf detects each option as valid", () => {
-        options.forEach(option => {
+        options.forEach((option: any) => {
             expect(oneOf(...options)(option)).toEqual({});
         });
     });
@@ -71,27 +71,27 @@ import { oneOf, required, email, length } from "../validators";
     "test@example",
 ].forEach(value => {
     test(`email detects "${value}" as expected`, () => {
-        expect(email(value)).toMatchSnapshot();
+        expect(email(value as any)).toMatchSnapshot();
     });
 });
 
 [
     {
         range: { min: 5 },
-        tests: ["", "1", "test", "longertext", null, undefined], // tslint:disable-line
+        tests: ["", "1", "test", "longertext", null, undefined] as any[], // tslint:disable-line
     },
     {
         range: { min: 5, max: 10 },
-        tests: ["", "1", "test", "longertext", "reallylongtextthatexceeds10", 9],
+        tests: ["", "1", "test", "longertext", "reallylongtextthatexceeds10", 9] as any[],
     },
     {
         range: { max: 10 },
-        tests: ["", "1", "test", "reallylongtextthatexceeds10", {}, []],
+        tests: ["", "1", "test", "reallylongtextthatexceeds10", {}, []] as any[],
     },
 ].forEach(({ range, tests }) => {
     tests.forEach(value => {
         test(`length detects "${value}" as expected with ${range}`, () => {
-            expect(length(range)(value)).toMatchSnapshot();
+            expect(length(range as any)(value)).toMatchSnapshot();
         });
     });
 });

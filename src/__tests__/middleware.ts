@@ -145,12 +145,12 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
         }
 
         @route("POST", "/user/:id")
-        public postTest(@is().schema({}) @body() user: User) {
+        public postTest(@is().schema({}) @body() user: any) {
             return ok("Everything is okay.");
         }
 
         @route("POST", "/echo")
-        public postEcho(@is().schema({ email: is(str).validate(email) }) @body() user: User) {
+        public postEcho(@is().schema({ email: is(str).validate(email) }) @body() user: any) {
             return ok(user, "Everything is okay.");
         }
     }
@@ -258,12 +258,12 @@ test("The `hyrest` middleware performs a context validation", async () => {
     @controller({ mode: ControllerMode.SERVER })
     class TestController6 {
         @route("GET", "/get/:id")
-        public getGet(@param("id") @is(str).validateCtx(ctx => ctx.validate1)) {
+        public getGet(@param("id") @is(str).validateCtx(ctx => ctx.validate1) id: string) {
             return ok();
         }
 
         @route("GET", "/get/array/:id")
-        public getArray(@param("id") @is(str).validateCtx(ctx => [ctx.validate2, ctx.validate3])) {
+        public getArray(@param("id") @is(str).validateCtx(ctx => [ctx.validate2, ctx.validate3]) id: string) {
             return ok();
         }
     }
@@ -497,7 +497,7 @@ test("transforming properties", async () => {
 
     class User {
         @is()
-        @transform(password => `***${password.substr(3, password.length)}`)
+        @transform((password: string) => `***${password.substr(3, password.length)}`)
         @scope(signup)
         public password: string;
     }
@@ -507,7 +507,7 @@ test("transforming properties", async () => {
         @route("POST", "/signup/:sth")
         public postSignup(
             @body(signup) user: User,
-            @is() @transform(s => s.toLowerCase()) @param("sth") sth: string,
+            @is() @transform((s: string) => s.toLowerCase()) @param("sth") sth: string,
         ) {
             mock(user.password, sth);
             return ok("Everything is okay.");

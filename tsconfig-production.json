@@ -13,6 +13,7 @@
         "emitDecoratorMetadata": true
     },
     "exclude": [
+        "**/__tests__/*",
         "node_modules.",
         "dist/",
         "example/",

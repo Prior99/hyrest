@@ -46,7 +46,7 @@ import { consumeLastCall } from "../last-call";
     },
 ].forEach(({ args, testName }) => {
     Object.keys(Answers)
-        .map(key => Answers[key])
+        .map(key => (Answers as any)[key])
         .forEach(answerFunction => {
             test(`${answerFunction.name} returns the expected result with ${testName}`, () => {
                 const body = answerFunction(...args);

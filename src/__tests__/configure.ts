@@ -5,7 +5,7 @@ import { configureController, controller, ControllerMode } from "..";
         throwOnError: true,
     },
     {
-        errorHandler: () => undefined,
+        errorHandler: (): undefined => undefined,
     },
     {
         baseUrl: "http://example.com/",
@@ -18,7 +18,7 @@ import { configureController, controller, ControllerMode } from "..";
     },
     {
         throwOnError: true,
-        errorHandler: () => undefined,
+        errorHandler: (): undefined => undefined,
         mode: ControllerMode.SERVER,
         baseUrl: "http://example.com/",
     },
@@ -38,5 +38,3 @@ test("`configureController` throws an error when called with a non-@controller",
     class NotAController {}
     expect(() => configureController(NotAController, {})).toThrowErrorMatchingSnapshot();
 });
-
-

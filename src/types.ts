@@ -1,6 +1,6 @@
 export interface Answer<T> {
     readonly message?: string;
-    readonly data: T;
+    readonly data?: T;
 }
 
 export interface Params {

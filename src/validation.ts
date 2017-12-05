@@ -43,7 +43,7 @@ export interface FullValidator<T, TContext> {
      *
      * @return The result of validating the value.
      */
-    (input: any, options: FullValidatorIvokationOptions<TContext>): Processed<T> | Promise<Processed<T>>;
+    (input: any, options?: FullValidatorIvokationOptions<TContext>): Processed<T> | Promise<Processed<T>>;
     /**
      * Call the function as a parameter decorator.
      */

@@ -6,7 +6,7 @@ test("`isBrowser()` in a browser returns `true`", () => {
 });
 
 test("`isBrowser()` on a server returns `false`", () => {
-    delete global.document;
-    delete global.window;
+    delete (global as any).document;
+    delete (global as any).window;
     expect(isBrowser()).toBe(false);
 });

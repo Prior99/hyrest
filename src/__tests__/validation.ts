@@ -72,7 +72,7 @@ test("@is as property decorator", () => {
                 b: 123.5,
                 c: "another string",
             },
-        ],
+        ] as any[],
         invalid: [
             {
                 a: false,
@@ -83,7 +83,7 @@ test("@is as property decorator", () => {
             {
                 a: false,
             },
-        ],
+        ] as any[],
     },
     {
         testSchema: {
@@ -101,7 +101,7 @@ test("@is as property decorator", () => {
                     [],
                 ],
             },
-        ],
+        ] as any[],
         invalid: [
             {
                 arraOfArrays: [5],
@@ -111,7 +111,7 @@ test("@is as property decorator", () => {
                     [8],
                 ],
             },
-        ],
+        ] as any[],
     },
     {
         testSchema: {
@@ -138,7 +138,7 @@ test("@is as property decorator", () => {
                 e: [1, 2, 1, 2, 1],
                 f: [{ g: "foo" }, { g: "bar" }, { g: "bas" }, { g: "baz" } ],
             },
-        ],
+        ] as any[],
         invalid: [
             {
                 a: 19,
@@ -159,10 +159,10 @@ test("@is as property decorator", () => {
                 f: [{ g: "test" }],
             },
             undefined,
-        ],
+        ] as any[],
     },
 
-].forEach(({ testSchema, valid, invalid }) => {
+].forEach(({ valid, invalid, testSchema}) => {
     valid.forEach(input => {
         test("The test schema detects a valid input as valid", async () => {
             expect(await validateSchema(testSchema, input)).toEqual({});
@@ -274,6 +274,7 @@ test("`@is` with the type specified explicitly in a parameter", async () => {
     }
     class A {
         public method(@is() @specify(() => B) param: undefined) {
+            return;
         }
     }
     const a = new A();
@@ -290,6 +291,7 @@ test("`@is` with an array", async () => {
     }
     class A {
         public method(@is() param: B) {
+            return;
         }
     }
     const a = new A();
@@ -313,6 +315,7 @@ test("`@is` with an array and a failed validation inside", async () => {
     }
     class A {
         public method(@is() param: B) {
+            return;
         }
     }
     const a = new A();

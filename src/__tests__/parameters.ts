@@ -2,7 +2,9 @@ import { body, getBodyParameters, param, getUrlParameters, query, getQueryParame
 
 test("@body, @param and @query", () => {
     class TestController {
-        public method(@param("param1") param: string, @query("query1") query: string, @body() body: any) {}
+        public method(@param("param1") p: string, @query("query1") q: string, @body() b: any) {
+            return;
+        }
     }
 
     const controller = new TestController();

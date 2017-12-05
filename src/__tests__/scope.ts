@@ -1,67 +1,68 @@
 import { Scope, scope, createScope, dump, populate, specify } from "../scope";
+import { Constructable } from "../types";
 
-
-let permissive, restricted: Scope;
-let A, B, C: Function;
-let a1, a2, a3: any;
-let b1, b2: any;
+let permissive: Scope, restricted: Scope;
+let A: Constructable<any>, B: Constructable<any>, C: Constructable<any>;
+let a1: any, a2: any, a3: any;
+let b1: any, b2: any;
 let c: any;
 
 beforeEach(() => {
     permissive = createScope();
     restricted = createScope().include(permissive);
 
-    class _A {
+    class AInternal {
         @scope(permissive)
         public a: string;
 
         @scope(restricted)
         public b: number;
-    };
+    }
 
-    class _B {
+    class BInternal {
         @scope(permissive)
-        public permissiveA: _A;
+        public permissiveA: AInternal;
 
         @scope(restricted)
-        public restrictedA: _A;
-    };
+        public restrictedA: AInternal;
+    }
 
-    class _C {
+    class CInternal {
         @scope(permissive)
         public c: string;
 
         @scope(restricted)
         public d: number;
 
-        @scope(permissive) @specify(() => _B)
-        public bs: _B[];
-    };
-    A = _A;
-    B = _B;
-    C = _C;
+        @scope(permissive) @specify(() => BInternal)
+        public bs: BInternal[];
+    }
 
-    a1 = new _A();
+    A = AInternal;
+    B = BInternal;
+    C = CInternal;
+
+    a1 = new AInternal();
     a1.a = "test1";
     a1.b = 2;
 
-    a2 = new _A();
+    a2 = new AInternal();
     a2.a = "test3";
     a2.b = 4;
 
-    a3 = new _A();
+    a3 = new AInternal();
     a3.a = "test5";
     a3.b = 6;
 
-    b1 = new _B();
+    b1 = new BInternal();
     b1.permissiveA = a1;
     b1.restrictedA = a2;
 
-    b2 = new _B();
+    b2 = new BInternal();
     b2.permissiveA = a3;
     b2.restrictedA = a1;
 
-    c = new _C();
+    c = new CInternal();
     c.c = "test7";
     c.d = 42;
     c.bs = [b1, b2];
@@ -98,8 +99,8 @@ test("populating a marked and nested structure", () => {
             {},
         ],
     };
-    const instanceRestricted: C = populate(restricted, C, input);
-    const instancePermissive: C = populate(permissive, C, input);
+    const instanceRestricted = populate(restricted, C, input);
+    const instancePermissive = populate(permissive, C, input);
     expect(instanceRestricted).toMatchSnapshot();
     expect(instancePermissive).toMatchSnapshot();
     expect(instanceRestricted.constructor).toEqual(C);
@@ -142,7 +143,7 @@ test("populating and dumping a circular structure", () => {
                     property1: "a",
                     property2: "b",
                     circular1: { property2: "edipiscir" },
-                    circularArray: [],
+                    circularArray: [] as any[],
                 },
             ],
         },
@@ -151,7 +152,7 @@ test("populating and dumping a circular structure", () => {
             property2: "sit",
             circular1: { property1: "lol" },
             circular2: { property1: "rofl", circular2: {} },
-            circularArray: [],
+            circularArray: [] as any[],
         },
         circularArray: [
             {
@@ -331,8 +332,8 @@ test("populating an array", () => {
     cInstance.test = "c";
     const expected = [ aInstance, bInstance, cInstance ];
     const input = [ { test: "a" }, { test: "b" }, { test: "c" } ];
-    expect(populate(scope1, Array, Class1, input)).toEqual(expected);
-    expect(populate(scope1, Array, Class1)(input)).toEqual(expected);
+    expect(populate(scope1, Array, Class1 as any, input)).toEqual(expected);
+    expect((populate(scope1, Array, Class1 as any) as any)(input)).toEqual(expected);
 });
 
 test("populating a cyclic dependency", () => {

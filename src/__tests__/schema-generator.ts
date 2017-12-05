@@ -4,14 +4,14 @@ import { is, validateSchema } from "../validation";
 import { email, oneOf, required } from "../validators";
 import { int, str, obj, arr } from "../converters";
 
-let A, B: Function;
-let scope1, scope2: Scope;
+let A: Function, B: Function;
+let scope1: Scope, scope2: Scope;
 
 beforeEach(() => {
     scope1 = createScope();
     scope2 = createScope();
 
-    class _A {
+    class AInternal {
         @scope(scope1)
         @is(str).validate(email, required)
         public email: string;
@@ -21,19 +21,19 @@ beforeEach(() => {
         public anInteger: number;
     }
 
-    class _B {
+    class BInternal {
         @scope(scope1) @is().validate(required)
-        public a: _A;
+        public a: AInternal;
 
-        @scope(scope2) @is() @specify(() => _A)
-        public as: _A[];
+        @scope(scope2) @is() @specify(() => AInternal)
+        public as: AInternal[];
 
-        @scope(scope1, scope2) @is() @specify(() => _B)
-        public bs: _B[];
+        @scope(scope1, scope2) @is() @specify(() => BInternal)
+        public bs: BInternal[];
     }
 
-    A = _A;
-    B = _B;
+    A = AInternal;
+    B = BInternal;
 });
 
 [

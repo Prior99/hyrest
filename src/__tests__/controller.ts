@@ -23,7 +23,7 @@ const query = {
     search: "some-search&? -\\/",
     page: "7",
     size: "100",
-    notDefined: undefined,
+    notDefined: undefined as any,
 };
 const body = {
     someKey: "some value",
@@ -56,7 +56,7 @@ test("@controller and @controller()", () => {
 
 test("`wrappedFetch` with a successfull response", async () => {
     const mock = jest.fn();
-    global.fetch = mock;
+    (global as any).fetch = mock;
     mock.mockReturnValue({
         json: () => ({
             message: "Everything went well.",
@@ -84,7 +84,7 @@ test("`wrappedFetch` with a successfull response", async () => {
 
 test("`wrappedFetch` with broken json", async () => {
     const mockCall = jest.fn();
-    global.fetch = mockCall;
+    (global as any).fetch = mockCall;
     const error = new Error();
     mockCall.mockReturnValue({
         json: () => { throw error; },
@@ -105,7 +105,7 @@ describe("`wrappedFetch` with a non-2xx status code", () => {
 
     beforeEach(() => {
         const mockCall = jest.fn();
-        global.fetch = mockCall;
+        (global as any).fetch = mockCall;
         mockCall.mockReturnValue({
             json: () => ({
                 message: "Something went wrong.",
@@ -157,8 +157,8 @@ test("`wrappedFetch` with a `.dump()` route", async () => {
         returnType: User,
     };
 
-    global.fetch = jest.fn();
-    global.fetch.mockReturnValue({
+    (global as any).fetch = jest.fn();
+    (global as any).fetch.mockReturnValue({
         json: () => ({
             message: "Everything went well.",
             data: {
@@ -176,8 +176,8 @@ test("`wrappedFetch` with a `.dump()` route", async () => {
 
 test("`getDefaultControllerMode()`", () => {
     expect(getDefaultControllerMode()).toBe(ControllerMode.CLIENT);
-    delete global.document;
-    delete global.window;
+    delete (global as any).document;
+    delete (global as any).window;
     expect(getDefaultControllerMode()).toBe(ControllerMode.SERVER);
 });
 
@@ -198,8 +198,8 @@ test("`wrappedFetch` with a `.dump()` route and an array", async () => {
         returnType: User,
     };
 
-    global.fetch = jest.fn();
-    global.fetch.mockReturnValue({
+    (global as any).fetch = jest.fn();
+    (global as any).fetch.mockReturnValue({
         json: () => ({
             message: "Everything went well.",
             data: [
