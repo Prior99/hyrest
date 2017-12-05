@@ -27,7 +27,7 @@ export class Other {
     public num2: number;
 }
 
-export class Example { // tslint:disable-line
+export class Example {
     @scope(world, create) @is().validate(oneOf("hunter", "jonas"))
     public name: string;
 
@@ -38,7 +38,7 @@ export class Example { // tslint:disable-line
 }
 
 @controller({ baseUrl: "http://localhost:9000" })
-export class ExampleController { // tslint:disable-line
+export class ExampleController {
     @route("POST", "/example/:id").dump(Example, world)
     public postExample(
             @param("id") @is(DataType.int) id: number,

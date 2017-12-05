@@ -11,7 +11,7 @@ beforeEach(() => {
     scope1 = createScope();
     scope2 = createScope();
 
-    class _A { // tslint:disable-line
+    class _A {
         @scope(scope1)
         @is(str).validate(email, required)
         public email: string;
@@ -21,7 +21,7 @@ beforeEach(() => {
         public anInteger: number;
     }
 
-    class _B { // tslint:disable-line
+    class _B {
         @scope(scope1) @is().validate(required)
         public a: _A;
 
@@ -139,7 +139,7 @@ beforeEach(() => {
 
 test("throws an error if decorated incorrectly", () => {
     expect(() => {
-        class C { // tslint:disable-line
+        class C {
             @specify(() => String) @is()
             public test: string[];
         }

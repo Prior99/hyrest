@@ -77,14 +77,14 @@ test("The `hyrest` middleware handles requests correctly", async () => {
 });
 
 test("The `hyrest` middleware throws when adding a non-@controller object", () => {
-    class NotAController {} // tslint:disable-line
+    class NotAController {}
 
     expect(() => hyrest(new NotAController())).toThrow();
 });
 
 test("The `hyrest` middleware reacts to all http methods", async () => {
     @controller({ mode: ControllerMode.SERVER })
-    class TestController2 { // tslint:disable-line
+    class TestController2 {
         @route("GET", "/get")
         public getGet() { return ok(); }
 
@@ -126,7 +126,7 @@ test("The `hyrest` middleware reacts to all http methods", async () => {
 
 test("The `hyrest` middleware throws with an invalid HTTP method", () => {
     @controller()
-    class TestController3 { // tslint:disable-line
+    class TestController3 {
         @route("INVALID" as any, "/invalid")
         public invalid() { return ok(); }
     }
@@ -136,7 +136,7 @@ test("The `hyrest` middleware throws with an invalid HTTP method", () => {
 
 test("The `hyrest` middleware handles invalid requests correctly", async () => {
     @controller({ mode: ControllerMode.SERVER })
-    class TestController4 { // tslint:disable-line
+    class TestController4 {
         @route("GET", "/user/:id")
         public getTest(
                 @is(int) @param("id") id: number,
@@ -223,7 +223,7 @@ test("The `hyrest` middleware handles invalid requests correctly", async () => {
 test("The `hyrest` middleware preserves `this`", async () => {
     const mock = jest.fn();
     @controller({ mode: ControllerMode.SERVER })
-    class TestController5 { // tslint:disable-line
+    class TestController5 {
         @route("GET", "/get")
         public getGet() {
             mock(this);
@@ -256,7 +256,7 @@ test("The `hyrest` middleware performs a context validation", async () => {
         },
     };
     @controller({ mode: ControllerMode.SERVER })
-    class TestController6 { // tslint:disable-line
+    class TestController6 {
         @route("GET", "/get/:id")
         public getGet(@param("id") @is(str).validateCtx(ctx => ctx.validate1)) {
             return ok();
@@ -292,7 +292,7 @@ test("@body with a scope and a route with `.dump()`", async () => {
     const login = createScope();
     const signup = createScope().include(login);
 
-    class User { // tslint:disable-line
+    class User {
         @scope(login) @is().validate(email, required)
         public email: string;
 
@@ -306,7 +306,7 @@ test("@body with a scope and a route with `.dump()`", async () => {
     const mockSignup = jest.fn();
     const mockLogin = jest.fn();
     @controller({ mode: ControllerMode.SERVER })
-    class TestController7 { // tslint:disable-line
+    class TestController7 {
         @bind @route("POST", "/signup").dump(User, signup)
         public postSignup(@body(signup) user: User) {
             mockSignup(user);
@@ -364,7 +364,7 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
     const mock = jest.fn();
     const mockName = jest.fn();
 
-    class Name { // tslint:disable-line
+    class Name {
         @is().validateCtx(c => {
             mockName(c);
             return length(10, 100);
@@ -373,7 +373,7 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
         public name: string;
     }
 
-    class User { // tslint:disable-line
+    class User {
         @is().validateCtx(c => {
             mock(c);
             return email;
@@ -390,7 +390,7 @@ test("The `hyrest` middleware handles invalid requests correctly with a schema c
     }
 
     @controller({ mode: ControllerMode.SERVER })
-    class TestController8 { // tslint:disable-line
+    class TestController8 {
         @route("POST", "/user")
         public postTest(@body(signup) user: User) {
             return ok("Everything is okay.");
@@ -445,13 +445,13 @@ test("The `hyrest` middleware handles `only()` correctly", async () => {
     const login = createScope();
     const ctx = {};
 
-    class Pet { // tslint:disable-line
+    class Pet {
         @is().validateCtx(c => { return only(signup, length(10, 100)); })
         @scope(signup, login)
         public name: string;
     }
 
-    class User { // tslint:disable-line
+    class User {
         @is().validate(only(signup, email))
         @scope(signup, login)
         public email: string;
@@ -462,7 +462,7 @@ test("The `hyrest` middleware handles `only()` correctly", async () => {
     }
 
     @controller({ mode: ControllerMode.SERVER })
-    class TestController9 { // tslint:disable-line
+    class TestController9 {
         @route("POST", "/signup")
         public postSignup(@body(signup) user: User) {
             return ok("Everything is okay.");
@@ -495,7 +495,7 @@ test("transforming properties", async () => {
     const signup = createScope();
     const mock = jest.fn();
 
-    class User { // tslint:disable-line
+    class User {
         @is()
         @transform(password => `***${password.substr(3, password.length)}`)
         @scope(signup)
@@ -503,7 +503,7 @@ test("transforming properties", async () => {
     }
 
     @controller({ mode: ControllerMode.SERVER })
-    class TestController10 { // tslint:disable-line
+    class TestController10 {
         @route("POST", "/signup/:sth")
         public postSignup(
             @body(signup) user: User,

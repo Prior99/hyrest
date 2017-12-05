@@ -38,15 +38,15 @@ const route = {
 
 test("@controller and @controller()", () => {
     @controller
-    class A { // tslint:disable-line
+    class A {
     }
 
     @controller()
-    class B { // tslint:disable-line
+    class B {
     }
 
     @controller({ mode: ControllerMode.SERVER})
-    class C { // tslint:disable-line
+    class C {
     }
 
     expect(Reflect.getMetadata("api:controller", A)).toMatchSnapshot();
@@ -140,7 +140,7 @@ describe("`wrappedFetch` with a non-2xx status code", () => {
 test("`wrappedFetch` with a `.dump()` route", async () => {
     const login = createScope();
 
-    class User { // tslint:disable-line
+    class User {
         @scope(login) @is().validate(email, required)
         public email: string;
 
@@ -184,7 +184,7 @@ test("`getDefaultControllerMode()`", () => {
 test("`wrappedFetch` with a `.dump()` route and an array", async () => {
     const login = createScope();
 
-    class User { // tslint:disable-line
+    class User {
         @scope(login) @is().validate(email, required)
         public email: string;
     }

@@ -11,7 +11,7 @@ beforeEach(() => {
     permissive = createScope();
     restricted = createScope().include(permissive);
 
-    class _A { // tslint:disable-line
+    class _A {
         @scope(permissive)
         public a: string;
 
@@ -19,7 +19,7 @@ beforeEach(() => {
         public b: number;
     };
 
-    class _B { // tslint:disable-line
+    class _B {
         @scope(permissive)
         public permissiveA: _A;
 
@@ -27,7 +27,7 @@ beforeEach(() => {
         public restrictedA: _A;
     };
 
-    class _C { // tslint:disable-line
+    class _C {
         @scope(permissive)
         public c: string;
 
@@ -112,7 +112,7 @@ test("populating a marked and nested structure", () => {
 test("populating and dumping a circular structure", () => {
     const scope1 = createScope();
     const scope2 = createScope();
-    class Circular { // tslint:disable-line
+    class Circular {
         @scope(scope1)
         public property1: string;
 
@@ -183,12 +183,12 @@ test("populating and dumping a circular structure", () => {
 test("populating a structure with an (un-)typed array", () => {
     const scope1 = createScope();
 
-    class Untyped {// tslint:disable-line
+    class Untyped {
         @scope(scope1)
         public test: string[];
     }
 
-    class Typed {// tslint:disable-line
+    class Typed {
         @scope(scope1) @specify(() => String)
         public test: string[];
     }
@@ -205,12 +205,12 @@ test("populating a structure with an (un-)typed array", () => {
 test("populating a structure with a not matching input", () => {
     const scope1 = createScope();
 
-    class Class1 {// tslint:disable-line
+    class Class1 {
         @scope(scope1)
         public test: boolean;
     }
 
-    class Class2 {// tslint:disable-line
+    class Class2 {
         @scope(scope1)
         public test: Class1;
     }
@@ -225,12 +225,12 @@ test("populating a structure with a not matching input", () => {
 test("populating a structure with a not matching input", () => {
     const scope1 = createScope();
 
-    class Class1 {// tslint:disable-line
+    class Class1 {
         @scope(scope1)
         public test: boolean;
     }
 
-    class Class2 {// tslint:disable-line
+    class Class2 {
         @scope(scope1)
         public test: Class1;
     }
@@ -249,7 +249,7 @@ test("populating a structure with an `any` or `interface` type", () => {
         test: boolean;
     }
 
-    class Class1 {// tslint:disable-line
+    class Class1 {
         @scope(scope1)
         public test1: any;
 
@@ -268,7 +268,7 @@ test("populating a structure with a setter", () => {
     const scope1 = createScope();
     const mock = jest.fn();
 
-    class Class1 {// tslint:disable-line
+    class Class1 {
         @scope(scope1)
         public set test(num: number) { mock(num); }
     }
@@ -279,12 +279,12 @@ test("populating a structure with a setter", () => {
 test("dumping a structure with a getter", () => {
     const scope1 = createScope();
 
-    class Class1 {// tslint:disable-line
+    class Class1 {
         @scope(scope1)
         public get test1() { return 1; }
     }
 
-    class Class2 extends Class1 {// tslint:disable-line
+    class Class2 extends Class1 {
         @scope(scope1)
         public get test2() { return 2; }
     }
@@ -297,7 +297,7 @@ test("dumping a structure with a getter", () => {
 test("dumping an array", () => {
     const scope1 = createScope();
 
-    class Class1 {// tslint:disable-line
+    class Class1 {
         constructor(test: string) {
             this.test = test;
         }
@@ -319,7 +319,7 @@ test("dumping an array", () => {
 test("populating an array", () => {
     const scope1 = createScope();
 
-    class Class1 {// tslint:disable-line
+    class Class1 {
         @scope(scope1)
         public test: string;
     }
@@ -338,12 +338,12 @@ test("populating an array", () => {
 test("populating a cyclic dependency", () => {
     const scope1 = createScope();
 
-    class Class1 {// tslint:disable-line
+    class Class1 {
         @scope(scope1) @specify(() => Class2)
         public class2: undefined;
     }
 
-    class Class2 {// tslint:disable-line
+    class Class2 {
         @scope(scope1) @specify(() => Class1)
         public class1: undefined;
     }

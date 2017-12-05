@@ -40,7 +40,7 @@ test("@is as property decorator", () => {
     const is1 = is(str).validate(oneOf("a", "b"), required);
     const is2 = is(int).validate(oneOf(1, 2, 3), required);
 
-    class TestController { // tslint:disable-line
+    class TestController {
         @is1 public test1: string;
         @is2 public test2: number;
     }
@@ -268,11 +268,11 @@ test("`@is` with no chance to infer the type", () => {
 });
 
 test("`@is` with the type specified explicitly in a parameter", async () => {
-    class B { // tslint:disable-line
+    class B {
         @is()
         public test: string;
     }
-    class A { // tslint:disable-line
+    class A {
         public method(@is() @specify(() => B) param: undefined) {
         }
     }
@@ -282,13 +282,13 @@ test("`@is` with the type specified explicitly in a parameter", async () => {
 });
 
 test("`@is` with an array", async () => {
-    class C { // tslint:disable-line
+    class C {
         @is() public test: number;
     }
-    class B { // tslint:disable-line
+    class B {
         @is().validate(length(2, 10), required) @specify(() => C) public test: C[];
     }
-    class A { // tslint:disable-line
+    class A {
         public method(@is() param: B) {
         }
     }
@@ -305,13 +305,13 @@ test("`@is` with an array", async () => {
 });
 
 test("`@is` with an array and a failed validation inside", async () => {
-    class C { // tslint:disable-line
+    class C {
         @is().validate(oneOf(1, 2, 3)) public test: number;
     }
-    class B { // tslint:disable-line
+    class B {
         @is().validate(required) @specify(() => C) public test: C[];
     }
-    class A { // tslint:disable-line
+    class A {
         public method(@is() param: B) {
         }
     }

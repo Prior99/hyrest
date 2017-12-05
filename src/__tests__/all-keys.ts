@@ -1,10 +1,10 @@
 import { allKeys } from "../all-keys";
 
-class A { // tslint:disable-line
+class A {
     public get testA() { return "a"; }
 }
 
-class B extends A { // tslint:disable-line
+class B extends A {
     public b: number;
 
     public get testB() { return "b"; }
@@ -14,7 +14,7 @@ class B extends A { // tslint:disable-line
     }
 }
 
-class C extends B { // tslint:disable-line
+class C extends B {
     public c: number;
 
     public get testC() { return "c"; }

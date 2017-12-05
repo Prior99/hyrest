@@ -76,7 +76,7 @@ export interface HyrestBuilder<T> {
 export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<TContext> {
     let context: TContext;
     let defaultAuthorizationMode = AuthorizationMode.UNAUTHORIZED;
-    let authorizationCheck: (request?: Request, context?: TContext) => boolean;
+    let authorizationCheck: AuthorizationChecker<TContext>;
     // Get the actual `Controller` instances for each @controller decorated object.
     // Throws an error if an instance of a class not decorated with @controller has been passed.
     const controllers = controllerObjects.map(controllerObject => {

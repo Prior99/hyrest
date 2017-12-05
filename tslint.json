@@ -32,7 +32,6 @@
         "eofline": true,
         "indent": [true, "spaces"],
         "linebreak-style": [true, "LF"],
-        "max-classes-per-file": [true, 1],
         "max-line-length": [true, 120],
         "no-require-imports": true,
         "no-trailing-whitespace": true,
