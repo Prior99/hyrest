@@ -16,6 +16,8 @@ import { Converter } from "./converters";
 import { Processed } from "./processed";
 import { populate, dump } from "./scope";
 import { getTransforms } from "./transform";
+import { AuthorizationMode, getAuthorization, AuthorizationChecker } from "./authorization";
+import * as HTTP from "http-status-codes";
 
 /**
  * A wrapper around a `Route` which also carries the Route's parameter injections.
@@ -50,8 +52,12 @@ function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
     }, []);
 }
 
+export type HyrestMiddleware<T> = Router & HyrestBuilder<T>;
+
 export interface HyrestBuilder<T> {
-    context: (contextObject: T) => Router & HyrestBuilder<T>;
+    context: (contextObject: T) => HyrestMiddleware<T>;
+    authorization: (handler: AuthorizationChecker<T>) => HyrestMiddleware<T>;
+    defaultAuthorizationMode: (mode: AuthorizationMode) => HyrestMiddleware<T>;
 }
 
 /**
@@ -67,8 +73,10 @@ export interface HyrestBuilder<T> {
  *
  * @return An express router.
  */
-export function hyrest<TContext>(...controllerObjects: any[]): Router & HyrestBuilder<TContext> {
+export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<TContext> {
     let context: TContext;
+    let defaultAuthorizationMode = AuthorizationMode.UNAUTHORIZED;
+    let authorizationCheck: (request?: Request, context?: TContext) => boolean;
     // Get the actual `Controller` instances for each @controller decorated object.
     // Throws an error if an instance of a class not decorated with @controller has been passed.
     const controllers = controllerObjects.map(controllerObject => {
@@ -90,6 +98,22 @@ export function hyrest<TContext>(...controllerObjects: any[]): Router & HyrestBu
 
         // This handler will be called for every request passing through this middleware.
         const handler = async (request: Request, response: Response) => {
+            // Check whether the call was authorized.
+            const authorizationOptions = getAuthorization(route.target, route.property);
+            const authorizationMode = authorizationOptions ? authorizationOptions.mode : defaultAuthorizationMode;
+            if (authorizationMode === AuthorizationMode.AUTHORIZED) {
+                const authorized = await authorizationCheck(request, context);
+                if (typeof authorized !== "function") {
+                    throw new Error("Call to an authorized route but no authorization check was provided.");
+                }
+                const extraCheck = typeof (authorizationOptions && authorizationOptions.check) !== "undefined" ?
+                    await authorizationOptions.check(request, context) : true;
+                if (!authorized || !extraCheck) {
+                    response.status(HTTP.UNAUTHORIZED).send({ message: "Unauthorized." });
+                    return;
+                }
+            }
+
             // Prepare the arguments to pass into the call to the route based on the parameter inejctions.
             const args: any[] = [];
             queryParameters.forEach(({ index, name }) => { args[index] = request.query[name]; });

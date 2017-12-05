@@ -1,3 +1,6 @@
+import { Controller } from "./controller";
+import { Request } from "express";
+
 export enum AuthorizationMode {
     AUTHORIZED = "authorized",
     UNAUTHORIZED = "unauthorized",
@@ -7,11 +10,13 @@ export interface FullAuthorizationOptions<T> extends AuthorizationOptions<T> {
     mode: AuthorizationMode;
 }
 
+export type AuthorizationChecker<T> = (request?: Request, context?: T) => Promise<boolean> | boolean;
+
 export interface AuthorizationOptions<T> {
     /**
      * An additional check to perform for this individual route.
      */
-    check?: (context: T) => boolean;
+    check?: AuthorizationChecker<T>;
 }
 
 function configureAuthorization<T extends Function, TContext>(
@@ -20,7 +25,7 @@ function configureAuthorization<T extends Function, TContext>(
     const options: AuthorizationOptions<TContext> = typeof arg1 === "object" ? arg1 : {};
     const fullOptions: FullAuthorizationOptions<TContext> = { ...options, mode: AuthorizationMode.UNAUTHORIZED };
     const decorator = function(target: T, property?: string | symbol, descriptor?: PropertyDescriptor): T {
-        Reflect.defineMetadata("api:authorization", fullOptions, target);
+        Reflect.defineMetadata("api:authorization", fullOptions, target, property);
         return target;
     };
     if (typeof arg1 === "function") {
@@ -64,4 +69,19 @@ export function unauthorized<T extends Function, TContext>(
     arg1?: AuthorizationOptions<TContext>,
 ): ClassDecorator | MethodDecorator | T {
     return configureAuthorization<T, TContext>(arg1 || {}, AuthorizationMode.UNAUTHORIZED);
+}
+
+export function getAuthorization<T>(target: Object, property: string | symbol): FullAuthorizationOptions<T> {
+    const routeAuthorization = Reflect.getMetadata("api:authorization", target, property);
+    if (typeof routeAuthorization !== "undefined") {
+        return routeAuthorization;
+    }
+    const classAuthorization = Reflect.getMetadata("api:authorization", target.constructor);
+    if (typeof classAuthorization !== "undefined") {
+        return classAuthorization;
+    }
+    const controller: Controller = Reflect.getMetadata("api:controller", target.constructor);
+    if (typeof controller !== "undefined") {
+        return { mode: controller.authorizationMode };
+    }
 }
