@@ -11,7 +11,6 @@ import { createScope, scope, specify } from "../scope";
 import * as request from "supertest";
 import * as Express from "express";
 import * as BodyParser from "body-parser";
-import bind from "bind-decorator";
 
 test("The `hyrest` middleware handles requests correctly", async () => {
     const mockA = jest.fn();

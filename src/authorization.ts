@@ -37,6 +37,7 @@ function configureAuthorization<T extends Function, TContext>(
 export function authorized<T extends Function, TContext>(options?: AuthorizationOptions<TContext>): ClassDecorator;
 export function authorized<T extends Function, TContext>(options?: AuthorizationOptions<TContext>): MethodDecorator;
 export function authorized<T extends Function>(target: T): T;
+export function authorized(target: Object, property: string, descriptor: PropertyDescriptor): void;
 /**
  * Decorate a route or whole controller to require authentication.
  * An object containing options can be passed.
@@ -56,6 +57,7 @@ export function authorized<T extends Function, TContext>(
 export function unauthorized<T extends Function, TContext>(): ClassDecorator;
 export function unauthorized<T extends Function, TContext>(): MethodDecorator;
 export function unauthorized<T extends Function>(target: T): T;
+export function unauthorized(target: Object, property: string, descriptor: PropertyDescriptor): void;
 /**
  * Decorate a route or whole controller to not require authentication.
  * Can be used as a method or class decorator.
