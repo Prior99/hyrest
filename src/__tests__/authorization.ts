@@ -123,3 +123,34 @@ test("A hyrest middleware with authorization disabled on a specific route", asyn
     await request(http).get("/test?ok=false").expect(200);
     expect(mock).toHaveBeenCalled();
 });
+
+test("A hyrest middleware throws an error when invoked with an authorized route but no checker provided", async () => {
+    const mock = jest.fn();
+    const mockError = jest.fn();
+
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController {
+        @route("GET", "/test")
+        public method() { mock(); return ok(); }
+    }
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(async (_, res: any, next: any) => {
+        try {
+            await next();
+        } catch (err) {
+            mockError(err);
+            res.status(500).send();
+        }
+    });
+    http.use(
+        hyrest(new TestController()).defaultAuthorizationMode(AuthorizationMode.AUTHORIZED),
+    );
+    const req = await request(http)
+        .get("/test?ok=false")
+        .expect(500)
+        .send();
+    expect(mock).not.toHaveBeenCalled();
+    expect(mockError.mock.calls).toMatchSnapshot();
+});
