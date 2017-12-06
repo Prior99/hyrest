@@ -7,7 +7,6 @@ import { Params, ApiError, HTTPMethod } from "./types";
 import { compile } from "path-to-regexp";
 import { isBrowser } from "./is-browser";
 import { populate } from "./scope";
-import { AuthorizationMode } from "./authorization";
 
 export enum ControllerMode {
     SERVER = "server",
@@ -89,11 +88,6 @@ export interface ControllerOptions {
      * will be used to serve the Api or consume it.
      */
     readonly mode?: ControllerMode;
-    /**
-     * The authorization mode specifying whether all routes in this controller require authorization
-     * or not.
-     */
-    readonly authorizationMode?: AuthorizationMode;
 }
 
 export class Controller {
@@ -101,7 +95,6 @@ export class Controller {
     public errorHandler: ErrorHandler;
     public baseUrl: string;
     public mode: ControllerMode = getDefaultControllerMode();
-    public authorizationMode: AuthorizationMode = AuthorizationMode.UNAUTHORIZED;
 
     constructor(options: ControllerOptions) {
         if (options) {
@@ -113,12 +106,11 @@ export class Controller {
      * Will be called by `configureController` and applies the given options to this controller.
      */
     public configure(options: ControllerOptions) {
-        const { throwOnError, errorHandler, baseUrl, mode, authorizationMode } = options;
+        const { throwOnError, errorHandler, baseUrl, mode } = options;
         if (typeof throwOnError !== "undefined") { this.throwOnError = throwOnError; }
         if (typeof errorHandler !== "undefined") { this.errorHandler = errorHandler; }
         if (typeof baseUrl !== "undefined") { this.baseUrl = baseUrl; }
         if (typeof mode !== "undefined") { this.mode = mode; }
-        if (typeof authorizationMode !== "undefined") { this.authorizationMode = authorizationMode; }
     }
 
     /**

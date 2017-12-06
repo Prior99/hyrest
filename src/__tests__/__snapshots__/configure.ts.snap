@@ -2,7 +2,6 @@
 
 exports[`\`configureController\` sets the options as expected 1`] = `
 Controller {
-  "authorizationMode": "unauthorized",
   "mode": "client",
   "throwOnError": true,
 }
@@ -10,7 +9,6 @@ Controller {
 
 exports[`\`configureController\` sets the options as expected 2`] = `
 Controller {
-  "authorizationMode": "unauthorized",
   "errorHandler": [Function],
   "mode": "client",
   "throwOnError": true,
@@ -19,7 +17,6 @@ Controller {
 
 exports[`\`configureController\` sets the options as expected 3`] = `
 Controller {
-  "authorizationMode": "unauthorized",
   "baseUrl": "http://example.com/",
   "mode": "client",
   "throwOnError": true,
@@ -28,7 +25,6 @@ Controller {
 
 exports[`\`configureController\` sets the options as expected 4`] = `
 Controller {
-  "authorizationMode": "unauthorized",
   "mode": "client",
   "throwOnError": true,
 }
@@ -36,7 +32,6 @@ Controller {
 
 exports[`\`configureController\` sets the options as expected 5`] = `
 Controller {
-  "authorizationMode": "unauthorized",
   "mode": "server",
   "throwOnError": true,
 }
@@ -44,7 +39,6 @@ Controller {
 
 exports[`\`configureController\` sets the options as expected 6`] = `
 Controller {
-  "authorizationMode": "unauthorized",
   "baseUrl": "http://example.com/",
   "errorHandler": [Function],
   "mode": "server",
@@ -53,3 +47,27 @@ Controller {
 `;
 
 exports[`\`configureController\` throws an error when called with a non-@controller 1`] = `"Tried to configure an object which is not a @controller. Check NotAController."`;
+
+exports[`\`configureController\` with an array of controllers 1`] = `
+Controller {
+  "baseUrl": "http://example.com",
+  "mode": "client",
+  "throwOnError": true,
+}
+`;
+
+exports[`\`configureController\` with an array of controllers 2`] = `
+Controller {
+  "baseUrl": "http://example.com",
+  "mode": "client",
+  "throwOnError": true,
+}
+`;
+
+exports[`\`configureController\` with an array of controllers 3`] = `
+Controller {
+  "baseUrl": "http://example.com",
+  "mode": "client",
+  "throwOnError": true,
+}
+`;

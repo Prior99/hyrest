@@ -91,7 +91,7 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
     // Get a flat list of all routes present on all controllers.
     const routes: RouteConfiguration[] = listRoutes(controllerObjects);
 
-    const router = Router();
+    const router: HyrestMiddleware<TContext> = Router() as any;
     routes.forEach(({ route, queryParameters, bodyParameters, urlParameters, controllerObject }) => {
         // Grab the actual method from the instance and the route's property name.
         const routeMethod = (route.target as any)[route.property];
@@ -102,10 +102,10 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
             const authorizationOptions = getAuthorization(route.target, route.property);
             const authorizationMode = authorizationOptions ? authorizationOptions.mode : defaultAuthorizationMode;
             if (authorizationMode === AuthorizationMode.AUTHORIZED) {
-                const authorized = await authorizationCheck(request, context);
-                if (typeof authorized !== "function") {
+                if (typeof authorizationCheck !== "function") {
                     throw new Error("Call to an authorized route but no authorization check was provided.");
                 }
+                const authorized = await authorizationCheck(request, context);
                 const extraCheck = typeof (authorizationOptions && authorizationOptions.check) !== "undefined" ?
                     await authorizationOptions.check(request, context) : true;
                 if (!authorized || !extraCheck) {
@@ -192,7 +192,11 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
             }
 
             // Respond to the request with the given status code and body.
-            const { statusCode, message } = consumeLastCall();
+            const lastCall = consumeLastCall();
+            if (typeof lastCall === "undefined") {
+                throw new Error("Route did not return an answer. Make sure the return value is wrapped properly.");
+            }
+            const { statusCode, message } = lastCall;
             response.status(statusCode).send({ data, message });
             return;
         };
@@ -211,8 +215,16 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
             default: throw new Error(`Unknown HTTP method ${route.method}. Take a look at ${route.property}.`);
         }
     });
-    (router as any).context = (newContext: TContext) => {
+    router.context = (newContext: TContext) => {
         context = newContext;
+        return router;
+    };
+    router.authorization = (checker: AuthorizationChecker<TContext>) => {
+        authorizationCheck = checker;
+        return router;
+    };
+    router.defaultAuthorizationMode = (defaultMode: AuthorizationMode) => {
+        defaultAuthorizationMode = defaultMode;
         return router;
     };
     return router as (Router & HyrestBuilder<TContext>);

@@ -20,22 +20,30 @@ export interface AuthorizationOptions<T> {
 }
 
 function configureAuthorization<T extends Function, TContext>(
-    arg1: AuthorizationOptions<TContext> | T, authorizationMode: AuthorizationMode,
+    arg1: AuthorizationOptions<TContext> | T | Object,
+    arg2?: string | symbol,
+    arg3?: PropertyDescriptor,
+    mode?: AuthorizationMode,
 ): ClassDecorator | MethodDecorator | T {
     const options: AuthorizationOptions<TContext> = typeof arg1 === "object" ? arg1 : {};
-    const fullOptions: FullAuthorizationOptions<TContext> = { ...options, mode: AuthorizationMode.UNAUTHORIZED };
+    const fullOptions: FullAuthorizationOptions<TContext> = { ...options, mode };
+
     const decorator = function(target: T, property?: string | symbol, descriptor?: PropertyDescriptor): T {
         Reflect.defineMetadata("api:authorization", fullOptions, target, property);
-        return target;
+        return;
     };
+
     if (typeof arg1 === "function") {
         return decorator(arg1 as T);
+    }
+    if (typeof arg2 !== "undefined" && typeof arg3 !== "undefined") {
+        return decorator(arg1 as T, arg2, arg3);
     }
     return decorator as ClassDecorator;
 }
 
-export function authorized<T extends Function, TContext>(options?: AuthorizationOptions<TContext>): ClassDecorator;
-export function authorized<T extends Function, TContext>(options?: AuthorizationOptions<TContext>): MethodDecorator;
+export function authorized<TContext>(options?: AuthorizationOptions<TContext>):
+    (target: Object | Function, property?: string, descriptor?: PropertyDescriptor) => void;
 export function authorized<T extends Function>(target: T): T;
 export function authorized(target: Object, property: string, descriptor: PropertyDescriptor): void;
 /**
@@ -49,13 +57,15 @@ export function authorized(target: Object, property: string, descriptor: Propert
  * @return A decorator if options were passed.
  */
 export function authorized<T extends Function, TContext>(
-    arg1: AuthorizationOptions<TContext> | T,
+    arg1: AuthorizationOptions<TContext> | T | Object,
+    arg2?: string | symbol,
+    arg3?: PropertyDescriptor,
 ): ClassDecorator | MethodDecorator | T {
-    return configureAuthorization<T, TContext>(arg1, AuthorizationMode.AUTHORIZED);
+    return configureAuthorization<T, TContext>(arg1, arg2, arg3, AuthorizationMode.AUTHORIZED);
 }
 
-export function unauthorized<T extends Function, TContext>(): ClassDecorator;
-export function unauthorized<T extends Function, TContext>(): MethodDecorator;
+export function unauthorized<TContext>():
+    (target: Object | Function, property?: string, descriptor?: PropertyDescriptor) => void;
 export function unauthorized<T extends Function>(target: T): T;
 export function unauthorized(target: Object, property: string, descriptor: PropertyDescriptor): void;
 /**
@@ -68,9 +78,11 @@ export function unauthorized(target: Object, property: string, descriptor: Prope
  * @return A decorator if nothing was passed as a first argument.
  */
 export function unauthorized<T extends Function, TContext>(
-    arg1?: AuthorizationOptions<TContext>,
+    arg1?: AuthorizationOptions<TContext> | T | Object,
+    arg2?: string | symbol,
+    arg3?: PropertyDescriptor,
 ): ClassDecorator | MethodDecorator | T {
-    return configureAuthorization<T, TContext>(arg1 || {}, AuthorizationMode.UNAUTHORIZED);
+    return configureAuthorization<T, TContext>(arg1 || {}, arg2, arg3, AuthorizationMode.UNAUTHORIZED);
 }
 
 export function getAuthorization<T>(target: Object, property: string | symbol): FullAuthorizationOptions<T> {
@@ -81,9 +93,5 @@ export function getAuthorization<T>(target: Object, property: string | symbol): 
     const classAuthorization = Reflect.getMetadata("api:authorization", target.constructor);
     if (typeof classAuthorization !== "undefined") {
         return classAuthorization;
-    }
-    const controller: Controller = Reflect.getMetadata("api:controller", target.constructor);
-    if (typeof controller !== "undefined") {
-        return { mode: controller.authorizationMode };
     }
 }
