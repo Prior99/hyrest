@@ -5,37 +5,37 @@ Array [
   Object {
     "expectedType": [Function],
     "property": "b",
-    "target": _A {},
+    "target": AInternal {},
   },
   Object {
     "expectedType": [Function],
     "property": "restrictedA",
-    "target": _B {},
+    "target": BInternal {},
   },
   Object {
     "expectedType": [Function],
     "property": "d",
-    "target": _C {},
+    "target": CInternal {},
   },
   Object {
     "expectedType": [Function],
     "property": "a",
-    "target": _A {},
+    "target": AInternal {},
   },
   Object {
     "expectedType": [Function],
     "property": "permissiveA",
-    "target": _B {},
+    "target": BInternal {},
   },
   Object {
     "expectedType": [Function],
     "property": "c",
-    "target": _C {},
+    "target": CInternal {},
   },
   Object {
     "expectedType": [Function],
     "property": "bs",
-    "target": _C {},
+    "target": CInternal {},
   },
 ]
 `;
@@ -45,22 +45,22 @@ Array [
   Object {
     "expectedType": [Function],
     "property": "a",
-    "target": _A {},
+    "target": AInternal {},
   },
   Object {
     "expectedType": [Function],
     "property": "permissiveA",
-    "target": _B {},
+    "target": BInternal {},
   },
   Object {
     "expectedType": [Function],
     "property": "c",
-    "target": _C {},
+    "target": CInternal {},
   },
   Object {
     "expectedType": [Function],
     "property": "bs",
-    "target": _C {},
+    "target": CInternal {},
   },
 ]
 `;
@@ -125,29 +125,29 @@ Class1 {
 `;
 
 exports[`populating a marked and nested structure 1`] = `
-_C {
+CInternal {
   "bs": Array [
-    _B {
-      "permissiveA": _A {
+    BInternal {
+      "permissiveA": AInternal {
         "a": "lorem",
         "b": 30,
       },
-      "restrictedA": _A {
+      "restrictedA": AInternal {
         "a": "ipsum",
         "b": 40,
       },
     },
-    _B {
-      "permissiveA": _A {
+    BInternal {
+      "permissiveA": AInternal {
         "a": "dolor",
         "b": 50,
       },
-      "restrictedA": _A {
+      "restrictedA": AInternal {
         "a": "sit",
         "b": 60,
       },
     },
-    _B {},
+    BInternal {},
   ],
   "c": "foo",
   "d": 42,
@@ -155,19 +155,19 @@ _C {
 `;
 
 exports[`populating a marked and nested structure 2`] = `
-_C {
+CInternal {
   "bs": Array [
-    _B {
-      "permissiveA": _A {
+    BInternal {
+      "permissiveA": AInternal {
         "a": "lorem",
       },
     },
-    _B {
-      "permissiveA": _A {
+    BInternal {
+      "permissiveA": AInternal {
         "a": "dolor",
       },
     },
-    _B {},
+    BInternal {},
   ],
   "c": "foo",
 }

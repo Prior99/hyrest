@@ -306,7 +306,7 @@ test("@body with a scope and a route with `.dump()`", async () => {
     const mockLogin = jest.fn();
     @controller({ mode: ControllerMode.SERVER })
     class TestController7 {
-        @bind @route("POST", "/signup").dump(User, signup)
+        @route("POST", "/signup").dump(User, signup)
         public postSignup(@body(signup) user: User) {
             mockSignup(user);
             return ok({
@@ -315,7 +315,7 @@ test("@body with a scope and a route with `.dump()`", async () => {
             });
         }
 
-        @bind @route("POST", "/login").dump(User, login)
+        @route("POST", "/login").dump(User, login)
         public postLogin(@body(login) user: User) {
             mockLogin(user);
             return ok(user);
