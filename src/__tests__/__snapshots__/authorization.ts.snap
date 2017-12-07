@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`A hyrest middleware throws an error when invoked with an authorized route but no checker provided 1`] = `
+Array [
+  Array [
+    [Error: Call to an authorized route but no authorization check was provided.],
+  ],
+]
+`;

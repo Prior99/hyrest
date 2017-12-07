@@ -97,13 +97,14 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
         const routeMethod = (route.target as any)[route.property];
 
         // This handler will be called for every request passing through this middleware.
-        const handler = async (request: Request, response: Response) => {
+        const handler = async (request: Request, response: Response, next: NextFunction) => {
             // Check whether the call was authorized.
             const authorizationOptions = getAuthorization(route.target, route.property);
             const authorizationMode = authorizationOptions ? authorizationOptions.mode : defaultAuthorizationMode;
             if (authorizationMode === AuthorizationMode.AUTHORIZED) {
                 if (typeof authorizationCheck !== "function") {
-                    throw new Error("Call to an authorized route but no authorization check was provided.");
+                    next(new Error("Call to an authorized route but no authorization check was provided."));
+                    return;
                 }
                 const authorized = await authorizationCheck(request, context);
                 const extraCheck = typeof (authorizationOptions && authorizationOptions.check) !== "undefined" ?
@@ -194,7 +195,8 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
             // Respond to the request with the given status code and body.
             const lastCall = consumeLastCall();
             if (typeof lastCall === "undefined") {
-                throw new Error("Route did not return an answer. Make sure the return value is wrapped properly.");
+                next(new Error("Route did not return an answer. Make sure the return value is wrapped properly."));
+                return;
             }
             const { statusCode, message } = lastCall;
             response.status(statusCode).send({ data, message });

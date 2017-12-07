@@ -136,17 +136,14 @@ test("A hyrest middleware throws an error when invoked with an authorized route 
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(async (_, res: any, next: any) => {
-        try {
-            await next();
-        } catch (err) {
-            mockError(err);
-            res.status(500).send();
-        }
-    });
     http.use(
         hyrest(new TestController()).defaultAuthorizationMode(AuthorizationMode.AUTHORIZED),
     );
+    http.use((err: any, _req: any, res: any, next: any) => {
+        mockError(err);
+        res.status(500).send();
+        next();
+    });
     const req = await request(http)
         .get("/test?ok=false")
         .expect(500)

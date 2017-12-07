@@ -14,3 +14,11 @@ User {
   "password": "asdfsadf",
 }
 `;
+
+exports[`The hyrest middleware throws an error if no wrapper function was used 1`] = `
+Array [
+  Array [
+    [Error: Route did not return an answer. Make sure the return value is wrapped properly.],
+  ],
+]
+`;

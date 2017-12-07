@@ -524,3 +524,27 @@ test("transforming properties", async () => {
         .send({ password: "secret" });
     expect(mock).toHaveBeenCalledWith("***ret", "uppercase");
 });
+
+test("The hyrest middleware throws an error if no wrapper function was used", async () => {
+    const mockError = jest.fn();
+
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController {
+        @route("GET", "/test")
+        public method() { return 25; }
+    }
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(hyrest(new TestController()));
+    http.use((err: any, _req: any, res: any, next: any) => {
+        mockError(err);
+        res.status(500).send();
+        next();
+    });
+    const req = await request(http)
+        .get("/test")
+        .expect(500)
+        .send();
+    expect(mockError.mock.calls).toMatchSnapshot();
+});
