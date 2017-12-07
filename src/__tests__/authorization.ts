@@ -11,7 +11,8 @@ import { createScope, scope, specify } from "../scope";
 import * as request from "supertest";
 import * as Express from "express";
 import * as BodyParser from "body-parser";
-import { authorized, unauthorized, AuthorizationMode } from "../";
+import { auth, noauth, AuthorizationMode } from "../authorization";
+import { Request } from "express";
 
 test("A hyrest middleware with authorization enabled on the route", async () => {
     const mock = jest.fn();
@@ -19,7 +20,7 @@ test("A hyrest middleware with authorization enabled on the route", async () => 
 
     @controller({ mode: ControllerMode.SERVER })
     class TestController {
-        @route("GET", "/test") @authorized
+        @route("GET", "/test") @auth
         public method() { mock(); return ok(); }
     }
 
@@ -27,7 +28,7 @@ test("A hyrest middleware with authorization enabled on the route", async () => 
     http.use(BodyParser.json());
     http.use(
         hyrest(new TestController())
-            .authorization((req, context) => {
+            .authorization((req: Request, context: {}) => {
                 expect(context).toBe(ctx);
                 return req.query["ok"] === "true";
             })
@@ -43,7 +44,7 @@ test("A hyrest middleware with authorization enabled on the route", async () => 
 test("A hyrest middleware with authorization enabled on the controller", async () => {
     const mock = jest.fn();
 
-    @authorized
+    @auth
     @controller({ mode: ControllerMode.SERVER })
     class TestController {
         @route("GET", "/test")
@@ -52,7 +53,7 @@ test("A hyrest middleware with authorization enabled on the controller", async (
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(hyrest(new TestController()).authorization(req => req.query["ok"] === "true"));
+    http.use(hyrest(new TestController()).authorization((req: Request) => req.query["ok"] === "true"));
 
     await request(http).get("/test?ok=false").expect(401);
     expect(mock).not.toHaveBeenCalled();
@@ -73,8 +74,8 @@ test("A hyrest middleware with authorization enabled on the middleware", async (
     http.use(BodyParser.json());
     http.use(
         hyrest(new TestController())
-            .authorization(req => req.query["ok"] === "true")
-            .defaultAuthorizationMode(AuthorizationMode.AUTHORIZED),
+            .authorization((req: Request) => req.query["ok"] === "true")
+            .defaultAuthorizationMode(AuthorizationMode.AUTH),
     );
 
     await request(http).get("/test?ok=false").expect(401);
@@ -86,16 +87,16 @@ test("A hyrest middleware with authorization enabled on the middleware", async (
 test("A hyrest middleware with a special authorization check", async () => {
     const mock = jest.fn();
 
-    @authorized
+    @auth
     @controller({ mode: ControllerMode.SERVER })
     class TestController {
-        @route("GET", "/test") @authorized({ check: req => req.query["extra"] === "true" })
+        @route("GET", "/test") @auth({ check: req => req.query["extra"] === "true" })
         public method() { mock(); return ok(); }
     }
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(hyrest(new TestController()).authorization(req => req.query["ok"] === "true"));
+    http.use(hyrest(new TestController()).authorization((req: Request) => req.query["ok"] === "true"));
 
     await request(http).get("/test?ok=true").expect(401);
     expect(mock).not.toHaveBeenCalled();
@@ -108,7 +109,7 @@ test("A hyrest middleware with authorization disabled on a specific route", asyn
 
     @controller({ mode: ControllerMode.SERVER })
     class TestController {
-        @route("GET", "/test") @unauthorized()
+        @route("GET", "/test") @noauth()
         public method() { mock(); return ok(); }
     }
 
@@ -116,8 +117,8 @@ test("A hyrest middleware with authorization disabled on a specific route", asyn
     http.use(BodyParser.json());
     http.use(
         hyrest(new TestController())
-            .authorization(req => req.query["ok"] === "true")
-            .defaultAuthorizationMode(AuthorizationMode.AUTHORIZED),
+            .authorization((req: Request) => req.query["ok"] === "true")
+            .defaultAuthorizationMode(AuthorizationMode.AUTH),
     );
 
     await request(http).get("/test?ok=false").expect(200);
@@ -137,7 +138,7 @@ test("A hyrest middleware throws an error when invoked with an authorized route 
     const http = Express();
     http.use(BodyParser.json());
     http.use(
-        hyrest(new TestController()).defaultAuthorizationMode(AuthorizationMode.AUTHORIZED),
+        hyrest(new TestController()).defaultAuthorizationMode(AuthorizationMode.AUTH),
     );
     http.use((err: any, _req: any, res: any, next: any) => {
         mockError(err);

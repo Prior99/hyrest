@@ -2,8 +2,8 @@ import { Controller } from "./controller";
 import { Request } from "express";
 
 export enum AuthorizationMode {
-    AUTHORIZED = "authorized",
-    UNAUTHORIZED = "unauthorized",
+    AUTH = "authorized",
+    NOAUTH = "unauthorized",
 }
 
 export interface FullAuthorizationOptions<T> extends AuthorizationOptions<T> {
@@ -42,10 +42,10 @@ function configureAuthorization<T extends Function, TContext>(
     return decorator as ClassDecorator;
 }
 
-export function authorized<TContext>(options?: AuthorizationOptions<TContext>):
+export function auth<TContext>(options?: AuthorizationOptions<TContext>):
     (target: Object | Function, property?: string, descriptor?: PropertyDescriptor) => void;
-export function authorized<T extends Function>(target: T): T;
-export function authorized(target: Object, property: string, descriptor: PropertyDescriptor): void;
+export function auth<T extends Function>(target: T): T;
+export function auth(target: Object, property: string, descriptor: PropertyDescriptor): void;
 /**
  * Decorate a route or whole controller to require authentication.
  * An object containing options can be passed.
@@ -56,18 +56,18 @@ export function authorized(target: Object, property: string, descriptor: Propert
  *
  * @return A decorator if options were passed.
  */
-export function authorized<T extends Function, TContext>(
+export function auth<T extends Function, TContext>(
     arg1: AuthorizationOptions<TContext> | T | Object,
     arg2?: string | symbol,
     arg3?: PropertyDescriptor,
 ): ClassDecorator | MethodDecorator | T {
-    return configureAuthorization<T, TContext>(arg1, arg2, arg3, AuthorizationMode.AUTHORIZED);
+    return configureAuthorization<T, TContext>(arg1, arg2, arg3, AuthorizationMode.AUTH);
 }
 
-export function unauthorized<TContext>():
+export function noauth<TContext>():
     (target: Object | Function, property?: string, descriptor?: PropertyDescriptor) => void;
-export function unauthorized<T extends Function>(target: T): T;
-export function unauthorized(target: Object, property: string, descriptor: PropertyDescriptor): void;
+export function noauth<T extends Function>(target: T): T;
+export function noauth(target: Object, property: string, descriptor: PropertyDescriptor): void;
 /**
  * Decorate a route or whole controller to not require authentication.
  * Can be used as a method or class decorator.
@@ -77,12 +77,12 @@ export function unauthorized(target: Object, property: string, descriptor: Prope
  *
  * @return A decorator if nothing was passed as a first argument.
  */
-export function unauthorized<T extends Function, TContext>(
+export function noauth<T extends Function, TContext>(
     arg1?: AuthorizationOptions<TContext> | T | Object,
     arg2?: string | symbol,
     arg3?: PropertyDescriptor,
 ): ClassDecorator | MethodDecorator | T {
-    return configureAuthorization<T, TContext>(arg1 || {}, arg2, arg3, AuthorizationMode.UNAUTHORIZED);
+    return configureAuthorization<T, TContext>(arg1 || {}, arg2, arg3, AuthorizationMode.NOAUTH);
 }
 
 export function getAuthorization<T>(target: Object, property: string | symbol): FullAuthorizationOptions<T> {

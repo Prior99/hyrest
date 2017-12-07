@@ -91,7 +91,7 @@ export interface HyrestBuilder<T> {
  */
 export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<TContext> {
     let contextFactory: ContextFactory<TContext> | TContext;
-    let defaultAuthorizationMode = AuthorizationMode.UNAUTHORIZED;
+    let defaultAuthorizationMode = AuthorizationMode.NOAUTH;
     let authorizationCheck: AuthorizationChecker<TContext>;
     // Get the actual `Controller` instances for each @controller decorated object.
     // Throws an error if an instance of a class not decorated with @controller has been passed.
@@ -118,7 +118,7 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
             const authorizationOptions = getAuthorization(route.target, route.property);
             const authorizationMode = authorizationOptions ? authorizationOptions.mode : defaultAuthorizationMode;
             const context = typeof contextFactory === "function" ? await contextFactory(request) : contextFactory;
-            if (authorizationMode === AuthorizationMode.AUTHORIZED) {
+            if (authorizationMode === AuthorizationMode.AUTH) {
                 if (typeof authorizationCheck !== "function") {
                     next(new Error("Call to an authorized route but no authorization check was provided."));
                     return;

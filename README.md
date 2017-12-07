@@ -544,18 +544,18 @@ Authorization can be configured on:
  - Each controller
  - The middleware
 
-In each instance, authorization can be switched to `AuthorizationMode.UNAUTHORIZED` or
-`AuthorizationMode.AUTHORIZED`.
+In each instance, authorization can be switched to `AuthorizationMode.NOAUTH` or
+`AuthorizationMode.AUTH`.
 
-If something is configured to be `UNAUTHORIZED` it does not require authorization and no
+If something is configured to be `NOAUTH` it does not require authorization and no
 authorization will be performed.
 
-If something is configured to be `AUTHORIZED` it does require authorization and an authorization
+If something is configured to be `AUTH` it does require authorization and an authorization
 check will be performed.
 
 #### Authorization on a Route
 
-You can configure each route individually to be `AUTHORIZED` or `UNAUTHORIZED`.
+You can configure each route individually to be `AUTH` or `NOAUTH`.
 
 The `@authorized` decorator can mark any route or controller as requiring authorization:
 
@@ -593,14 +593,14 @@ class controller {
 #### Authorization on the middleware
 
 It is possible to configure the default authorization mode on [the middleware](#usage-as-express-middleware)
-if nothing is configured on either the controller or route. By default, it is set to `UNAUTHORIZED`.
+if nothing is configured on either the controller or route. By default, it is set to `NOAUTH`.
 
 ```typescript
 import { AuthorizationMode } from "hyrest";
 
 ...
 
-middleware.defaultAuthorizationMode(AuthorizationMode.AUTHORIZED);
+middleware.defaultAuthorizationMode(AuthorizationMode.AUTH);
 ```
 
 #### Extra checks
