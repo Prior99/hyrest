@@ -50,6 +50,7 @@ export function getBodyParameters(target: Object, propertyKey: string | symbol):
  * A decorator to mark a specific parameter to receive the request's body.
  *
  * **Example:**
+ *
  * ```
  * @route(...)
  * public postSomething(@body() body: SomeBody): SomeAnswer {
@@ -118,6 +119,7 @@ export function getQueryParameters(target: Object, propertyKey: string | symbol)
  * A decorator to mark a specific parameter to receive the given query parameter.
  *
  * **Example:**
+ *
  * ```
  * @route(...)
  * public postSomething(@query("search") search: string): SomeAnswer {
@@ -179,6 +181,7 @@ export function getUrlParameters(target: Object, propertyKey: string | symbol): 
  * A decorator to mark a specific parameter to receive the given Url parameter.
  *
  * **Example:**
+ *
  * ```
  * @route("GET", "/user/:id)
  * public postSomething(@param("id") id: string): SomeAnswer {
@@ -236,9 +239,10 @@ export function getContextParameters(target: Object, propertyKey: string | symbo
  * A decorator to mark a specific parameter to receive the given query parameter.
  *
  * **Example:**
+ *
  * ```
  * @route(...)
- * public postSomething(@query("search") search: string): SomeAnswer {
+ * public postSomething(@context ctx: any): SomeAnswer {
  * ```
  *
  * If the parameter is decorated with this decorator, the query parameter named `name` will be injected

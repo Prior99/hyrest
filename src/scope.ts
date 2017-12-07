@@ -42,6 +42,7 @@ export class Scope {
      * Include all properties from another scope in this scope:
      *
      * **Example:**
+     *
      * ```
      * const exampleA = createScope();
      * const exampleB = createScope().include(exampleA);
@@ -86,6 +87,7 @@ export class Scope {
      * Will return all properties for a specific class.
      *
      * **Example:**
+     *
      * ```
      * const example = createScope();
      *

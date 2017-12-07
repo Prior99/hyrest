@@ -100,6 +100,7 @@ export function getRoutes(target: Object): Route[] {
  * express middleware.
  *
  * **Example:**
+ *
  * ```
  * @route("GET", "/user/:id")
  * public getUser(...) {

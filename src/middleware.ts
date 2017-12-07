@@ -80,6 +80,7 @@ export interface HyrestBuilder<T> {
  * to react and will receive requests.
  *
  * **Example:**
+ *
  * ```
  * app.use(resRpc(new ControllerOne(), new ControllerTwo(), ...));
  * ```
