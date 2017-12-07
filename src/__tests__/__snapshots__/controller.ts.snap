@@ -21,6 +21,12 @@ Controller {
 }
 `;
 
+exports[`\`buildUrl\` 1`] = `"http://example.com/user"`;
+
+exports[`\`buildUrl\` 2`] = `"http://example.com/a/b"`;
+
+exports[`\`buildUrl\` 3`] = `"http://example.com/user/some-user-id/game/some-game-id/45?search=name"`;
+
 exports[`\`wrappedFetch\` with a \`.dump()\` route 1`] = `
 User {
   "email": "test@example.com",
@@ -39,5 +45,27 @@ Array [
   User {
     "email": "test3@example.com",
   },
+]
+`;
+
+exports[`A controller with an authorization provider calls the provider 1`] = `
+Array [
+  Array [
+    "undefined/test/some-id?search=some-name&auth=true",
+    Object {
+      "body": "{\\"a\\":\\"a\\",\\"auth\\":true}",
+      "headers": Headers {
+        "_headers": Object {
+          "authorization": Array [
+            "indeed",
+          ],
+          "content-type": Array [
+            "application/json",
+          ],
+        },
+      },
+      "method": "GET",
+    },
+  ],
 ]
 `;

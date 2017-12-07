@@ -27,7 +27,11 @@ function buildQueryString(query: Params) {
         return `${result}&${key}=${value}`;
     }, "");
     // Remove first `&`.
-    return queryString.substr(1, queryString.length);
+    const withoutAmpersand = queryString.substr(1, queryString.length);
+    if (withoutAmpersand.length > 0) {
+        return `?${withoutAmpersand}`;
+    }
+    return withoutAmpersand;
 }
 
 /**
@@ -54,8 +58,10 @@ export function buildUrl(urlParameters: Params, query: Params, baseUrl: string, 
     const routeString = compile(subUrl)(stringifiedParameters);
 
     // Assemble the full url.
-    return `${baseUrl}${routeString}?${queryString}`;
+    return `${baseUrl}${routeString}${queryString}`;
 }
+
+export type AuthorizationProvider = (header: Headers, body: any, query: Params) => void;
 
 /**
  * A handler which will be called whenever an Api error is encountered.
@@ -88,6 +94,10 @@ export interface ControllerOptions {
      * will be used to serve the Api or consume it.
      */
     readonly mode?: ControllerMode;
+    /**
+     * Can be set to provide a way of authorizing against authorized endpoints.
+     */
+    readonly authorizationProvider?: AuthorizationProvider;
 }
 
 export class Controller {
@@ -95,6 +105,7 @@ export class Controller {
     public errorHandler: ErrorHandler;
     public baseUrl: string;
     public mode: ControllerMode = getDefaultControllerMode();
+    public authorizationProvider: AuthorizationProvider;
 
     constructor(options: ControllerOptions) {
         if (options) {
@@ -106,11 +117,12 @@ export class Controller {
      * Will be called by `configureController` and applies the given options to this controller.
      */
     public configure(options: ControllerOptions) {
-        const { throwOnError, errorHandler, baseUrl, mode } = options;
+        const { throwOnError, errorHandler, baseUrl, mode, authorizationProvider } = options;
         if (typeof throwOnError !== "undefined") { this.throwOnError = throwOnError; }
         if (typeof errorHandler !== "undefined") { this.errorHandler = errorHandler; }
         if (typeof baseUrl !== "undefined") { this.baseUrl = baseUrl; }
         if (typeof mode !== "undefined") { this.mode = mode; }
+        if (typeof authorizationProvider !== "undefined") { this.authorizationProvider = authorizationProvider; }
     }
 
     /**
@@ -126,12 +138,16 @@ export class Controller {
      */
     public async wrappedFetch<T>(route: Route, urlParameters: Params, body: any, query: Params): Promise<T> {
         try {
-            // Create the url from the given inputs.
-            const url = buildUrl(urlParameters, query, this.baseUrl, route.url);
-
             // Prepare the headers.
             const headers = new Headers();
             headers.append("content-type", "application/json");
+
+            if (typeof this.authorizationProvider === "function") {
+                this.authorizationProvider(headers, body, query);
+            }
+
+            // Create the url from the given inputs.
+            const url = buildUrl(urlParameters, query, this.baseUrl, route.url);
 
             // Perform the actual fetch.
             const response = await fetch(url, {
