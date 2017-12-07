@@ -22,3 +22,19 @@ Array [
   ],
 ]
 `;
+
+exports[`The hyrest middleware with a context factory and an injected context 1`] = `
+Array [
+  Object {
+    "headers": Object {
+      "accept-encoding": "gzip, deflate",
+      "authorization": "test",
+      "connection": "close",
+      "host": "test",
+      "user-agent": "node-superagent/3.8.1",
+    },
+    "test": "test",
+    "url": "/test",
+  },
+]
+`;

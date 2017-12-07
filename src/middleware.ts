@@ -10,6 +10,8 @@ import {
     getBodyParameters,
     getQueryParameters,
     getUrlParameters,
+    getContextParameters,
+    ContextParameter,
 } from "./parameters";
 import { getParameterValidation, processValue } from "./validation";
 import { Converter } from "./converters";
@@ -27,6 +29,7 @@ interface RouteConfiguration {
     readonly queryParameters: QueryParameter[];
     readonly bodyParameters: BodyParameter[];
     readonly urlParameters: UrlParameter[];
+    readonly contextParameters: ContextParameter[];
     readonly controllerObject: Object;
 }
 
@@ -45,6 +48,7 @@ function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
             queryParameters: getQueryParameters(controllerObject, route.property),
             bodyParameters: getBodyParameters(controllerObject, route.property),
             urlParameters: getUrlParameters(controllerObject, route.property),
+            contextParameters: getContextParameters(controllerObject, route.property),
             controllerObject,
         }));
         result.push(...routes);
@@ -52,11 +56,22 @@ function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
     }, []);
 }
 
+export type ContextFactory<T> = (request: Request) => T | Promise<T>;
 export type HyrestMiddleware<T> = Router & HyrestBuilder<T>;
 
 export interface HyrestBuilder<T> {
-    context: (contextObject: T) => HyrestMiddleware<T>;
+    /**
+     * Set a context or context factory on the Hyrest middleware which will be invoked for every call
+     * to any endpoint, providing a custom context object.
+     */
+    context: (contextFactory: ContextFactory<T> | T) => HyrestMiddleware<T>;
+    /**
+     * Provide a handler checking if the call to an endpoint was authorized.
+     */
     authorization: (handler: AuthorizationChecker<T>) => HyrestMiddleware<T>;
+    /**
+     * Set the default authorization for all routes.
+     */
     defaultAuthorizationMode: (mode: AuthorizationMode) => HyrestMiddleware<T>;
 }
 
@@ -74,7 +89,7 @@ export interface HyrestBuilder<T> {
  * @return An express router.
  */
 export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<TContext> {
-    let context: TContext;
+    let contextFactory: ContextFactory<TContext> | TContext;
     let defaultAuthorizationMode = AuthorizationMode.UNAUTHORIZED;
     let authorizationCheck: AuthorizationChecker<TContext>;
     // Get the actual `Controller` instances for each @controller decorated object.
@@ -92,7 +107,7 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
     const routes: RouteConfiguration[] = listRoutes(controllerObjects);
 
     const router: HyrestMiddleware<TContext> = Router() as any;
-    routes.forEach(({ route, queryParameters, bodyParameters, urlParameters, controllerObject }) => {
+    routes.forEach(({ route, queryParameters, bodyParameters, urlParameters, contextParameters, controllerObject }) => {
         // Grab the actual method from the instance and the route's property name.
         const routeMethod = (route.target as any)[route.property];
 
@@ -101,6 +116,7 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
             // Check whether the call was authorized.
             const authorizationOptions = getAuthorization(route.target, route.property);
             const authorizationMode = authorizationOptions ? authorizationOptions.mode : defaultAuthorizationMode;
+            const context = typeof contextFactory === "function" ? await contextFactory(request) : contextFactory;
             if (authorizationMode === AuthorizationMode.AUTHORIZED) {
                 if (typeof authorizationCheck !== "function") {
                     next(new Error("Call to an authorized route but no authorization check was provided."));
@@ -120,6 +136,7 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
             queryParameters.forEach(({ index, name }) => { args[index] = request.query[name]; });
             bodyParameters.forEach(({ index }) => { args[index] = request.body; });
             urlParameters.forEach(({ index, name }) => { args[index] = request.params[name]; });
+            contextParameters.forEach(({ index }) => { args[index] = context; });
 
             let data: any;
 
@@ -217,8 +234,8 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
             default: throw new Error(`Unknown HTTP method ${route.method}. Take a look at ${route.property}.`);
         }
     });
-    router.context = (newContext: TContext) => {
-        context = newContext;
+    router.context = (factory: ContextFactory<TContext> | TContext) => {
+        contextFactory = factory;
         return router;
     };
     router.authorization = (checker: AuthorizationChecker<TContext>) => {

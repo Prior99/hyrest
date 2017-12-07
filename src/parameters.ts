@@ -200,3 +200,57 @@ export function param(name: string): ParameterDecorator {
         });
     };
 }
+
+/**
+ * A parameter decorated to receive the a context.
+ */
+export interface ContextParameter {
+    /**
+     * The index of the parameter that was decorated.
+     */
+    readonly index: number;
+}
+
+/**
+ * Returns a list of context parameters for the given route method.
+ * This function is always guaranteed to return an array. If no context parameters have been injected for this
+ * method yet, a new reflection metadata key is created and the new array is returned.
+ * The array can be used to append new parameters.
+ *
+ * @param target The class on which the method for which the decorated parameters should be retrieved exists.
+ * @param propertyKey The name of the method on `target` for which the decorated parameters should be retrieved.
+ *
+ * @return An array of all decorated parameters.
+ */
+export function getContextParameters(target: Object, propertyKey: string | symbol): ContextParameter[] {
+    const contextParameters = Reflect.getMetadata("api:route:context", target, propertyKey);
+    if (contextParameters) {
+        return contextParameters;
+    }
+    const newContextParameters: ContextParameter[] = [];
+    Reflect.defineMetadata("api:route:context", newContextParameters, target, propertyKey);
+    return newContextParameters;
+}
+
+/**
+ * A decorator to mark a specific parameter to receive the given query parameter.
+ *
+ * **Example:**
+ * ```
+ * @route(...)
+ * public postSomething(@query("search") search: string): SomeAnswer {
+ * ```
+ *
+ * If the parameter is decorated with this decorator, the query parameter named `name` will be injected
+ * into this parameter.
+ *
+ * If the route had been called with `?search=foo`, then the value of `search` will be `foo`.
+ *
+ * @return A parameter decorator to inject the given query parameter.
+ */
+export function context(target: Object, propertyKey: string | symbol, index: number): void {
+    const contextParameters = getContextParameters(target, propertyKey);
+    contextParameters.push({
+        index,
+    });
+}

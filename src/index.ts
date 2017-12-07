@@ -3,7 +3,7 @@ import "path-to-regexp";
 export { Route, RouteOptions, route } from "./route";
 export { controller, ControllerOptions, ErrorHandler, ControllerMode } from "./controller";
 export * from "./answers";
-export { body, query, param } from "./parameters";
+export { body, query, param, context } from "./parameters";
 export { configureController } from "./configure";
 export { ApiError } from "./types";
 export * from "./validators";

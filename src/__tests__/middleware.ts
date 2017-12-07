@@ -1,7 +1,7 @@
 import { hyrest } from "../middleware";
 import { controller, ControllerMode } from "../controller";
 import { route } from "../route";
-import { body, param, query } from "../parameters";
+import { body, param, query, context } from "../parameters";
 import { float, int, str } from "../converters";
 import { required, email, length, only } from "../validators";
 import { is } from "../validation";
@@ -236,7 +236,7 @@ test("The `hyrest` middleware preserves `this`", async () => {
     http.use(BodyParser.json());
     http.use(hyrest(instance));
 
-    const responseA = await request(http)
+    await request(http)
         .get("/get")
         .expect(200)
         .set("content-type", "application/json");
@@ -246,7 +246,7 @@ test("The `hyrest` middleware preserves `this`", async () => {
 test("The `hyrest` middleware performs a context validation", async () => {
     const mock = jest.fn();
     mock.mockReturnValue({});
-    const context = {
+    const originalContext = {
         validate1: mock,
         validate2: mock,
         validate3: async (id: string) => {
@@ -271,15 +271,15 @@ test("The `hyrest` middleware performs a context validation", async () => {
 
     const http = Express();
     http.use(BodyParser.json());
-    http.use(hyrest(instance).context(context));
+    http.use(hyrest(instance).context(originalContext));
 
-    const responseA = await request(http)
+    await request(http)
         .get("/get/some-id")
         .expect(200)
         .set("content-type", "application/json");
     expect(mock.mock.calls[0][0]).toBe("some-id");
 
-    const responseB = await request(http)
+    await request(http)
         .get("/get/array/some-id")
         .expect(422)
         .set("content-type", "application/json");
@@ -328,28 +328,28 @@ test("@body with a scope and a route with `.dump()`", async () => {
     http.use(BodyParser.json());
     http.use(hyrest(instance));
 
-    const responseA = await request(http)
+    await request(http)
         .post("/signup")
         .expect(200)
         .set("content-type", "application/json")
         .send({ email: "test@example.com", username: "testtest", password: "asdfsadf" });
     expect(mockSignup.mock.calls[0][0]).toMatchSnapshot();
 
-    const responseB = await request(http)
+    await request(http)
         .post("/login")
         .expect(200)
         .set("content-type", "application/json")
         .send({ email: "test@example.com", password: "asdfsadf" });
     expect(mockLogin.mock.calls[0][0]).toMatchSnapshot();
 
-    const responseC = await request(http)
+    await request(http)
         .post("/login")
         .expect(422)
         .set("content-type", "application/json")
         .send({ email: "test@example.com", password: "asdfsadf", username: "testtest" });
     expect(mockLogin.mock.calls[1]).toBeUndefined();
 
-    const responseD = await request(http)
+    await request(http)
         .post("/login")
         .expect(422)
         .set("content-type", "application/json");
@@ -477,13 +477,13 @@ test("The `hyrest` middleware handles `only()` correctly", async () => {
     http.use(BodyParser.json());
     http.use(hyrest(new TestController9()).context(ctx));
 
-    const responseA = await request(http)
+    await request(http)
         .post("/signup")
         .expect(422)
         .set("content-type", "application/json")
         .send({ email: "invalid", pets: [ { name: "short" } ] });
 
-    const responseB = await request(http)
+    await request(http)
         .post("/login")
         .expect(200)
         .set("content-type", "application/json")
@@ -517,7 +517,7 @@ test("transforming properties", async () => {
     http.use(BodyParser.json());
     http.use(hyrest(new TestController10()));
 
-    const responseA = await request(http)
+    await request(http)
         .post("/signup/UPPERCASE")
         .expect(200)
         .set("content-type", "application/json")
@@ -542,9 +542,41 @@ test("The hyrest middleware throws an error if no wrapper function was used", as
         res.status(500).send();
         next();
     });
-    const req = await request(http)
+    await request(http)
         .get("/test")
         .expect(500)
         .send();
     expect(mockError.mock.calls).toMatchSnapshot();
+});
+
+test("The hyrest middleware with a context factory and an injected context", async () => {
+    const mock = jest.fn();
+
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController {
+        @route("GET", "/test")
+        public method(@context ctx: any) {
+            mock(ctx);
+            return ok();
+        }
+    }
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(
+        hyrest(new TestController())
+            .context(async req => {
+                return {
+                    headers: req.headers,
+                    url: req.url,
+                    test: "test",
+                };
+            }),
+    );
+    await request(http)
+        .get("/test")
+        .expect(200)
+        .set({ authorization: "test", host: "test" })
+        .send();
+    expect(mock.mock.calls[0]).toMatchSnapshot();
 });
