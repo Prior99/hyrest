@@ -152,14 +152,16 @@ describe("`wrappedFetch` with a non-2xx status code", () => {
     });
 
     test("with no error handler", async () => {
-        await expect(
+        await expect( // tslint:disable-line
             exampleController.wrappedFetch(artificialRoute, urlParameters, bodyMock, queryMock),
         ).rejects.toEqual(error);
     });
 
     test("with throwing disabled", async () => {
         exampleController.configure({ throwOnError: false });
-        await expect(exampleController.wrappedFetch(artificialRoute, urlParameters, bodyMock, queryMock)).resolves;
+        await expect( // tslint:disable-line
+            exampleController.wrappedFetch(artificialRoute, urlParameters, bodyMock, queryMock),
+        ).resolves;
     });
 
     test("with an error handler attached", async () => {
@@ -169,7 +171,7 @@ describe("`wrappedFetch` with a non-2xx status code", () => {
             errorHandler: mockErrorHandler,
         });
 
-        await expect(
+        await expect( // tslint:disable-line
             exampleController.wrappedFetch(artificialRoute, urlParameters, bodyMock, queryMock),
         ).rejects.toEqual(error);
         expect(mockErrorHandler).toHaveBeenCalledWith(error);
@@ -275,7 +277,7 @@ test("A controller with an authorization provider calls the provider", async () 
     @controller
     class AuthorizedController {
         @route("GET", "/test/:id")
-        public method(@param("id") id: string, @body() bdy: any, @query("search") search: string) {
+        public method(@param("id") id: string, @body() bdy: any, @query("search") search: string): Promise<undefined> {
             return ok();
         }
     }

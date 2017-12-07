@@ -628,7 +628,7 @@ The check is performed in addition to the check from the middleware.
 If the server encounters an authorized route, a checker must be configured.
 A checker will receive [express's](http://expressjs.com/de/api.html#req) as the first,
 and the [context](#context) as the second argument. It should return `true` or `false`,
-with `true` meaning that the access should be allowed and `false` meaning, that a `403 UNAUTHORIZED`
+with `true` meaning that the access should be allowed and `false` meaning, that a `401 UNAUTHORIZED`
 should be returned.
 
 ```typescript

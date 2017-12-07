@@ -11,7 +11,13 @@ export { is } from "./validation";
 export { dump, createScope, scope, Scope, populate, specify } from "./scope";
 export { schemaFrom } from "./schema-generator";
 export { transform } from "./transform";
-export { AuthorizationMode, authorized, unauthorized } from "./authorization";
+export {
+    AuthorizationMode,
+    AuthorizationChecker,
+    AuthorizationOptions,
+    authorized,
+    unauthorized,
+} from "./authorization";
 
 import * as dataType from "./converters";
 export const DataType = dataType;
