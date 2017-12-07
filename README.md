@@ -22,6 +22,7 @@ is transparent, type-safe and as easy calling a method.
              * [ControllerOptions.errorHandler](#controlleroptionserrorhandler)
              * [ControllerOptions.baseUrl](#controlleroptionsbaseurl)
          * [Route configuration](#route-configuration)
+         * [Context](#context)
      * [Validation](#validation)
          * [Parameters](#parameters)
          * [Advanced Validation](#advanced-validation)
@@ -31,6 +32,14 @@ is transparent, type-safe and as easy calling a method.
          * [How about validation against my database?](#how-about-validation-against-my-database)
          * [How about validation against my database from the frontend?](#how-about-validation-against-my-database-from-the-frontend)
          * [What if I need to access my application's context from my validator?](#what-if-i-need-to-access-my-applications-context-from-my-validator)
+     * [Authorization](#authorization)
+         * [Authorization Configuration](#authorization-configuration)
+             * [Authorization on a Route](#authorization-on-a-route)
+             * [Authorization on a Controller](#authorization-on-a-controller)
+             * [Authorization on the middleware](#authorization-on-the-middleware)
+             * [Extra checks](#extra-checks)
+         * [Configuring the server for Authorization](#configuring-the-server-for-authorization)
+         * [Configuring the client for Authorization](#configuring-the-client-for-authorization)
      * [Usage as express middleware](#usage-as-express-middleware)
      * [Usage as client](#usage-as-client)
      * [Scopes](#scopes)
@@ -181,6 +190,45 @@ public postSignup(@body(signupScope) user: User) {
 
 // When this route is called on the frontend, the returned value is actually a `User`.
 ```
+
+### Context
+
+It is possible to inject a context into each route on the server side. This context can be created by
+a factory or simply specified as an object or instance. It could carry the database connection, a property
+with the current user from the database, a unique id for this request or anything similar.
+
+Specify the context by calling `.context()` on the [hyrest middleware](#usage-as-express-middleware):
+
+```typescript
+const anObject = {
+    database: ...
+};
+
+middleware.context(anObject)
+```
+
+Or as a factory:
+
+```typescript
+middleware.context(async (request) => {
+    return {
+        url: request.url,
+        headers: request.headers,
+        database: await connect()
+    };
+});
+```
+
+The context can then be used in a [context validation](#how-about-validation-against-my-database) or
+injected as an argument:
+
+```typescript
+@route("GET", "/user/:id")
+public getUser(@param("id") id: string, @context ctx?: any)
+```
+
+It can afterwards be used in the route method. It is recommended to make the context argument an optional
+one to be able to skip it when calling the route from the frontend.
 
 ## Validation
 
@@ -429,6 +477,12 @@ function emailAvailable(value: string): Validation {
 }
 ```
 
+The validation can access the [context](#context):
+
+```typescript
+is(...).validateCtx(context => context.validation.emailAvailable)
+```
+
 ### How about validation against my database from the frontend?
 
 This is not a problem either:
@@ -477,6 +531,135 @@ class SomeController {
     }
 }
 ```
+
+## Authorization
+
+Authorization is a neccessary part of any REST server.
+
+### Authorization Configuration
+
+Authorization can be configured on:
+
+ - Each route
+ - Each controller
+ - The middleware
+
+In each instance, authorization can be switched to `AuthorizationMode.UNAUTHORIZED` or
+`AuthorizationMode.AUTHORIZED`.
+
+If something is configured to be `UNAUTHORIZED` it does not require authorization and no
+authorization will be performed.
+
+If something is configured to be `AUTHORIZED` it does require authorization and an authorization
+check will be performed.
+
+#### Authorization on a Route
+
+You can configure each route individually to be `AUTHORIZED` or `UNAUTHORIZED`.
+
+The `@authorized` decorator can mark any route or controller as requiring authorization:
+
+```typescript
+import { authorized, unauthorized, controller, route, ok } from "hyrest";
+
+@controller
+class controller {
+    @route("get", "/test") @authorized
+    public method() {
+        return ok();
+    }
+}
+```
+
+Respectively, `@unauthorized` excludes the route or controller from authorization.
+
+The configuration of route take the highest precedence, overriding the controller's and middleware's
+configuration.
+
+#### Authorization on a Controller
+
+A whole controller can be configured to require authorization or be excluded from it. The controller's
+configuration will be applied to all routes which are not configured explicitly. It overrides the
+middleware's configuration:
+
+```typescript
+import { authorized, unauthorized, controller } from "hyrest";
+
+@controller @authorized
+class controller {
+}
+```
+
+#### Authorization on the middleware
+
+It is possible to configure the default authorization mode on [the middleware](#usage-as-express-middleware)
+if nothing is configured on either the controller or route. By default, it is set to `UNAUTHORIZED`.
+
+```typescript
+import { AuthorizationMode } from "hyrest";
+
+...
+
+middleware.defaultAuthorizationMode(AuthorizationMode.AUTHORIZED);
+```
+
+#### Extra checks
+
+Each `@authorization` decorator can be configured to take an extra check:
+
+```typescript
+import { authorized, controller, route, ok } from "hyrest";
+
+@controller
+class Controller {
+    @route("get", "/test") @authorized({ check: (request, context) => false })
+    public method() {
+        return ok();
+    }
+}
+```
+
+If it returns `true` the route will be authorized, otherwise not.
+
+The check is performed in addition to the check from the middleware.
+
+### Configuring the server for Authorization
+
+If the server encounters an authorized route, a checker must be configured.
+A checker will receive [express's](http://expressjs.com/de/api.html#req) as the first,
+and the [context](#context) as the second argument. It should return `true` or `false`,
+with `true` meaning that the access should be allowed and `false` meaning, that a `403 UNAUTHORIZED`
+should be returned.
+
+```typescript
+middleware.authorization(async (request, context) => {
+    return request.headers["authorization"] === await context.db.getAuthorizationToken();
+});
+```
+
+### Configuring the client for Authorization
+
+A provider for the authorization can be configured in the client by configuring the cointrollers:
+
+```typescript
+import { authorized, controller, route, ok, configureController } from "hyrest";
+
+@controller
+class Controller {
+    ...
+}
+
+configureController(Controller, {
+    authorizationProvider: (headers: Headers, currentBody: any, currentQuery: Params) => {
+        currentQuery["authorization"] = "secret-key-in-the-query";
+        currentBody.authorizationKey = "some-secret-key-on-the-body";
+        headers.append("authorization", "Bearer secret-key-in-the-headers");
+    },
+});
+```
+
+It will receive the headers, body and query as arguments and can mutate them to provide an
+secret token or therelike.
 
 ## Usage as express middleware
 
