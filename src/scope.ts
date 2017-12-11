@@ -210,7 +210,7 @@ export function dump<T>(dumpScope: Scope, arg2?: T): T | ((instance: T) => T) {
         if (Array.isArray(instance)) {
             return instance.map(internalDump) as any as U;
         }
-        if (typeof instance === "object") {
+        if (typeof instance === "object" && instance !== null) {
             const propertiesForClass = dumpScope.propertiesForClass(instance.constructor);
             const keys = allKeys(instance);
             return keys.reduce((result, key) => {
@@ -267,7 +267,7 @@ export function populate<T>(
         }
         invariant(typeof data === "object" && !Array.isArray(data), "Structure does not match. Object expected.");
         if (typeof guardedClass !== "function") {
-            throw new Error("Could not infer type. This might be due to a cyclic dependency.")
+            throw new Error("Could not infer type. This might be due to a cyclic dependency.");
         }
         // Instanciate the classe to populate.
         const instance = new guardedClass();

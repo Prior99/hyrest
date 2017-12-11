@@ -317,6 +317,18 @@ test("dumping an array", () => {
     ]);
 });
 
+test("dumping null in an array", () => {
+    const scope1 = createScope();
+
+    class Class1 {}
+
+    expect(dump(scope1, [
+        null, // tslint:disable-line
+    ])).toEqual([
+        null, // tslint:disable-line
+    ]);
+});
+
 test("populating an array", () => {
     const scope1 = createScope();
 
