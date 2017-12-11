@@ -266,6 +266,9 @@ export function populate<T>(
             return data;
         }
         invariant(typeof data === "object" && !Array.isArray(data), "Structure does not match. Object expected.");
+        if (typeof guardedClass !== "function") {
+            throw new Error("Could not infer type. This might be due to a cyclic dependency.")
+        }
         // Instanciate the classe to populate.
         const instance = new guardedClass();
         // Get a list of all properties to populate.

@@ -359,3 +359,27 @@ test("populating a cyclic dependency", () => {
         },
     })).toMatchSnapshot();
 });
+
+test("populating a cyclic dependency with no type specified", () => {
+    const scope1 = createScope();
+
+    class Class1 {
+        @scope(scope1)
+        public class2: undefined;
+    }
+
+    class Class2 {
+        @scope(scope1)
+        public class1: undefined;
+    }
+
+    expect(() => populate(scope1, Class1, {
+        class2: {
+            class1: {
+                class2: {
+                    class1: {},
+                },
+            },
+        },
+    })).toThrowErrorMatchingSnapshot();
+});

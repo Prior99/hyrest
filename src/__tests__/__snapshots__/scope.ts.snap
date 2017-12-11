@@ -124,6 +124,8 @@ Class1 {
 }
 `;
 
+exports[`populating a cyclic dependency with no type specified 1`] = `"Could not infer type. This might be due to a cyclic dependency."`;
+
 exports[`populating a marked and nested structure 1`] = `
 CInternal {
   "bs": Array [
