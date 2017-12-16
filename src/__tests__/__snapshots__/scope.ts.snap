@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`dumping a structure with an array of dates 1`] = `
+Object {
+  "class1s": Array [
+    Object {
+      "date": 2017-12-16T08:00:00.000Z,
+    },
+    Object {
+      "date": 2017-12-16T08:00:00.000Z,
+    },
+  ],
+}
+`;
+
 exports[`marking properties on a nested structure 1`] = `
 Array [
   Object {
@@ -172,12 +185,6 @@ CInternal {
     BInternal {},
   ],
   "c": "foo",
-}
-`;
-
-exports[`populating a structure with a date from a string 1`] = `
-Class1 {
-  "date": 2017-12-16T08:35:29.390Z,
 }
 `;
 
@@ -365,6 +372,18 @@ Object {
 
 exports[`populating and dumping a structure with a date 2`] = `
 Class1 {
+  "date": 2017-12-16T08:35:29.390Z,
+}
+`;
+
+exports[`populating and dumping structure with a date from a string 1`] = `
+Class1 {
+  "date": 2017-12-16T08:35:29.390Z,
+}
+`;
+
+exports[`populating and dumping structure with a date from a string 2`] = `
+Object {
   "date": 2017-12-16T08:35:29.390Z,
 }
 `;

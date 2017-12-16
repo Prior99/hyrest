@@ -269,7 +269,12 @@ export function populate<T>(
             return new Date(data) as any;
         }
         // Ignore primitives.
-        if (guardedClass === Number || guardedClass === Boolean || guardedClass === String || guardedClass === Object) {
+        const isPrimitive = guardedClass === Number ||
+            guardedClass === Boolean ||
+            guardedClass === String ||
+            guardedClass === Object ||
+            guardedClass === Date;
+        if (isPrimitive) {
             return data;
         }
         invariant(typeof data === "object" && !Array.isArray(data), "Structure does not match. Object expected.");

@@ -415,7 +415,7 @@ test("populating and dumping a structure with a date", () => {
     expect(populate(scope1, Class1, dump(scope1, original))).toEqual(original);
 });
 
-test("populating a structure with a date from a string", () => {
+test("populating and dumping structure with a date from a string", () => {
     const scope1 = createScope();
 
     class Class1 {
@@ -429,4 +429,31 @@ test("populating a structure with a date from a string", () => {
     expect(result).toMatchSnapshot();
     expect(typeof result.date).toBe("object");
     expect(result.date.constructor).toBe(Date);
+    expect(populate(scope1, Class1, dump(scope1, result))).toEqual(result);
+    expect(dump(scope1, result)).toMatchSnapshot();
+});
+
+test("dumping a structure with an array of dates", () => {
+    const scope1 = createScope();
+
+    class Class1 {
+        @scope(scope1) @specify(() => Date)
+        public date: Date;
+    }
+
+    class Class2 {
+        @scope(scope1) @specify(() => Class1)
+        public class1s: Class1[];
+    }
+
+    const date1 = new Date("2017-12-16T08:00:00Z");
+    const date2 = new Date("2017-12-16T08:00:00Z");
+    const instance1 = new Class1();
+    instance1.date = date1;
+    const instance2 = new Class1();
+    instance2.date = date2;
+    const class2 = new Class2();
+    class2.class1s = [instance1, instance2];
+    expect(dump(scope1, class2)).toMatchSnapshot();
+    expect(populate(scope1, Class2, dump(scope1, class2))).toEqual(class2);
 });
