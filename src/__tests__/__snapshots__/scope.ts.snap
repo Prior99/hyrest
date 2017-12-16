@@ -175,6 +175,12 @@ CInternal {
 }
 `;
 
+exports[`populating a structure with a date from a string 1`] = `
+Class1 {
+  "date": 2017-12-16T08:35:29.390Z,
+}
+`;
+
 exports[`populating a structure with an (un-)typed array 1`] = `
 Typed {
   "test": Array [
@@ -348,5 +354,17 @@ Object {
     },
   ],
   "property2": "bar",
+}
+`;
+
+exports[`populating and dumping a structure with a date 1`] = `
+Object {
+  "date": 2017-12-16T08:35:29.390Z,
+}
+`;
+
+exports[`populating and dumping a structure with a date 2`] = `
+Class1 {
+  "date": 2017-12-16T08:35:29.390Z,
 }
 `;

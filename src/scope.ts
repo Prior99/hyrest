@@ -211,6 +211,9 @@ export function dump<T>(dumpScope: Scope, arg2?: T): T | ((instance: T) => T) {
             return instance.map(internalDump) as any as U;
         }
         if (typeof instance === "object" && instance !== null) {
+            if (instance.constructor === Date) {
+                return instance;
+            }
             const propertiesForClass = dumpScope.propertiesForClass(instance.constructor);
             const keys = allKeys(instance);
             return keys.reduce((result, key) => {
@@ -260,7 +263,11 @@ export function populate<T>(
             invariant(typeof specifiedClass === "function", "Array type not specified.");
             return (data as any[]).map(element => internalPopulate(element, specifiedClass, undefined)) as any as U;
         }
-        const guardedClass = thisClass || specifiedClass;
+        const guardedClass = specifiedClass || thisClass;
+        // The date might have been converted to a string while being transported via JSON.
+        if (guardedClass === Date && typeof data === "string") {
+            return new Date(data) as any;
+        }
         // Ignore primitives.
         if (guardedClass === Number || guardedClass === Boolean || guardedClass === String || guardedClass === Object) {
             return data;

@@ -395,3 +395,38 @@ test("populating a cyclic dependency with no type specified", () => {
         },
     })).toThrowErrorMatchingSnapshot();
 });
+
+test("populating and dumping a structure with a date", () => {
+    const scope1 = createScope();
+
+    class Class1 {
+        constructor(date?: Date) {
+            this.date = date;
+        }
+
+        @scope(scope1)
+        public date: Date;
+    }
+
+    const originalDate = new Date("2017-12-16T08:35:29.390Z");
+    const original = new Class1(originalDate);
+    expect(dump(scope1, original)).toMatchSnapshot();
+    expect(populate(scope1, Class1, { date: originalDate })).toMatchSnapshot();
+    expect(populate(scope1, Class1, dump(scope1, original))).toEqual(original);
+});
+
+test("populating a structure with a date from a string", () => {
+    const scope1 = createScope();
+
+    class Class1 {
+        @scope(scope1) @specify(() => Date)
+        public date: Date;
+    }
+
+    const dateString = "2017-12-16T08:35:29.390Z";
+    const date = new Date(dateString);
+    const result = populate(scope1, Class1, { date: dateString });
+    expect(result).toMatchSnapshot();
+    expect(typeof result.date).toBe("object");
+    expect(result.date.constructor).toBe(Date);
+});

@@ -915,6 +915,10 @@ populate(signup, User)(input)
 It is possible to transform properties before populating a field using `@transform(input => output)`.
 This is for example usefull to encrypt a password or similar. This also applies to parameters.
 
+Dates can be populate from strings automatically (as dates are not preserved but turned into strings
+when parsing JSON), but the `@specify(() => Date)` decorator must be added as currently typescript can not
+preserve the type to be date on its own.
+
 #### Populating Arrays
 
 Arrays can also be populated, but a special `specify` decorator is necessary to infer the type of
