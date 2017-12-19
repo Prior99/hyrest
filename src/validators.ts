@@ -60,6 +60,8 @@ export function length(arg1: { max: number, min: number } | number, arg2?: numbe
 
 // Taken from http://emailregex.com/
 const emailValidationRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // tslint:disable-line
+// Taken from https://github.com/mixer/uuid-validate
+const uuidValidationRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-4][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 /**
  * Validates that the input is an email.
@@ -91,4 +93,43 @@ export function only<T>(onlyScope: Scope, validator: Validator<T>): Validator<T>
         }
         return {};
     };
+}
+
+export function range({ min, max }: { max: number, min: number }): Validator<number>;
+export function range(min: number, max: number): Validator<number>;
+/**
+ * Validates the input to be a number in the specified range.
+ *
+ * @param options An object with the keys `min` and `max` for the minimum and maximum length of the string.
+ *
+ * @return A validator which checks the range of the input string.
+ */
+export function range(arg1: { max: number, min: number } | number, arg2?: number): Validator<number> {
+    const { min, max } = typeof arg1 === "object" ? arg1 : { min: arg1, max: arg2 };
+    return (value: number) => {
+        if (typeof value === "undefined") { return {}; }
+        if (value === null) { return { error: "Cannot compare with null." }; }
+        if (typeof max !== "undefined" && value > max) {
+            return { error: `Exceeds maximum of ${max}.` };
+        }
+        if (typeof min !== "undefined" && value < min) {
+            return { error: `Less than minimum of ${min}.` };
+        }
+        return {};
+    };
+}
+
+/**
+ * Validates that the input is an uuid.
+ *
+ * @param value The value to check.
+ *
+ * @return An error if `value` was not an uuid.
+ */
+export function uuid(value: string): Validation {
+    if (typeof value === "undefined") { return {}; }
+    if (typeof value !== "string" || !value.match(uuidValidationRegex)) {
+        return { error: `String is not a valid uuid.` };
+    }
+    return {};
 }

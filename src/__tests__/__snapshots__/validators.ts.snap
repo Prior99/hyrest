@@ -224,6 +224,92 @@ exports[`oneOf detects "undefined" as invalid 1`] = `Object {}`;
 
 exports[`oneOf detects "undefined" as invalid 2`] = `Object {}`;
 
+exports[`range detects "" as expected with [object Object] 1`] = `
+Object {
+  "error": "Less than minimum of 5.",
+}
+`;
+
+exports[`range detects "" as expected with [object Object] 2`] = `
+Object {
+  "error": "Less than minimum of 5.",
+}
+`;
+
+exports[`range detects "" as expected with [object Object] 3`] = `Object {}`;
+
+exports[`range detects "" as expected with [object Object] 4`] = `Object {}`;
+
+exports[`range detects "[object Object]" as expected with [object Object] 1`] = `Object {}`;
+
+exports[`range detects "0" as expected with [object Object] 1`] = `
+Object {
+  "error": "Less than minimum of 5.",
+}
+`;
+
+exports[`range detects "0" as expected with [object Object] 2`] = `
+Object {
+  "error": "Less than minimum of 5.",
+}
+`;
+
+exports[`range detects "0" as expected with [object Object] 3`] = `Object {}`;
+
+exports[`range detects "1" as expected with [object Object] 1`] = `
+Object {
+  "error": "Less than minimum of 5.",
+}
+`;
+
+exports[`range detects "1" as expected with [object Object] 2`] = `
+Object {
+  "error": "Less than minimum of 5.",
+}
+`;
+
+exports[`range detects "5" as expected with [object Object] 1`] = `Object {}`;
+
+exports[`range detects "5" as expected with [object Object] 2`] = `Object {}`;
+
+exports[`range detects "6" as expected with [object Object] 1`] = `Object {}`;
+
+exports[`range detects "6" as expected with [object Object] 2`] = `Object {}`;
+
+exports[`range detects "9" as expected with [object Object] 1`] = `Object {}`;
+
+exports[`range detects "9" as expected with [object Object] 2`] = `Object {}`;
+
+exports[`range detects "10" as expected with [object Object] 1`] = `Object {}`;
+
+exports[`range detects "10" as expected with [object Object] 2`] = `Object {}`;
+
+exports[`range detects "11" as expected with [object Object] 1`] = `
+Object {
+  "error": "Exceeds maximum of 10.",
+}
+`;
+
+exports[`range detects "11" as expected with [object Object] 2`] = `
+Object {
+  "error": "Exceeds maximum of 10.",
+}
+`;
+
+exports[`range detects "1000" as expected with [object Object] 1`] = `
+Object {
+  "error": "Exceeds maximum of 10.",
+}
+`;
+
+exports[`range detects "null" as expected with [object Object] 1`] = `
+Object {
+  "error": "Cannot compare with null.",
+}
+`;
+
+exports[`range detects "undefined" as expected with [object Object] 1`] = `Object {}`;
+
 exports[`required detects "" as expected 1`] = `Object {}`;
 
 exports[`required detects "" as expected 2`] = `Object {}`;
@@ -243,3 +329,55 @@ Object {
   "error": "Missing required field.",
 }
 `;
+
+exports[`uuid detects "" as expected 1`] = `
+Object {
+  "error": "String is not a valid uuid.",
+}
+`;
+
+exports[`uuid detects "" as expected 2`] = `
+Object {
+  "error": "String is not a valid uuid.",
+}
+`;
+
+exports[`uuid detects "[object Object]" as expected 1`] = `
+Object {
+  "error": "String is not a valid uuid.",
+}
+`;
+
+exports[`uuid detects "9" as expected 1`] = `
+Object {
+  "error": "String is not a valid uuid.",
+}
+`;
+
+exports[`uuid detects "550e00-e29b-11d4-a716-446655440000" as expected 1`] = `
+Object {
+  "error": "String is not a valid uuid.",
+}
+`;
+
+exports[`uuid detects "550e8400-e29b-11d4-a716-4466554400" as expected 1`] = `
+Object {
+  "error": "String is not a valid uuid.",
+}
+`;
+
+exports[`uuid detects "550e8400-e29b-11d4-a716-446655440000" as expected 1`] = `Object {}`;
+
+exports[`uuid detects "null" as expected 1`] = `
+Object {
+  "error": "String is not a valid uuid.",
+}
+`;
+
+exports[`uuid detects "test" as expected 1`] = `
+Object {
+  "error": "String is not a valid uuid.",
+}
+`;
+
+exports[`uuid detects "undefined" as expected 1`] = `Object {}`;

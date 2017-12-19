@@ -1,4 +1,4 @@
-import { oneOf, required, email, length } from "../validators";
+import { oneOf, required, email, length, uuid, range } from "../validators";
 
 [
     {
@@ -77,21 +77,21 @@ import { oneOf, required, email, length } from "../validators";
 
 [
     {
-        range: { min: 5 },
+        lengthRange: { min: 5 },
         tests: ["", "1", "test", "longertext", null, undefined] as any[], // tslint:disable-line
     },
     {
-        range: { min: 5, max: 10 },
+        lengthRange: { min: 5, max: 10 },
         tests: ["", "1", "test", "longertext", "reallylongtextthatexceeds10", 9] as any[],
     },
     {
-        range: { max: 10 },
+        lengthRange: { max: 10 },
         tests: ["", "1", "test", "reallylongtextthatexceeds10", {}, []] as any[],
     },
-].forEach(({ range, tests }) => {
+].forEach(({ lengthRange, tests }) => {
     tests.forEach(value => {
-        test(`length detects "${value}" as expected with ${range}`, () => {
-            expect(length(range as any)(value)).toMatchSnapshot();
+        test(`length detects "${value}" as expected with ${lengthRange}`, () => {
+            expect(length(lengthRange as any)(value)).toMatchSnapshot();
         });
     });
 });
@@ -100,4 +100,48 @@ test("length with the input as args", () => {
     expect(length(1, 5)("")).toEqual({ error: `Shorter than minimum length of 1.` });
     expect(length(1, 5)("test")).toEqual({});
     expect(length(1, 5)("toolong")).toEqual({ error: `Exceeds maximum length of 5.` });
+});
+
+[
+    undefined,
+    null, // tslint:disable-line
+    {},
+    [],
+    9,
+    "",
+    "test",
+    "550e8400-e29b-11d4-a716-446655440000",
+    "550e00-e29b-11d4-a716-446655440000",
+    "550e8400-e29b-11d4-a716-4466554400",
+].forEach(value => {
+    test(`uuid detects "${value}" as expected`, () => {
+        expect(uuid(value as any)).toMatchSnapshot();
+    });
+});
+
+[
+    {
+        rangeRange: { min: 5 },
+        tests: ["", 1, 0, 5, 6, null, undefined] as any[], // tslint:disable-line
+    },
+    {
+        rangeRange: { min: 5, max: 10 },
+        tests: ["", 1, 0, 5, 6, 9, 10, 11] as any[],
+    },
+    {
+        rangeRange: { max: 10 },
+        tests: ["", 0, 9, 10, 11, 1000, {}, []] as any[],
+    },
+].forEach(({ rangeRange, tests }) => {
+    tests.forEach(value => {
+        test(`range detects "${value}" as expected with ${rangeRange}`, () => {
+            expect(range(rangeRange as any)(value)).toMatchSnapshot();
+        });
+    });
+});
+
+test("range with the input as args", () => {
+    expect(range(1, 5)(0)).toEqual({ error: `Less than minimum of 1.` });
+    expect(range(1, 5)(6)).toEqual({ error: `Exceeds maximum of 5.` });
+    expect(range(1, 5)(4)).toEqual({});
 });
