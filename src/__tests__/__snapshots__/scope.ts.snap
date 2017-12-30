@@ -236,6 +236,12 @@ Class1 {
 }
 `;
 
+exports[`populating and dumping a @precompute getter 1`] = `
+Object {
+  "property": "some test",
+}
+`;
+
 exports[`populating and dumping a circular structure 1`] = `
 Circular {
   "circular1": Circular {

@@ -1,4 +1,4 @@
-import { Scope, scope, createScope, dump, populate, specify } from "../scope";
+import { Scope, scope, createScope, dump, populate, specify, precompute } from "../scope";
 import { Constructable } from "../types";
 
 let permissive: Scope, restricted: Scope;
@@ -456,4 +456,28 @@ test("dumping a structure with an array of dates", () => {
     class2.class1s = [instance1, instance2];
     expect(dump(scope1, class2)).toMatchSnapshot();
     expect(populate(scope1, Class2, dump(scope1, class2))).toEqual(class2);
+});
+
+test("populating and dumping a @precompute getter", () => {
+    const scope1 = createScope();
+
+    class Class1 {
+        private value: string;
+
+        constructor(value?: string) {
+            this.value = value;
+        }
+
+        @scope(scope1) @precompute
+        public get property() {
+            return this.value;
+        }
+    }
+
+    const instance = new Class1("some test");
+    const dumped = dump(scope1, instance);
+    expect(dumped).toMatchSnapshot();
+    const populated = populate(scope1, Class1, dumped);
+    expect(populated.constructor).toBe(Class1);
+    expect(populated).toMatchSnapshot();
 });

@@ -34,6 +34,18 @@ export interface PropertyMeta {
     readonly expectedType: any | any[];
 }
 
+export interface Precomputed {
+    /**
+     * List of all properties decorated with the `@precompute` decorator.
+     */
+    readonly properties: string[];
+    /**
+     * A map of all the values for all `@precompute` decorators used when
+     * populating the instance.
+     */
+    readonly values: Map<string, any>;
+}
+
 export class Scope {
     private included: Scope[] = [];
     private ownProperties: PropertyMeta[] = [];
@@ -294,6 +306,7 @@ export function populate<T>(
             const specifyType = specifyTypeCreator && specifyTypeCreator();
             const transforms = getTransforms(target, property);
             const populated = internalPopulate(dataValue, expectedType, specifyType);
+            const precomputed = Reflect.getMetadata("precompute", instance, property);
             if (transforms.propertyTransform) {
                 (instance as any)[property] = transforms.propertyTransform(populated);
             } else {
@@ -316,4 +329,36 @@ export function populate<T>(
         return internalPopulate(arg3, initialClass, undefined);
     }
     return (data: any) => internalPopulate(data, initialClass, undefined);
+}
+
+/**
+ * Returns the object describing all properties decorated with `@precompute` on the target.
+ * This function will always return an object. If nothing was defined before, a new object is created.
+ *
+ * @param target The target object of which to get the `@precompute` properties.
+ *
+ * @return An object containing all decorated properties and the values for each of them.
+ */
+export function getPrecomputed(target: Object): Precomputed {
+    let precomputed = Reflect.getMetadata("precomputed", target);
+    if (typeof precomputed === "undefined") {
+        precomputed = {
+            properties: [],
+            values: new Map(),
+        };
+        Reflect.defineMetadata("precomputed", precomputed, target);
+    }
+    return precomputed;
+}
+
+export function precompute(target: Object, property: string, descriptor: PropertyDescriptor) {
+    const originalFunction = descriptor.value;
+    descriptor.value = function (...args: any[]) {
+        const precomputed = getPrecomputed(target);
+        if (precomputed.values.has(property)) {
+            return precomputed.values.get(property);
+        }
+        return originalFunction();
+    };
+    return descriptor;
 }
