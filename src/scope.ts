@@ -311,7 +311,7 @@ export function populate<T>(
             if (precomputed.properties.includes(property)) {
                 precomputed.values.set(property, value);
             } else {
-                (target as any)[property] = value;
+                (instance as any)[property] = value;
             }
         });
         return instance;
