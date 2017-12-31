@@ -768,7 +768,7 @@ class User {
 
 console.log(dump(world, user));
 // {
-//     avatarUrl: "https://example.com/avatar/3426c53bde535550ace9f38078123d630fd1373ec0e507ae9a3aa3b16139ebf2"
+//     avatarUrl: "https://example.com/avatar/3426c53bde535550ace9f38078123d630fd1373ec0e507ae9a3aa3b16139ebf2.png"
 // }
 ```
 
