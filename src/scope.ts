@@ -38,12 +38,12 @@ export interface Precomputed {
     /**
      * List of all properties decorated with the `@precompute` decorator.
      */
-    readonly properties: string[];
+    readonly properties: (string | symbol)[];
     /**
      * A map of all the values for all `@precompute` decorators used when
      * populating the instance.
      */
-    readonly values: Map<string, any>;
+    readonly values: Map<string | symbol, any>;
 }
 
 export class Scope {
@@ -306,11 +306,12 @@ export function populate<T>(
             const specifyType = specifyTypeCreator && specifyTypeCreator();
             const transforms = getTransforms(target, property);
             const populated = internalPopulate(dataValue, expectedType, specifyType);
-            const precomputed = Reflect.getMetadata("precompute", instance, property);
-            if (transforms.propertyTransform) {
-                (instance as any)[property] = transforms.propertyTransform(populated);
+            const precomputed = getPrecomputed(target);
+            const value = transforms.propertyTransform ? transforms.propertyTransform(populated) : populated;
+            if (precomputed.properties.includes(property)) {
+                precomputed.values.set(property, value);
             } else {
-                (instance as any)[property] = populated;
+                (target as any)[property] = value;
             }
         });
         return instance;
@@ -351,14 +352,18 @@ export function getPrecomputed(target: Object): Precomputed {
     return precomputed;
 }
 
-export function precompute(target: Object, property: string, descriptor: PropertyDescriptor) {
-    const originalFunction = descriptor.value;
-    descriptor.value = function (...args: any[]) {
-        const precomputed = getPrecomputed(target);
+export function precompute(target: Object, property: string | symbol, descriptor: PropertyDescriptor) {
+    const originalGetter = descriptor.get;
+    if (typeof originalGetter !== "function") {
+        throw new Error("Only getters can be decorated with @precompute.");
+    }
+    const precomputed = getPrecomputed(target);
+    precomputed.properties.push(property);
+    descriptor.get = function () {
         if (precomputed.values.has(property)) {
             return precomputed.values.get(property);
         }
-        return originalFunction();
+        return originalGetter.apply(this); // tslint:disable-line
     };
     return descriptor;
 }

@@ -464,7 +464,7 @@ test("populating and dumping a @precompute getter", () => {
     class Class1 {
         private value: string;
 
-        constructor(value?: string) {
+        constructor(value = "not set") {
             this.value = value;
         }
 
@@ -476,8 +476,53 @@ test("populating and dumping a @precompute getter", () => {
 
     const instance = new Class1("some test");
     const dumped = dump(scope1, instance);
-    expect(dumped).toMatchSnapshot();
+    expect(dumped).toEqual({
+        property: "some test",
+    });
     const populated = populate(scope1, Class1, dumped);
     expect(populated.constructor).toBe(Class1);
-    expect(populated).toMatchSnapshot();
+    expect(populated.property).toEqual("some test");
+});
+
+test("populating and dumping a @precompute getter returning a class instance", () => {
+    const scope1 = createScope();
+
+    class Class2 {
+        @scope(scope1)
+        public other: string;
+    }
+
+    class Class1 {
+        @scope(scope1) @precompute
+        public get property(): Class2 {
+            const class2 = new Class2();
+            class2.other = "another test";
+            return class2;
+        }
+    }
+
+    const instance = new Class1();
+    const dumped = dump(scope1, instance);
+    expect(dumped).toEqual({
+        property: {
+            other: "another test",
+        },
+    });
+    const populated = populate(scope1, Class1, dumped);
+    expect(populated.constructor).toBe(Class1);
+    expect(populated.property.other).toEqual("another test");
+    expect(populated.property.constructor).toBe(Class2);
+});
+
+test("populating something which is not a getter with @precompute", () => {
+    const scope1 = createScope();
+
+    expect(() => {
+        class Class1 {
+            @scope(scope1) @precompute
+            public property(): string {
+                return "test";
+            }
+        }
+    }).toThrowErrorMatchingSnapshot();
 });

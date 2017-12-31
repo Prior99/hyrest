@@ -236,12 +236,6 @@ Class1 {
 }
 `;
 
-exports[`populating and dumping a @precompute getter 1`] = `
-Object {
-  "property": "some test",
-}
-`;
-
 exports[`populating and dumping a circular structure 1`] = `
 Circular {
   "circular1": Circular {
@@ -393,3 +387,5 @@ Object {
   "date": 2017-12-16T08:35:29.390Z,
 }
 `;
+
+exports[`populating something which is not a getter with @precompute 1`] = `"Only getters can be decorated with @precompute."`;
