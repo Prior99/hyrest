@@ -43,6 +43,7 @@ is transparent, type-safe and as easy calling a method.
      * [Usage as express middleware](#usage-as-express-middleware)
      * [Usage as client](#usage-as-client)
      * [Scopes](#scopes)
+         * [Precomputing values](#precomputing-values)
          * [Dumping](#dumping)
          * [Nested Objects](#nested-objects)
          * [Populating](#populating)
@@ -740,6 +741,39 @@ class User {
     public username: string;
 }
 ```
+
+### Precomputing values
+
+Sometimes it can be neccessary to compute values on the server and have them available on the client.
+This can be achieved using `@precompute`:
+
+```typescript
+import { scope, createScope, precompute } from "hyrest";
+
+const owner = createScope();
+const world = createScope();
+
+class User {
+    @scope(owner)
+    public email: string;
+
+    @scope(world) @precompute
+    public get avatarUrl() {
+        // This code will be executed on the server and the value will be transmitted to the client.
+        // The client will never execute this code and does not need access to `this.email`, so
+        // `this.email` can be kept private.
+        return `https://example.com/avatar/${sha256(this.email)}.png`;
+    }
+}
+
+console.log(dump(world, user));
+// {
+//     avatarUrl: "https://example.com/avatar/3426c53bde535550ace9f38078123d630fd1373ec0e507ae9a3aa3b16139ebf2"
+// }
+```
+
+Of course on the client the populated instance of the class can normally access the getter, it will
+return the value received from the server and not execute the code of the getter.
 
 ### Dumping
 
