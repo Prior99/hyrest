@@ -68,7 +68,7 @@ import { controller, route, param, body, ok, created, notFound, conflict } from 
 @controller()
 class UserController {
     @route("GET", "/user/:id")
-    public getUser(@param("id") id: string) {
+    public async getUser(@param("id") id: string) {
         const user = ...;
         if (!user) {
             return notFound("No such user exists.")
@@ -77,7 +77,7 @@ class UserController {
     }
 
     @route("POST", "/user")
-    public createUser(@body() user: User) {
+    public async createUser(@body() user: User) {
         const newUser = ...;
         if (!newUser) {
             return conflict("User already exists.")
@@ -86,6 +86,17 @@ class UserController {
     }
 }
 ```
+
+In the browser calling the route is as easy as:
+
+```typescript
+const controller = new UserController();
+await controller.getUser("the-id-of-some-user");
+```
+
+All the HTTP calls will happen automatically.
+Of course the methods can still be used within the backend itself, without an HTTP
+request happening.
 
 ### Controller configuration
 
@@ -153,7 +164,7 @@ import { param, query, controller, ok } from "hyrest";
 @controller()
 class UserController {
     @route("GET", "/user/:id/game/:gameId")
-    public getGame(
+    public async getGame(
             @param("id") id: string,
             @param("gameId") gameId: string,
             @query("search") search: string,
@@ -175,7 +186,7 @@ the parameter with the correct type](#populating) limited to a [scope](#scopes) 
 ```typescript
 ...
 @route("POST", "/signup")
-public postSignup(@body(signupScope) user: User) {
+public async postSignup(@body(signupScope) user: User) {
     // `user` is now validated against `User` and a propert instance of `User`.
 }
 ```
@@ -186,7 +197,7 @@ it be automatically populated on the client side and safely dumped on the server
 ```typescript
 ...
 @route("POST", "/signup").dump(User, signupScope)
-public postSignup(@body(signupScope) user: User) {
+public async postSignup(@body(signupScope) user: User) {
 }
 
 // When this route is called on the frontend, the returned value is actually a `User`.
@@ -225,7 +236,7 @@ injected as an argument:
 
 ```typescript
 @route("GET", "/user/:id")
-public getUser(@param("id") id: string, @context ctx?: any)
+public async getUser(@param("id") id: string, @context ctx?: any)
 ```
 
 It can afterwards be used in the route method. It is recommended to make the context argument an optional
@@ -247,7 +258,7 @@ import { query, controller, ok, is, DataType } from "hyrest";
 @controller()
 class GameController {
     @route("GET", "/games")
-    public listGames(@query("count") @is(DataType.int) count: number) {
+    public async listGames(@query("count") @is(DataType.int) count: number) {
         return ok([
             ...
         ]);
@@ -315,7 +326,7 @@ const UserSchema = {
 @controller()
 class UserControllre {
     @route("POST", "/user")
-    public createUser(@body() @is(DataType.obj).schema(UserSchema) user: User) {
+    public async createUser(@body() @is(DataType.obj).schema(UserSchema) user: User) {
         ...
         return created(user)
     }
@@ -357,7 +368,7 @@ The schema can then be used by using `schemaFrom()`:
 
 ```typescript
 @route("POST", "/user")
-public createUser(@body() @is(DataType.obj).schema(schemaFrom(User)) user: User) {
+public async createUser(@body() @is(DataType.obj).schema(schemaFrom(User)) user: User) {
     ...
 ```
 
@@ -399,7 +410,7 @@ To limit the schema to properties marked with the scope `signup`, simply specify
 
 ```typescript
 @route("POST", "/user")
-public createUser(@body() @is(DataType.obj).schema(schemaFrom(User)).scope(signup) user: User) {
+public async createUser(@body() @is(DataType.obj).schema(schemaFrom(User)).scope(signup) user: User) {
     ...
 ```
 
@@ -494,7 +505,7 @@ import { controller, route, body } from "hyrest";
 @controller()
 class ValidationController {
     @route("POST", "/validate/email")
-    public validateEmail(@body() value: string) {
+    public async validateEmail(@body() value: string) {
         if (typeof value === "undefined") { return {}; }
         const rows = await db.query("SELECT id FROM user WHERE email = ?", [ value ]);
         return rows.length === 0 ? {} : { error: "Email already taken." };
@@ -527,7 +538,7 @@ import { controller, route, body, DataType } from "hyrest";
 @controller()
 class SomeController {
     @route("POST", "/validate/email")
-    public validateEmail(@body() @is(DataType.str).validateCtx(ctx => ctx.validator) value: string) {
+    public async validateEmail(@body() @is(DataType.str).validateCtx(ctx => ctx.validator) value: string) {
         ...
     }
 }
@@ -566,7 +577,7 @@ import { authorized, unauthorized, controller, route, ok } from "hyrest";
 @controller
 class controller {
     @route("get", "/test") @authorized
-    public method() {
+    public async method() {
         return ok();
     }
 }
@@ -614,7 +625,7 @@ import { authorized, controller, route, ok } from "hyrest";
 @controller
 class Controller {
     @route("get", "/test") @authorized({ check: (request, context) => false })
-    public method() {
+    public async method() {
         return ok();
     }
 }
