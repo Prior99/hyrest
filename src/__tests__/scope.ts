@@ -526,3 +526,45 @@ test("populating something which is not a getter with @precompute", () => {
         }
     }).toThrowErrorMatchingSnapshot();
 });
+
+test("populating and dumping multiple structures with a @precompute getter", async () => {
+    const scope1 = createScope();
+
+    class SubClass1 {
+        public value: string;
+
+        @scope(scope1) @precompute
+        public get precomputed() {
+            return `property ${this.value}`;
+        }
+    }
+
+    class Class1 {
+        @scope(scope1)
+        public sub1?: SubClass1;
+
+        @scope(scope1)
+        public sub2?: SubClass1;
+
+        constructor(value1 = "sub1", value2 = "sub2") {
+            this.sub1 = new SubClass1();
+            this.sub2 = new SubClass1();
+            this.sub1.value = value1;
+            this.sub2.value = value2;
+        }
+    }
+
+    const instances = [];
+    for (let i = 0; i < 10; ++i) {
+        instances.push(populate(scope1, Class1, {
+            sub1: { precomputed: `populated instance #${i} sub 1` },
+            sub2: { precomputed: `populated instance #${i} sub 2` },
+        }));
+    }
+
+    for (let i = 0; i < 10; ++i) {
+        const dumped = dump(scope1, instances[i]);
+        expect(dumped.sub1.precomputed).toEqual(`populated instance #${i} sub 1`);
+        expect(dumped.sub2.precomputed).toEqual(`populated instance #${i} sub 2`);
+    }
+});

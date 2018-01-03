@@ -34,11 +34,14 @@ export interface PropertyMeta {
     readonly expectedType: any | any[];
 }
 
-export interface Precomputed {
+export interface PrecomputedClass {
     /**
      * List of all properties decorated with the `@precompute` decorator.
      */
     readonly properties: (string | symbol)[];
+}
+
+export interface PrecomputedInstance {
     /**
      * A map of all the values for all `@precompute` decorators used when
      * populating the instance.
@@ -306,10 +309,11 @@ export function populate<T>(
             const specifyType = specifyTypeCreator && specifyTypeCreator();
             const transforms = getTransforms(target, property);
             const populated = internalPopulate(dataValue, expectedType, specifyType);
-            const precomputed = getPrecomputed(target);
+            const precomputedClass = getPrecomputedClass(target);
+            const precomputedInstance = getPrecomputedInstance(instance);
             const value = transforms.propertyTransform ? transforms.propertyTransform(populated) : populated;
-            if (precomputed.properties.includes(property)) {
-                precomputed.values.set(property, value);
+            if (precomputedClass.properties.includes(property)) {
+                precomputedInstance.values.set(property, value);
             } else {
                 (instance as any)[property] = value;
             }
@@ -338,16 +342,30 @@ export function populate<T>(
  *
  * @param target The target object of which to get the `@precompute` properties.
  *
- * @return An object containing all decorated properties and the values for each of them.
+ * @return An object containing all decorated properties of `@precompute`.
  */
-export function getPrecomputed(target: Object): Precomputed {
-    let precomputed = Reflect.getMetadata("precomputed", target);
+export function getPrecomputedClass(target: Object): PrecomputedClass {
+    let precomputed = Reflect.getMetadata("precomputed:class", target);
     if (typeof precomputed === "undefined") {
-        precomputed = {
-            properties: [],
-            values: new Map(),
-        };
-        Reflect.defineMetadata("precomputed", precomputed, target);
+        precomputed = { properties: [] };
+        Reflect.defineMetadata("precomputed:class", precomputed, target);
+    }
+    return precomputed;
+}
+
+/**
+ * Returns the object containing all the values for all getters decorated with @precompute.
+ * This function will always return an object. If nothing was defined before, a new object is created.
+ *
+ * @param instance The instance of which to get the `@precompute` property values.
+ *
+ * @return An object containing all values for getters decorated with `@precompute`.
+ */
+export function getPrecomputedInstance(instance: Object): PrecomputedInstance {
+    let precomputed = Reflect.getMetadata("precomputed:instance", instance);
+    if (typeof precomputed === "undefined") {
+        precomputed = { values: new Map() };
+        Reflect.defineMetadata("precomputed:instance", precomputed, instance);
     }
     return precomputed;
 }
@@ -357,11 +375,12 @@ export function precompute(target: Object, property: string | symbol, descriptor
     if (typeof originalGetter !== "function") {
         throw new Error("Only getters can be decorated with @precompute.");
     }
-    const precomputed = getPrecomputed(target);
-    precomputed.properties.push(property);
+    const precomputedClass = getPrecomputedClass(target);
+    precomputedClass.properties.push(property);
     descriptor.get = function () {
-        if (precomputed.values.has(property)) {
-            return precomputed.values.get(property);
+        const precomputedInstance = getPrecomputedInstance(this); // tslint:disable-line
+        if (precomputedInstance.values.has(property)) {
+            return precomputedInstance.values.get(property);
         }
         return originalGetter.apply(this); // tslint:disable-line
     };
