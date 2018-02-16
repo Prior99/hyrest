@@ -205,7 +205,7 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
                         data = routeResult;
                     }
                 } catch (err) {
-                    console.error(err);
+                    next(err);
                     data = internalServerError();
                 }
             }

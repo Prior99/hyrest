@@ -580,3 +580,28 @@ test("The hyrest middleware with a context factory and an injected context", asy
         .send();
     expect(mock.mock.calls[0]).toMatchSnapshot();
 });
+
+test("The hyrest middleware propagates errors as expected", async () => {
+    const mock = jest.fn();
+    const err = new Error("some error");
+
+    @controller({ mode: ControllerMode.SERVER })
+    class TestController {
+        @route("GET", "/test")
+        public method(@context ctx: any) {
+            throw err;
+        }
+    }
+
+    const http = Express();
+    http.use(BodyParser.json());
+    http.use(hyrest(new TestController()));
+    http.use((caughtErr: Error, req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
+        mock(caughtErr);
+    });
+    await request(http)
+        .get("/test")
+        .expect(500)
+        .send();
+    expect(mock).toHaveBeenCalledWith(err);
+});
