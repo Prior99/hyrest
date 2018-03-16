@@ -9,7 +9,8 @@
     "build": "tsc -p tsconfig-production.json --sourceMap",
     "test": "jest",
     "lint": "tslint --format stylish --type-check --project tsconfig.json",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "docs": "typedoc --mode file --out docs/ --exclude '**/__tests__/*.ts' src/"
   },
   "repository": {
     "type": "git",
@@ -64,6 +65,7 @@
     "supertest": "^3.0.0",
     "ts-jest": "^21.2.3",
     "tslint": "^5.8.0",
+    "typedoc": "^0.11.1",
     "typescript": "^2.6.1"
   },
   "dependencies": {

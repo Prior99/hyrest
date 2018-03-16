@@ -1,4 +1,4 @@
-default: test lint build
+default: test lint build docs
 
 .PHONY: node_modules
 node_modules:
@@ -7,6 +7,10 @@ node_modules:
 .PHONY: build
 build: node_modules
 	yarn build
+
+.PHONE: docs
+docs: node_modules
+	yarn docs
 
 .PHONY: test
 test: node_modules

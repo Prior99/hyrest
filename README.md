@@ -11,6 +11,8 @@ and call them from the frontend. When developing both server and client in the s
 or sharing a common library with all endpoints between the both, a call to a REST endoint
 is transparent, type-safe and as easy calling a method.
 
+Please also refer to the **[Documentation](https://prior99.github.io/hyrest/docs/index.html)**.
+
 ## Table of contents
 
  * [Hyrest](#hyrest)
