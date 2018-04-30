@@ -292,6 +292,7 @@ export function populate<T>(
         if (isPrimitive) {
             return data;
         }
+        if (data === null) { return null; } // tslint:disable-line
         invariant(typeof data === "object" && !Array.isArray(data), "Structure does not match. Object expected.");
         if (typeof guardedClass !== "function") {
             throw new Error("Could not infer type. This might be due to a cyclic dependency.");
@@ -303,7 +304,7 @@ export function populate<T>(
         propertiesForClass.forEach(({ property, target, expectedType }) => {
             const dataValue = (data as any)[property];
             if (typeof dataValue === "undefined") {
-                return;
+                return undefined;
             }
             const specifyTypeCreator = getSpecifiedType(target, property).property;
             const specifyType = specifyTypeCreator && specifyTypeCreator();

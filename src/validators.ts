@@ -34,8 +34,8 @@ export function required<T>(value: T): Validation {
     return {};
 }
 
-export function length({ min, max }: { max: number, min: number }): Validator<string>;
-export function length(min: number, max: number): Validator<string>;
+export function length({ min, max }: { max: number, min: number }): Validator<string | any[]>;
+export function length(min: number, max: number): Validator<string | any[]>;
 /**
  * Validates the input string to be at least of length `min` and not longer than `max`.
  *

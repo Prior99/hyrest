@@ -514,6 +514,24 @@ test("populating and dumping a @precompute getter returning a class instance", (
     expect(populated.property.constructor).toBe(Class2);
 });
 
+test("populating something with null", () => {
+    const scope1 = createScope();
+
+    class Class1 {
+        @scope(scope1) public value: string;
+    }
+
+    class Class2 {
+        @scope(scope1) public class1?: Class1;
+    }
+
+    const populated = populate(scope1, Class2, { class1: null }); // tslint:disable-line
+    expect(populated.constructor).toBe(Class2);
+    const expected = new Class2();
+    expected.class1 = null; // tslint:disable-line
+    expect(populated).toEqual(expected);
+});
+
 test("populating something which is not a getter with @precompute", () => {
     const scope1 = createScope();
 
