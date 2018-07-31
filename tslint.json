@@ -76,7 +76,6 @@
         "no-default-export": true,
         "await-promise": true,
         "no-unnecessary-qualifier": true,
-        "no-misused-new": true,
-        "typeof-compare": true
+        "no-misused-new": true
     }
 }

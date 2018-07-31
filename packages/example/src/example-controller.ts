@@ -40,11 +40,11 @@ export class Example {
 @controller({ baseUrl: "http://localhost:9000" })
 export class ExampleController {
     @route("POST", "/example/:id").dump(Example, world)
-    public postExample(
+    public async postExample(
             @param("id") @is(DataType.int) id: number,
             @body(create) example: Example,
             @query("age") @is(DataType.float) age: number,
-            @query("kind") @is(DataType.str).validate(oneOf("a", "b", "c"), required) kind: string): Example {
+            @query("kind") @is(DataType.str).validate(oneOf("a", "b", "c"), required) kind: string): Promise<Example> {
         if (age > 10) {
             return badRequest(undefined, "Cannot create example with age > 10.");
         }

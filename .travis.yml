@@ -1,17 +1,17 @@
 language: node_js
 node_js:
-  - '8'
+  - '10'
 
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install make git -qq
-  - npm install -g yarn
+  - npm install -g yarn lerna
 
 install:
-  - yarn install
+  - lerna bootstrap
 
 script:
-  - yarn build
+  - lerna run build
   - yarn lint
   - yarn test
 

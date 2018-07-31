@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test": "jest",
-    "lint": "tslint --format stylish --type-check --project tsconfig.json"
+    "lint": "tslint --format stylish --project tsconfig.json"
   },
   "workspaces": [
     "packages/*"
