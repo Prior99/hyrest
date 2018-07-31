@@ -3,17 +3,18 @@ default: test lint build docs
 .PHONY: node_modules
 node_modules:
 	yarn install
+	yarn lerna bootstrap
 
 .PHONY: build
 build: node_modules
-	yarn build
+	yarn lerna run build
 
 .PHONE: docs
 docs: node_modules
-	yarn docs
+	yarn lerna run docs
 
 .PHONY: test
-test: node_modules
+test: node_modules build
 	yarn test
 
 .PHONY: lint
@@ -22,12 +23,15 @@ lint: node_modules
 
 .PHONY: clean
 clean:
-	rm -rf dist
+	yarn lerna run clean
 
 .PHONY: release
 release: clean test lint build
-	test `cat package.json | jq ".version"` = '"${VERSION}"'
+	# Check that the version in $VERSION is correct.
+	test `cat lerna.json | jq ".version"` = '"${VERSION}"'
+	# Check that there are no uncommitted changes.
+	git diff-index --quiet HEAD --
 	git tag ${VERSION}
 	git push
 	git push --tags
-	yarn publish
+	lerna publish

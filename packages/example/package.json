@@ -1,0 +1,19 @@
+{
+  "name": "hyrest-example",
+  "version": "0.0.0",
+  "scripts": {
+    "run:server": "ts-node src/server.ts",
+    "run:client": "ts-node src/client.ts"
+  },
+  "devDependencies": {
+    "@types/express": "^4.0.39",
+    "ts-node": "^7.0.0",
+    "typescript": "^3.0.1"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "hyrest": "^0.7.13",
+    "hyrest-express": "^0.0.0",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
