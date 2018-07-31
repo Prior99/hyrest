@@ -24,14 +24,3 @@ lint: node_modules
 .PHONY: clean
 clean:
 	yarn lerna run clean
-
-.PHONY: release
-release: clean test lint build
-	# Check that the version in $VERSION is correct.
-	test `cat lerna.json | jq ".version"` = '"${VERSION}"'
-	# Check that there are no uncommitted changes.
-	git diff-index --quiet HEAD --
-	git tag ${VERSION}
-	git push
-	git push --tags
-	lerna publish
