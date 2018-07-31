@@ -24,3 +24,8 @@ lint: node_modules
 .PHONY: clean
 clean:
 	yarn lerna run clean
+
+.PHONY: publish
+publish: node_modules build lint test
+	git diff-index --quiet HEAD --
+	yarn lerna publish
