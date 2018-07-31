@@ -1,6 +1,6 @@
 {
   "name": "hyrest-express",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A hybrid REST library for the frontend and backend. Express middleware package.",
   "keywords": [
     "hyrest",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "express": "^4.16.3",
-    "hyrest": "^0.7.13",
+    "hyrest": "^0.8.0",
     "reflect-metadata": "^0.1.12"
   }
 }

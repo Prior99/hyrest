@@ -1,6 +1,6 @@
 {
   "name": "hyrest",
-  "version": "0.7.13",
+  "version": "0.8.0",
   "description": "A hybrid REST library for the frontend and backend.",
   "keywords": [
     "hyrest",

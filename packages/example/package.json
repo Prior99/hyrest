@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "hyrest-example",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "run:server": "ts-node src/server.ts",
     "run:client": "ts-node src/client.ts"
@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "express": "^4.16.2",
-    "hyrest": "^0.7.13",
-    "hyrest-express": "^0.0.0",
+    "hyrest": "^0.8.0",
+    "hyrest-express": "^0.1.0",
     "isomorphic-fetch": "^2.2.1"
   }
 }
