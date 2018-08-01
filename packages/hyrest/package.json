@@ -2,35 +2,21 @@
   "name": "hyrest",
   "version": "0.8.0",
   "description": "A hybrid REST library for the frontend and backend.",
-  "keywords": [
-    "hyrest",
-    "hybrid",
-    "http",
-    "rest",
-    "api",
-    "promise"
-  ],
+  "keywords": ["hyrest", "hybrid", "http", "rest", "api", "promise"],
   "main": "dist/index.js",
   "author": "Frederick Gnodtke",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
-    "docs": "typedoc --mode file --out docs/ --exclude '**/__tests__/*.ts' src/"
+    "docs": "typedoc --mode file --out docs/ src/"
   },
   "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/Prior99/hyrest"
   },
-  "files": [
-    "dist",
-    "index.d.ts",
-    "src",
-    "LICENSE",
-    "README.md",
-    "example"
-  ],
+  "files": [ "dist", "src", "LICENSE", "README.md"],
   "devDependencies": {
     "@types/invariant": "^2.2.29",
     "bind-decorator": "^1.0.11",
