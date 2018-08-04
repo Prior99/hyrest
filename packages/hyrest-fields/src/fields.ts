@@ -6,7 +6,7 @@ export type Field<TModel> = {
     };
 };
 
-export function field<TModel>(modelType: Constructable<TModel>): PropertyDecorator {
+export function fields<TModel>(modelType: Constructable<TModel>): PropertyDecorator {
     return (target: Object, property: string | symbol): void => {
         const model = new modelType();
         Object.keys(model).reduce((result, ))

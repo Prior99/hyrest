@@ -26,7 +26,7 @@ export interface PropertyMeta {
     /**
      * The name of the property that was decorated.
      */
-    readonly property: string;
+    readonly property: string | symbol;
     /**
      * The expected type for this property.
      */
@@ -159,7 +159,7 @@ export function createScope() {
  * @see populate
  */
 export function scope(...scopes: Scope[]) {
-    return function<T>(target: Object, property: string, descriptor?: PropertyDescriptor) {
+    return function<T>(target: Object, property: string | symbol, descriptor?: PropertyDescriptor) {
         const expectedType = Reflect.getMetadata("design:type", target, property);
         scopes.forEach(decoratedScope => decoratedScope.registerProperty({
             target, property, expectedType,
@@ -245,6 +245,10 @@ export function dump<T>(dumpScope: Scope, arg2?: T): T | ((instance: T) => T) {
     return internalDump;
 }
 
+export function populate<T>(initialClass: Constructable<T>): (data: any) => T;
+export function populate<T>(initialClass: Constructable<T>, data: any): T;
+export function populate<T>(initialClass: Constructable<T>, arrayType: Constructable<T>): (data: any) => T;
+export function populate<T>(initialClass: Constructable<T>, arrayType: Constructable<T>, data: any): T;
 export function populate<T>(populateScope: Scope, initialClass: Constructable<T>): (data: any) => T;
 export function populate<T>(populateScope: Scope, initialClass: Constructable<T>, data: any): T;
 export function populate<T>(
@@ -266,8 +270,10 @@ export function populate<T>(
  *         structure otherwise.
  */
 export function populate<T>(
-    populateScope: Scope, initialClass: Constructable<T>, arg3?: any, arg4?: any,
+    arg1?: Scope | Constructable<T>, arg2?: Constructable<T>, arg3?: any, arg4?: any,
 ): T | ((data: T) => T) {
+    const populateScope = arg1.constructor === Scope ? arg1 as Scope : everything;
+    const initialClass = arg1.constructor === Scope ? arg2 : arg1 as Constructable<T>;
     function internalPopulate<U extends any | any[]>(
         data: any, thisClass: any, specifiedClass: Constructable<any>,
     ): U {
@@ -386,3 +392,8 @@ export function precompute(target: Object, property: string | symbol, descriptor
     };
     return descriptor;
 }
+
+/**
+ * Every property on every schema will always be added to this scope implicitly.
+ */
+export const everything = createScope();
