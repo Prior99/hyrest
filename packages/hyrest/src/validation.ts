@@ -4,7 +4,7 @@ import { Validator, Validation } from "./validators";
 import { schemaFrom } from "./schema-generator";
 import { Converter, bool, str, float, obj, arr } from "./converters";
 import * as invariant from "invariant";
-import { Scope, getSpecifiedType, TypeCreator, scope, everything } from "./scope";
+import { Scope, getSpecifiedType, TypeCreator, scope, universal } from "./scope";
 import { Processed } from "./processed";
 
 export interface ValidationOptions<T, TContext> {
@@ -374,8 +374,8 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
             property,
             propertyType,
         });
-        // Add all validated properties to the `everything` scope always.
-        scope(everything)(target, property, descriptor);
+        // Add all validated properties to the `universal` scope always.
+        scope(universal)(target, property, descriptor);
         return;
     };
     const parameterDecorator = (target: Object, property: string | symbol, index: number) => {
@@ -412,8 +412,8 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         validationSchema = schema;
         return fullValidator;
     };
-    fullValidator.scope = (scope: Scope) => {
-        scopeLimit = scope;
+    fullValidator.scope = (limit: Scope) => {
+        scopeLimit = limit;
         return fullValidator;
     };
     return fullValidator;

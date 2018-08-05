@@ -261,9 +261,10 @@ export function populate<T>(
  * the input.
  *
  * @param populateScope The scope to populate. Only properties included in this scope will be populated.
+ *             Can be omitted to populate all properties using the `universal` scope.
  * @param initialClass The class to start populating with.
  *             It can also be invoked with an additional array type.
- * @param arg4 When populating an array, an additional array type must be specified as the thrid argument
+ * @param arrayType When populating an array, an additional array type must be specified as the thrid argument
  *             and the data is specified as the fourth argument instead.
  *
  * @return A curried function for use in higher order functions if `arg3` is not specified and the populated
@@ -272,7 +273,7 @@ export function populate<T>(
 export function populate<T>(
     arg1?: Scope | Constructable<T>, arg2?: Constructable<T>, arg3?: any, arg4?: any,
 ): T | ((data: T) => T) {
-    const populateScope = arg1.constructor === Scope ? arg1 as Scope : everything;
+    const populateScope = arg1.constructor === Scope ? arg1 as Scope : universal;
     const initialClass = arg1.constructor === Scope ? arg2 : arg1 as Constructable<T>;
     function internalPopulate<U extends any | any[]>(
         data: any, thisClass: any, specifiedClass: Constructable<any>,
@@ -396,4 +397,4 @@ export function precompute(target: Object, property: string | symbol, descriptor
 /**
  * Every property on every schema will always be added to this scope implicitly.
  */
-export const everything = createScope();
+export const universal = createScope();
