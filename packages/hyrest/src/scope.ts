@@ -128,6 +128,7 @@ export class Scope {
     public propertiesForClass(clazz: Function) {
         return this.properties.filter(property => {
             let current = clazz;
+            // Properly handle inheritance.
             while (current !== null && typeof current !== "undefined") { // tslint:disable-line
                 if (property.target.constructor === current) {
                     return true;
