@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fields user / pet integration test works as expected throughout a journey 1`] = `
+<UserForm>
+  <div>
+    <input
+      onChange={[Function]}
+    />
+    <p>
+      Please type something!
+    </p>
+  </div>
+</UserForm>
+`;
+
+exports[`fields user / pet integration test works as expected throughout a journey 2`] = `
+<UserForm>
+  <div>
+    <input
+      onChange={[Function]}
+      value="someone"
+    />
+    <p>
+      Loading...
+    </p>
+  </div>
+</UserForm>
+`;
+
+exports[`fields user / pet integration test works as expected throughout a journey 3`] = `
+<UserForm>
+  <div>
+    <input
+      onChange={[Function]}
+      value="someone"
+    />
+    <p>
+      Invalid!
+    </p>
+  </div>
+</UserForm>
+`;
+
+exports[`fields user / pet integration test works as expected throughout a journey 4`] = `
+<UserForm>
+  <div>
+    <input
+      onChange={[Function]}
+      value="someone@example.com"
+    />
+    <p>
+      Loading...
+    </p>
+  </div>
+</UserForm>
+`;
+
+exports[`fields user / pet integration test works as expected throughout a journey 5`] = `
+<UserForm>
+  <div>
+    <input
+      onChange={[Function]}
+      value="someone@example.com"
+    />
+    <p>
+      Valid!
+    </p>
+  </div>
+</UserForm>
+`;

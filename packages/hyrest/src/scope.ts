@@ -272,7 +272,7 @@ export function populate<T>(
  *         structure otherwise.
  */
 export function populate<T>(
-    arg1?: Scope | Constructable<T>, arg2?: Constructable<T>, arg3?: any, arg4?: any,
+    arg1?: Scope | Constructable<T>, arg2?: Constructable<T> | any, arg3?: any, arg4?: any,
 ): T | ((data: T) => T) {
     const populateScope = arg1.constructor === Scope ? arg1 as Scope : universal;
     const initialClass = arg1.constructor === Scope ? arg2 : arg1 as Constructable<T>;
@@ -327,6 +327,19 @@ export function populate<T>(
             }
         });
         return instance;
+    }
+    // When specifying only two arguments and omitting the scope, use the second argument as data.
+    if (arg1.constructor !== Scope) {
+        if (typeof arg2 === "function") {
+            if (typeof arg3 !== "undefined") {
+                return internalPopulate(arg3, initialClass, arg2);
+            }
+            return (data: any) => internalPopulate(data, initialClass, arg2);
+        }
+        if (typeof arg2 !== "undefined") {
+            return internalPopulate(arg2, initialClass, undefined);
+        }
+        return (data: any) => internalPopulate(data, initialClass, undefined);
     }
     // `arg3` can either be array type or data.
     if (typeof arg3 !== "undefined") {

@@ -17,25 +17,47 @@
       }
     },
     "collectCoverage": true,
-    "moduleFileExtensions": ["ts", "js"],
-    "moduleDirectories": ["node_modules"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/jest-setup.ts",
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "transform": {
-      "^.+\\.(ts|ts)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "testMatch": [
-      "<rootDir>/test//*.(ts|js)"
+      "<rootDir>/test//*.(ts|tsx|js)"
     ],
     "moduleNameMapper": {
       "^hyrest$": "<rootDir>/packages/hyrest/src",
-      "^hyrest-express$": "<rootDir>/packages/hyrest-express/src"
+      "^hyrest-express$": "<rootDir>/packages/hyrest-express/src",
+      "^hyrest-mobx$": "<rootDir>/packages/hyrest-mobx/src"
     }
   },
   "devDependencies": {
+    "@types/enzyme": "^3.1.13",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
+    "@types/enzyme-to-json": "^1.5.2",
     "@types/jest": "^23.3.1",
+    "@types/react": "^16.4.7",
+    "@types/react-test-renderer": "^16.0.1",
     "@types/supertest": "^2.0.5",
+    "bind-decorator": "^1.0.11",
     "coveralls": "^3.0.2",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.4",
     "jest": "^23.4.2",
     "lerna": "^3.0.0-rc.0",
+    "react-dom": "^16.4.2",
+    "react-test-renderer": "^16.4.2",
     "reflect-metadata": "^0.1.10",
     "supertest": "^3.1.0",
     "ts-jest": "^23.0.1",
@@ -44,5 +66,10 @@
   },
   "resolutions": {
     "jest/**/jsdom": "11.11.0"
+  },
+  "dependencies": {
+    "mobx": "^5.0.3",
+    "mobx-react": "^5.2.3",
+    "react": "^16.4.2"
   }
 }

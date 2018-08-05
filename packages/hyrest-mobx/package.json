@@ -1,8 +1,18 @@
 {
-  "name": "hyrest-fields",
+  "name": "hyrest-mobx",
   "version": "0.0.0",
-  "description": "A hybrid REST library for the frontend and backend. Express middleware package.",
-  "keywords": ["hyrest", "hybrid", "http", "rest", "api", "promise", "form", "field"],
+  "description": "A hybrid REST library for the frontend and backend. Mobx connector package.",
+  "keywords": [
+    "hyrest",
+    "hybrid",
+    "http",
+    "rest",
+    "api",
+    "promise",
+    "form",
+    "field",
+    "mobx"
+  ],
   "main": "dist/index.js",
   "author": "Frederick Gnodtke",
   "license": "MIT",
@@ -16,13 +26,20 @@
     "type": "git",
     "url": "https://github.com/Prior99/hyrest"
   },
-  "files": ["dist", "src", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
   "devDependencies": {
     "typedoc": "^0.11.1",
     "typescript": "^3.0.1"
   },
   "dependencies": {
+    "bind-decorator": "^1.0.11",
     "hyrest": "^0.8.0",
+    "mobx": "^5.0.3",
     "reflect-metadata": "^0.1.12"
   }
 }
