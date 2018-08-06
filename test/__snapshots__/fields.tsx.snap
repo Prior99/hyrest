@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`fields user / pet integration test works as expected throughout a journey 1`] = `
+exports[`works as expected throughout a journey 1`] = `
 <UserForm>
   <div>
     <input
@@ -13,7 +13,7 @@ exports[`fields user / pet integration test works as expected throughout a journ
 </UserForm>
 `;
 
-exports[`fields user / pet integration test works as expected throughout a journey 2`] = `
+exports[`works as expected throughout a journey 2`] = `
 <UserForm>
   <div>
     <input
@@ -27,7 +27,7 @@ exports[`fields user / pet integration test works as expected throughout a journ
 </UserForm>
 `;
 
-exports[`fields user / pet integration test works as expected throughout a journey 3`] = `
+exports[`works as expected throughout a journey 3`] = `
 <UserForm>
   <div>
     <input
@@ -41,7 +41,7 @@ exports[`fields user / pet integration test works as expected throughout a journ
 </UserForm>
 `;
 
-exports[`fields user / pet integration test works as expected throughout a journey 4`] = `
+exports[`works as expected throughout a journey 4`] = `
 <UserForm>
   <div>
     <input
@@ -55,7 +55,7 @@ exports[`fields user / pet integration test works as expected throughout a journ
 </UserForm>
 `;
 
-exports[`fields user / pet integration test works as expected throughout a journey 5`] = `
+exports[`works as expected throughout a journey 5`] = `
 <UserForm>
   <div>
     <input

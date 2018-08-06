@@ -30,7 +30,7 @@ export function getFieldsMeta(target: Object): FieldsMeta {
 
 export function hasFields<TContext>(
     contextFactory: ContextFactory<TContext>,
-    fieldType: Function,
+    fieldType: Function = Field,
 ): ClassDecorator {
     const decorator = function <T extends Function>(target: T): T {
         const constructor = function OverloadedConstructor(this: any, ...args: any[]): any {
@@ -48,6 +48,7 @@ export function hasFields<TContext>(
         } catch (err) {
             // tslint:disable-line
         }
+        /* istanbul ignore else */
         if (typeof Object.setPrototypeOf !== "undefined") {
             Object.setPrototypeOf(constructor, target);
         } else {

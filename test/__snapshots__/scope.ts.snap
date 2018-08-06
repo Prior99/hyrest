@@ -389,3 +389,29 @@ Object {
 `;
 
 exports[`populating something which is not a getter with @precompute 1`] = `"Only getters can be decorated with @precompute."`;
+
+exports[`populating with no scope provided with a class and an array type provided 1`] = `
+Array [
+  AInternal {
+    "a": "something",
+    "b": 7,
+  },
+  AInternal {
+    "a": "another thing",
+    "b": 6,
+  },
+]
+`;
+
+exports[`populating with no scope provided with a class, data and an array type provided 1`] = `
+Array [
+  AInternal {
+    "a": "something",
+    "b": 7,
+  },
+  AInternal {
+    "a": "another thing",
+    "b": 6,
+  },
+]
+`;

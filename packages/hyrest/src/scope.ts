@@ -48,6 +48,10 @@ export interface PrecomputedInstance {
     readonly values: Map<string | symbol, any>;
 }
 
+function propertyMetaEqual(a: PropertyMeta, b: PropertyMeta) {
+    return a.target === b.target && a.property === b.property;
+}
+
 export class Scope {
     private included: Scope[] = [];
     private ownProperties: PropertyMeta[] = [];
@@ -83,7 +87,9 @@ export class Scope {
     }
 
     public registerProperty(property: PropertyMeta) {
-        this.ownProperties.push(property);
+        if (!this.ownProperties.find(existing => propertyMetaEqual(existing, property))) {
+            this.ownProperties.push(property);
+        }
     }
 
     /**
@@ -162,7 +168,7 @@ export function createScope() {
 export function scope(...scopes: Scope[]) {
     return function<T>(target: Object, property: string | symbol, descriptor?: PropertyDescriptor) {
         const expectedType = Reflect.getMetadata("design:type", target, property);
-        scopes.forEach(decoratedScope => decoratedScope.registerProperty({
+        [universal, ...scopes].forEach(decoratedScope => decoratedScope.registerProperty({
             target, property, expectedType,
         }));
     };
@@ -265,7 +271,7 @@ export function populate<T>(
  *             Can be omitted to populate all properties using the `universal` scope.
  * @param initialClass The class to start populating with.
  *             It can also be invoked with an additional array type.
- * @param arrayType When populating an array, an additional array type must be specified as the thrid argument
+ * @param arrayType When populating an array, an additional array type must be specified as the third argument
  *             and the data is specified as the fourth argument instead.
  *
  * @return A curried function for use in higher order functions if `arg3` is not specified and the populated

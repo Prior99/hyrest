@@ -118,6 +118,44 @@ test("populating a marked and nested structure", () => {
     expect(populate(permissive, C)(input)).toEqual(instancePermissive);
 });
 
+describe("populating with no scope provided", () => {
+    test("with only a class returns a curried function", () => {
+        const currier = populate(A);
+        expect(typeof currier).toBe("function");
+        const populated = currier({ a: "something", b: 7 });
+        expect(populated.constructor).toBe(A);
+        expect(populated.a).toBe("something");
+        expect(populated.b).toBe(7);
+    });
+
+    test("with a class and data provided", () => {
+        const populated = populate(A, { a: "something", b: 7 });
+        expect(populated.constructor).toBe(A);
+        expect(populated.a).toBe("something");
+        expect(populated.b).toBe(7);
+    });
+
+    test("with a class, data and an array type provided", () => {
+        const array = [
+            { a: "something", b: 7 },
+            { a: "another thing", b: 6 },
+        ];
+        const populated = populate(Array, A, array);
+        expect(populated).toMatchSnapshot();
+    });
+
+    test("with a class and an array type provided", () => {
+        const array = [
+            { a: "something", b: 7 },
+            { a: "another thing", b: 6 },
+        ];
+        const currier = populate(Array, A);
+        expect(typeof currier).toBe("function");
+        const populated = currier(array);
+        expect(populated).toMatchSnapshot();
+    });
+});
+
 test("populating and dumping a circular structure", () => {
     const scope1 = createScope();
     const scope2 = createScope();

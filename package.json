@@ -39,7 +39,11 @@
       "^hyrest$": "<rootDir>/packages/hyrest/src",
       "^hyrest-express$": "<rootDir>/packages/hyrest-express/src",
       "^hyrest-mobx$": "<rootDir>/packages/hyrest-mobx/src"
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "jest-setup.ts"
+    ]
   },
   "devDependencies": {
     "@types/enzyme": "^3.1.13",
