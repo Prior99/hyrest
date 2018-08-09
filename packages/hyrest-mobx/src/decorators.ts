@@ -38,12 +38,15 @@ export function hasFields<TContext>(
             const instance = new (target as any)(...args);
             const { fieldProperties } = getFieldsMeta(target);
             fieldProperties.forEach(({ property, modelType }) => {
-                const { expectedType } = universal.propertiesForClass(modelType)
-                    .find(meta => meta.property === property);
-                if (expectedType === Array) {
-                    throw new Error("TODO: Assert that the specified type was set using `@specify`.");
-                    // TODO: Is `instance.prototype` correct?
-                    const arrayType = getSpecifiedType(instance.prototype, property).property();
+                if (modelType === Array) {
+                    const { property: typeCreator } = getSpecifiedType(instance.prototype, property);
+                    if (!typeCreator) {
+                        throw new Error(
+                            "Decorated a property of type Array with @field. Make sure to use @specify. " +
+                            `Check property "${property}" on class "${constructor.name}".`,
+                        );
+                    }
+                    const arrayType = typeCreator();
                     (instance as any)[property] = fieldFactory(arrayType, contextFactory, false);
                 } else {
                     (instance as any)[property] = fieldFactory(modelType, contextFactory, false);

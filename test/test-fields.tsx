@@ -42,7 +42,7 @@ class UserForm extends React.Component {
     public render() {
         return (
             <div>
-                <input value={this.user.nested.email.value} onChange={this.handleChange} />
+                <input value={this.user.nested.email.value || ""} onChange={this.handleChange} />
                 { this.user.nested.email.valid && <p>Valid!</p> }
                 { this.user.nested.email.invalid && <p>Invalid!</p> }
                 { this.user.nested.email.untouched && <p>Please type something!</p> }

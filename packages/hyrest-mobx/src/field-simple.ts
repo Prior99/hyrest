@@ -89,6 +89,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
                 get: () => {
                     const key = property as keyof TModel;
                     if (this._nested[key] !== undefined) { return this._nested[key]; }
+                    const nestedValidation = getPropertyValidation(target, property);
                     // The cast to `any` are neccessary as Typescript cannot deal with this
                     // kind of types. See https://github.com/Microsoft/TypeScript/issues/22628 (for example).
                     if (expectedType === Array) {
@@ -99,6 +100,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
                                 arrayType.property() as Constructable<TModel[keyof TModel]>,
                                 this.contextFactory,
                                 true,
+                                nestedValidation,
                             ) as any;
                     } else {
                         this._nested[key] =
@@ -106,8 +108,10 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
                                 expectedType,
                                 this.contextFactory,
                                 false,
+                                nestedValidation,
                             ) as any;
                     }
+                    return this._nested[key];
                 },
                 enumerable: true,
             });

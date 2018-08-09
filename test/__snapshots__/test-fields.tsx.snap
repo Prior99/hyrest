@@ -14,6 +14,7 @@ exports[`works as expected throughout a journey 1`] = `
   <div>
     <input
       onChange={[Function]}
+      value=""
     />
     <p>
       Please type something!
