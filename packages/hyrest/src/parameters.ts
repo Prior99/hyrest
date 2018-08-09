@@ -35,13 +35,13 @@ export interface BodyParameter {
  *
  * @return An array of all decorated parameters.
  */
-export function getBodyParameters(target: Object, propertyKey: string | symbol): BodyParameter[] {
-    const bodyParameters = Reflect.getMetadata("api:route:bodyparameters", target, propertyKey);
+export function getBodyParameters<T extends Object>(target: T, propertyKey: keyof T): BodyParameter[] {
+    const bodyParameters = Reflect.getMetadata("api:route:bodyparameters", target, propertyKey as string | symbol);
     if (bodyParameters) {
         return bodyParameters;
     }
     const newBodyParameters: BodyParameter[] = [];
-    Reflect.defineMetadata("api:route:bodyparameters", newBodyParameters, target, propertyKey);
+    Reflect.defineMetadata("api:route:bodyparameters", newBodyParameters, target, propertyKey as string | symbol);
     return newBodyParameters;
 }
 
@@ -64,8 +64,8 @@ export function getBodyParameters(target: Object, propertyKey: string | symbol):
  * @return A parameter decorator to inject the body.
  */
 export function body(scope?: Scope): ParameterDecorator {
-    return (target: Object, propertyKey: string, index: number) => {
-        const paramType = Reflect.getMetadata("design:paramtypes", target, propertyKey)[index];
+    return <T extends Object>(target: T, propertyKey: keyof T, index: number) => {
+        const paramType = Reflect.getMetadata("design:paramtypes", target, propertyKey as string | symbol)[index];
         const bodyParameters = getBodyParameters(target, propertyKey);
         bodyParameters.push({
             index, scope, paramType,
@@ -104,13 +104,13 @@ export interface QueryParameter {
  *
  * @return An array of all decorated parameters.
  */
-export function getQueryParameters(target: Object, propertyKey: string | symbol): QueryParameter[] {
-    const queryParameters = Reflect.getMetadata("api:route:queryparameters", target, propertyKey);
+export function getQueryParameters<T extends Object>(target: T, propertyKey: keyof T): QueryParameter[] {
+    const queryParameters = Reflect.getMetadata("api:route:queryparameters", target, propertyKey as string | symbol);
     if (queryParameters) {
         return queryParameters;
     }
     const newQueryParameters: QueryParameter[] = [];
-    Reflect.defineMetadata("api:route:queryparameters", newQueryParameters, target, propertyKey);
+    Reflect.defineMetadata("api:route:queryparameters", newQueryParameters, target, propertyKey as string | symbol);
     return newQueryParameters;
 }
 
@@ -132,7 +132,7 @@ export function getQueryParameters(target: Object, propertyKey: string | symbol)
  * @return A parameter decorator to inject the given query parameter.
  */
 export function query(name: string): ParameterDecorator {
-    return (target: Object, propertyKey: string | symbol, index: number) => {
+    return <T extends Object>(target: T, propertyKey: keyof T, index: number) => {
         const queryParameters = getQueryParameters(target, propertyKey);
         queryParameters.push({
             index,
@@ -166,13 +166,13 @@ export interface UrlParameter {
  *
  * @return An array of all decorated parameters.
  */
-export function getUrlParameters(target: Object, propertyKey: string | symbol): UrlParameter[] {
-    const urlParameters = Reflect.getMetadata("api:route:urlparameters", target, propertyKey);
+export function getUrlParameters<T extends Object>(target: T, propertyKey: keyof T): UrlParameter[] {
+    const urlParameters = Reflect.getMetadata("api:route:urlparameters", target, propertyKey as string | symbol);
     if (urlParameters) {
         return urlParameters;
     }
     const newUrlParameters: UrlParameter[] = [];
-    Reflect.defineMetadata("api:route:urlparameters", newUrlParameters, target, propertyKey);
+    Reflect.defineMetadata("api:route:urlparameters", newUrlParameters, target, propertyKey as string | symbol);
     return newUrlParameters;
 }
 
@@ -194,7 +194,7 @@ export function getUrlParameters(target: Object, propertyKey: string | symbol): 
  * @return A parameter decorator to inject the given Url parameter.
  */
 export function param(name: string): ParameterDecorator {
-    return (target: Object, propertyKey: string, index: number) => {
+    return <T extends Object>(target: T, propertyKey: keyof T, index: number) => {
         const urlParameters = getUrlParameters(target, propertyKey);
         urlParameters.push({
             index,
@@ -224,13 +224,13 @@ export interface ContextParameter {
  *
  * @return An array of all decorated parameters.
  */
-export function getContextParameters(target: Object, propertyKey: string | symbol): ContextParameter[] {
-    const contextParameters = Reflect.getMetadata("api:route:context", target, propertyKey);
+export function getContextParameters<T extends Object>(target: T, propertyKey: keyof T): ContextParameter[] {
+    const contextParameters = Reflect.getMetadata("api:route:context", target, propertyKey as string | symbol);
     if (contextParameters) {
         return contextParameters;
     }
     const newContextParameters: ContextParameter[] = [];
-    Reflect.defineMetadata("api:route:context", newContextParameters, target, propertyKey);
+    Reflect.defineMetadata("api:route:context", newContextParameters, target, propertyKey as string | symbol);
     return newContextParameters;
 }
 
@@ -251,7 +251,7 @@ export function getContextParameters(target: Object, propertyKey: string | symbo
  *
  * @return A parameter decorator to inject the given query parameter.
  */
-export function context(target: Object, propertyKey: string | symbol, index: number): void {
+export function context<T extends Object>(target: T, propertyKey: keyof T, index: number): void {
     const contextParameters = getContextParameters(target, propertyKey);
     contextParameters.push({
         index,

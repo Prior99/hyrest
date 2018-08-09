@@ -100,7 +100,7 @@ export interface ControllerOptions {
     readonly authorizationProvider?: AuthorizationProvider;
 }
 
-export class Controller {
+export class Controller<DecoratedClass> {
     public throwOnError = true;
     public errorHandler: ErrorHandler;
     public baseUrl: string;
@@ -136,7 +136,11 @@ export class Controller {
      *
      * @return The unwrapped answer from the backend.
      */
-    public async wrappedFetch<T>(route: Route, urlParameters: Params, body: any, query: Params): Promise<T> {
+    public async wrappedFetch<T>(
+        route: Route<DecoratedClass>,
+        urlParameters: Params,
+        body: any, query: Params,
+    ): Promise<T> {
         try {
             // Prepare the headers.
             const headers = new Headers();

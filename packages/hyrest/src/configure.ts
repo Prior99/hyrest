@@ -14,7 +14,7 @@ export function configureController(controllerClass: Function | Function[], opti
         controllerClass.forEach(single => configureController(single, options));
         return;
     }
-    const controller: Controller = Reflect.getMetadata("api:controller", controllerClass);
+    const controller: Controller<any> = Reflect.getMetadata("api:controller", controllerClass);
     if (!controller) {
         const name = controllerClass.name;
         throw new Error(`Tried to configure an object which is not a @controller. Check ${name}.`);

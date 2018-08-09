@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`retrieving the constructed model from a nested field structure 1`] = `
+User {
+  "email": "someone@example.com",
+  "pet": Pet {
+    "age": 7,
+  },
+}
+`;
+
 exports[`works as expected throughout a journey 1`] = `
 <UserForm>
   <div>

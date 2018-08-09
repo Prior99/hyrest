@@ -21,15 +21,15 @@ export interface Schema {
  *
  * @see getValidatedProperties
  */
-export interface ValidatedProperty {
-    readonly property: string | symbol;
+export interface ValidatedProperty<T extends Object> {
+    readonly property: keyof T;
     readonly propertyType: Function;
 }
 
 /**
  * A full set of recursive validators featuring schema, array and value validation.
  */
-export interface FullValidator<T, TContext> {
+export interface FullValidator<T extends Object, TContext> {
     /**
      * Call the validator manually with a value and an optional scope to limit the
      * validation to.
@@ -46,11 +46,11 @@ export interface FullValidator<T, TContext> {
     /**
      * Call the function as a parameter decorator.
      */
-    (target: Object, propertyKey: string | symbol, index: number): void;
+    (target: T, propertyKey: keyof T, index: number): void;
     /**
      * Call the function as a property decorator.
      */
-    (target: Object, propertyKey: string, descriptor?: PropertyDescriptor): void;
+    (target: T, propertyKey: keyof T, descriptor?: PropertyDescriptor): void;
     /**
      * Add a set of validators to the validator.
      *
@@ -219,13 +219,13 @@ export async function processValue<T>(
  * @return An options object to which new validators and a converter can be appended. Is always guaranteed to return
  *         an options object.
  */
-export function getParameterValidation<T, TContext>(
-    target: Object, propertyKey: string | symbol, index: number,
+export function getParameterValidation<T extends Object, TContext>(
+    target: T, propertyKey: keyof T, index: number,
 ): ValidationOptions<T, TContext> {
     // Try to retrieve the `Map` of options with the keys being the parameter index and the value being
     // an the options object.
     const map: Map<number, ValidationOptions<T, TContext>> =
-        Reflect.getMetadata("validation:parameters", target, propertyKey);
+        Reflect.getMetadata("validation:parameters", target, propertyKey as string | symbol);
 
     // If no map has been found then this function has never been called for this method before. A new map needs
     // to be created and an empty options object needs to be attached.
@@ -235,7 +235,7 @@ export function getParameterValidation<T, TContext>(
         newMap.set(index, newOptions);
 
         // Define the new key on the reflection metadatas.
-        Reflect.defineMetadata("validation:parameters", newMap, target, propertyKey);
+        Reflect.defineMetadata("validation:parameters", newMap, target, propertyKey as string | symbol);
         return newOptions;
     }
 
@@ -262,13 +262,13 @@ export function getParameterValidation<T, TContext>(
  * @return An array of options objects to which new validators and a converter can be appended.
  * Is always guaranteed to return an array.
  */
-export function getPropertyValidation<T, TContext>(
-    target: Object, propertyKey: string | symbol,
+export function getPropertyValidation<T extends Object, TContext>(
+    target: T, propertyKey: keyof T,
 ): ValidationOptions<T, TContext> {
-    const options = Reflect.getMetadata("validation:property", target, propertyKey);
+    const options = Reflect.getMetadata("validation:property", target, propertyKey as string | symbol);
     if (!options) {
         const newOptions: ValidationOptions<T, TContext> = {};
-        Reflect.defineMetadata("validation:property", newOptions, target, propertyKey);
+        Reflect.defineMetadata("validation:property", newOptions, target, propertyKey as string | symbol);
         return newOptions;
     }
     return options;
@@ -281,10 +281,10 @@ export function getPropertyValidation<T, TContext>(
  *
  * @return A list of validated properties.
  */
-export function getValidatedProperties(target: Object): ValidatedProperty[] {
+export function getValidatedProperties<T extends Object>(target: T): ValidatedProperty<T>[] {
     const properties = Reflect.getMetadata("validation:properties", target);
     if (!properties) {
-        const newProperties: ValidatedProperty[] = [];
+        const newProperties: ValidatedProperty<T>[] = [];
         Reflect.defineMetadata("validation:properties", newProperties, target);
         return newProperties;
     }
@@ -334,7 +334,7 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
     let scopeLimit: Scope;
     let fullValidator: FullValidator<T, TContext>;
     let propertyType: Function;
-    let specifyTypeCreator: TypeCreator;
+    let specifyTypeCreator: TypeCreator<any>;
     const invoke = (value: T, options?: FullValidatorIvokationOptions<TContext>) => {
         const guardedScopeLimit = scopeLimit ? scopeLimit : options.scope;
         const context = options && options.context;
@@ -360,10 +360,10 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         const guardedSchema = inferSchema ? schemaFrom(propertyType || specifyType) : validationSchema;
         return processValue(value, guardedConverter, allValidators, guardedSchema, guardedScopeLimit, context);
     };
-    const propertyDecorator = (target: Object, property: string | symbol, descriptor: PropertyDescriptor) => {
+    const propertyDecorator = (target: T, property: keyof T, descriptor: PropertyDescriptor) => {
         const options = getPropertyValidation(target, property);
         options.fullValidator = fullValidator;
-        propertyType = Reflect.getMetadata("design:type", target, property);
+        propertyType = Reflect.getMetadata("design:type", target, property as string | symbol);
         specifyTypeCreator = getSpecifiedType(target, property).property;
         // If the user decorated an array but forgot the `@specify` decorator or specified it before `@is`,
         // fail early.
@@ -378,10 +378,10 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         scopeDecorator(universal)(target, property, descriptor);
         return;
     };
-    const parameterDecorator = (target: Object, property: string | symbol, index: number) => {
+    const parameterDecorator = (target: T, property: keyof T, index: number) => {
         const options = getParameterValidation(target, property, index);
         options.fullValidator = fullValidator;
-        propertyType = Reflect.getMetadata("design:paramtypes", target, property)[index];
+        propertyType = Reflect.getMetadata("design:paramtypes", target, property as string | symbol)[index];
         specifyTypeCreator = getSpecifiedType(target, property).params.get(index);
     };
     // This function can be called in three ways:

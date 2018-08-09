@@ -33,12 +33,14 @@
     "README.md"
   ],
   "devDependencies": {
+    "@types/invariant": "^2.2.29",
     "typedoc": "^0.11.1",
     "typescript": "^3.0.1"
   },
   "dependencies": {
     "bind-decorator": "^1.0.11",
     "hyrest": "^0.8.0",
+    "invariant": "^2.2.4",
     "mobx": "^5.0.3",
     "reflect-metadata": "^0.1.12"
   }

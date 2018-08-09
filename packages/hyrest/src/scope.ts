@@ -5,47 +5,47 @@ import { allKeys } from "./all-keys";
 import { getTransforms } from "./transform";
 import { isCustomClass } from "./validation";
 
-export type TypeCreator = () => Constructable<any>;
+export type TypeCreator<T> = () => Constructable<T>;
 
-export interface SpecifiedTypes {
+export interface SpecifiedTypes<T> {
     /**
      * Types specified for method's parameters.
      */
-    params: Map<number, TypeCreator>;
+    params: Map<number, TypeCreator<any>>;
     /**
      * The type specified for the property itself.
      */
-    property?: TypeCreator;
+    property?: TypeCreator<T>;
 }
 
-export interface PropertyMeta {
+export interface PropertyMeta<T extends Object = any> {
     /**
      * The prototype of the class on which the property was decorated.
      */
-    readonly target: Object;
+    readonly target: T;
     /**
      * The name of the property that was decorated.
      */
-    readonly property: string | symbol;
+    readonly property: keyof T;
     /**
      * The expected type for this property.
      */
     readonly expectedType: any | any[];
 }
 
-export interface PrecomputedClass {
+export interface PrecomputedClass<T extends Object> {
     /**
      * List of all properties decorated with the `@precompute` decorator.
      */
-    readonly properties: (string | symbol)[];
+    readonly properties: (keyof T)[];
 }
 
-export interface PrecomputedInstance {
+export interface PrecomputedInstance<T extends Object> {
     /**
      * A map of all the values for all `@precompute` decorators used when
      * populating the instance.
      */
-    readonly values: Map<string | symbol, any>;
+    readonly values: Map<keyof T, any>;
 }
 
 function propertyMetaEqual(a: PropertyMeta, b: PropertyMeta) {
@@ -166,8 +166,8 @@ export function createScope() {
  * @see populate
  */
 export function scope(...scopes: Scope[]) {
-    return function<T>(target: Object, property: string | symbol, descriptor?: PropertyDescriptor) {
-        const expectedType = Reflect.getMetadata("design:type", target, property);
+    return function<T extends Object>(target: T, property: keyof T, descriptor?: PropertyDescriptor) {
+        const expectedType = Reflect.getMetadata("design:type", target, property as string | symbol);
         [universal, ...scopes].forEach(decoratedScope => decoratedScope.registerProperty({
             target, property, expectedType,
         }));
@@ -183,13 +183,13 @@ export function scope(...scopes: Scope[]) {
  *
  * @return An object containing the type of the property and a map for all its parameters.
  */
-export function getSpecifiedType(target: Object, property: string | symbol): SpecifiedTypes {
-    let specified = Reflect.getMetadata("specifytype", target, property);
+export function getSpecifiedType<T extends Object>(target: T, property: keyof T): SpecifiedTypes<T[keyof T]> {
+    let specified = Reflect.getMetadata("specifytype", target, property as string | symbol);
     if (typeof specified === "undefined") {
         specified = {
             params: new Map(),
         };
-        Reflect.defineMetadata("specifytype", specified, target, property);
+        Reflect.defineMetadata("specifytype", specified, target, property as string | symbol);
     }
     return specified;
 }
@@ -202,8 +202,8 @@ export function getSpecifiedType(target: Object, property: string | symbol): Spe
  *
  * @return A decorator for a property or a parameter.
  */
-export function specify<T>(factory: TypeCreator) {
-    return function(target: Object, property: string | symbol, arg3?: any) {
+export function specify<T extends Object>(factory: TypeCreator<T[keyof T]>) {
+    return function(target: T, property: keyof T, arg3?: any) {
         const specified = getSpecifiedType(target, property);
         if (typeof arg3 === "number") {
             specified.params.set(arg3, factory);
@@ -319,11 +319,11 @@ export function populate<T>(
             if (typeof dataValue === "undefined") {
                 return undefined;
             }
-            const specifyTypeCreator = getSpecifiedType(target, property).property;
+            const specifyTypeCreator = getSpecifiedType<any>(target, property).property;
             const specifyType = specifyTypeCreator && specifyTypeCreator();
-            const transforms = getTransforms(target, property);
+            const transforms = getTransforms<any>(target, property);
             const populated = internalPopulate(dataValue, expectedType, specifyType);
-            const precomputedClass = getPrecomputedClass(target);
+            const precomputedClass = getPrecomputedClass<any>(target);
             const precomputedInstance = getPrecomputedInstance(instance);
             const value = transforms.propertyTransform ? transforms.propertyTransform(populated) : populated;
             if (precomputedClass.properties.includes(property)) {
@@ -371,7 +371,7 @@ export function populate<T>(
  *
  * @return An object containing all decorated properties of `@precompute`.
  */
-export function getPrecomputedClass(target: Object): PrecomputedClass {
+export function getPrecomputedClass<T extends Object>(target: T): PrecomputedClass<T> {
     let precomputed = Reflect.getMetadata("precomputed:class", target);
     if (typeof precomputed === "undefined") {
         precomputed = { properties: [] };
@@ -388,7 +388,7 @@ export function getPrecomputedClass(target: Object): PrecomputedClass {
  *
  * @return An object containing all values for getters decorated with `@precompute`.
  */
-export function getPrecomputedInstance(instance: Object): PrecomputedInstance {
+export function getPrecomputedInstance<T extends Object>(instance: T): PrecomputedInstance<T> {
     let precomputed = Reflect.getMetadata("precomputed:instance", instance);
     if (typeof precomputed === "undefined") {
         precomputed = { values: new Map() };
@@ -397,7 +397,7 @@ export function getPrecomputedInstance(instance: Object): PrecomputedInstance {
     return precomputed;
 }
 
-export function precompute(target: Object, property: string | symbol, descriptor: PropertyDescriptor) {
+export function precompute<T extends Object>(target: T, property: keyof T, descriptor: PropertyDescriptor) {
     const originalGetter = descriptor.get;
     if (typeof originalGetter !== "function") {
         throw new Error("Only getters can be decorated with @precompute.");

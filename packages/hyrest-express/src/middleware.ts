@@ -30,8 +30,8 @@ import * as HTTP from "http-status-codes";
 /**
  * A wrapper around a `Route` which also carries the Route's parameter injections.
  */
-interface RouteConfiguration {
-    readonly route: Route;
+interface RouteConfiguration<TController> {
+    readonly route: Route<TController>;
     readonly queryParameters: QueryParameter[];
     readonly bodyParameters: BodyParameter[];
     readonly urlParameters: UrlParameter[];
@@ -46,7 +46,7 @@ interface RouteConfiguration {
  *
  * @return An array of all routes present on all supplied controllers.
  */
-function listRoutes(controllerObjects: any[]): RouteConfiguration[] {
+function listRoutes(controllerObjects: any[]): RouteConfiguration<any>[] {
     return controllerObjects.reduce((result, controllerObject) => {
         // Fetch all routes from this particular controller and put the parameter injections next to tehm.
         const routes = getRoutes(controllerObject).map(route => ({
@@ -102,7 +102,7 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
     // Get the actual `Controller` instances for each @controller decorated object.
     // Throws an error if an instance of a class not decorated with @controller has been passed.
     const controllers = controllerObjects.map(controllerObject => {
-        const controller: Controller = Reflect.getMetadata("api:controller", controllerObject.constructor);
+        const controller: Controller<any> = Reflect.getMetadata("api:controller", controllerObject.constructor);
         if (!controller) {
             const name = controllerObject.constructor.name;
             throw new Error(`Added an object to the Hyrest middleware which is not a @controller. Check ${name}.`);
@@ -111,7 +111,7 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
     });
 
     // Get a flat list of all routes present on all controllers.
-    const routes: RouteConfiguration[] = listRoutes(controllerObjects);
+    const routes: RouteConfiguration<any>[] = listRoutes(controllerObjects);
 
     const router: HyrestMiddleware<TContext> = Router() as any;
     routes.forEach(({ route, queryParameters, bodyParameters, urlParameters, contextParameters, controllerObject }) => {
@@ -238,7 +238,9 @@ export function hyrest<TContext>(...controllerObjects: any[]): HyrestMiddleware<
             case "HEAD": router.head(route.url, handler); break;
             case "OPTIONS": router.options(route.url, handler); break;
             case "TRACE": router.trace(route.url, handler); break;
-            default: throw new Error(`Unknown HTTP method ${route.method}. Take a look at ${route.property}.`);
+            default: throw new Error(
+                `Unknown HTTP method ${route.method}. Take a look at ${route.property as string}.`,
+            );
         }
     });
     router.context = (factory: ContextFactory<TContext> | TContext) => {

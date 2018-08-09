@@ -8,8 +8,8 @@ import {
     universal,
 } from "hyrest";
 import { ValidationStatus } from "./validation-status";
-import { ContextFactory } from "./types";
-import { Field } from "./field";
+import { ContextFactory } from "./context-factory";
+import { createField } from "./field";
 
 export interface FieldsMeta {
     fieldProperties: {
@@ -30,14 +30,15 @@ export function getFieldsMeta(target: Object): FieldsMeta {
 
 export function hasFields<TContext>(
     contextFactory: ContextFactory<TContext>,
-    fieldType: Function = Field,
+    fieldFactory: typeof createField = createField,
 ): ClassDecorator {
     const decorator = function <T extends Function>(target: T): T {
         const constructor = function OverloadedConstructor(this: any, ...args: any[]): any {
             const instance = new (target as any)(...args);
             const { fieldProperties } = getFieldsMeta(target);
             fieldProperties.forEach(({ property, modelType }) => {
-                (instance as any)[property] = new Field(modelType, contextFactory);
+                const propertyMeta = universal.propertiesForClass(modelType).find(meta => meta.property === property);
+                (instance as any)[property] = fieldFactory(propertyMeta, contextFactory);
             });
             return instance;
         };

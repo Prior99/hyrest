@@ -25,15 +25,15 @@ export interface TransformOptions {
  *
  * @return An object containing a map with all decorated parameters and the transformer for the property.
  */
-export function getTransforms(target: Object, propertyKey: string | symbol): TransformOptions {
-    const transformOptions = Reflect.getMetadata("transformers", target, propertyKey);
+export function getTransforms<T extends Object>(target: T, propertyKey: keyof T): TransformOptions {
+    const transformOptions = Reflect.getMetadata("transformers", target, propertyKey as string | symbol);
     if (transformOptions) {
         return transformOptions;
     }
     const newTransformOptions: TransformOptions = {
         parameterTransforms: new Map(),
     };
-    Reflect.defineMetadata("transformers", newTransformOptions, target, propertyKey);
+    Reflect.defineMetadata("transformers", newTransformOptions, target, propertyKey as string | symbol);
     return newTransformOptions;
 }
 
@@ -46,7 +46,7 @@ export function getTransforms(target: Object, propertyKey: string | symbol): Tra
  * @return A decorator which can be used to decorate properties and parameters.
  */
 export function transform<T, U>(transformer: Transformer<T, U>) {
-    return (target: Object, property: string | symbol, arg3?: any) => {
+    return <V extends Object>(target: V, property: keyof V, arg3?: any) => {
         const transforms = getTransforms(target, property);
         if (typeof arg3 === "number") {
             // Called as a parameter decorator.

@@ -2,7 +2,7 @@ import * as React from "react";
 import { mount } from "enzyme";
 import { observer } from "mobx-react";
 import { bind } from "bind-decorator";
-import { schemaFrom, is, length, oneOf, email, DataType, required, range } from "hyrest";
+import { specify, schemaFrom, is, length, oneOf, email, DataType, required, range } from "hyrest";
 import { field, hasFields, Field } from "hyrest-mobx";
 
 class Pet {
@@ -80,4 +80,24 @@ test("retrieving the constructed model from a nested field structure", async () 
     a.user.nested.email.update("someone@example.com");
 
     expect(a.user.value).toMatchSnapshot();
+});
+
+test("with an array in the structure", async () => {
+    class UserList {
+        @is() @specify(() => User)
+        public users: User[];
+    }
+
+    @hasFields(() => ctx)
+    class A extends React.Component {
+        @field(UserList) public userList: Field<UserList>;
+
+        public render() {
+            return (
+                <ul>
+                    {}
+                </ul>
+            );
+        }
+    }
 });

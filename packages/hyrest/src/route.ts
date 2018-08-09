@@ -20,16 +20,16 @@ export interface RouteOptions {
 /**
  * A route which can be called via REST.
  */
-export interface Route {
+export interface Route<T extends Object> {
     /**
      * The target object which had been decorated with this route.
      * This is the class decorated with @controller.
      */
-    readonly target: Object;
+    readonly target: T;
     /**
      * The name of the method decorated with @route on `target`.
      */
-    readonly property: string;
+    readonly property: keyof T;
     /**
      * The HTTP method ("GET", "POST", ...).
      */
@@ -83,12 +83,12 @@ export interface RouteFunction {
  *
  * @return An array of all routes on the given `target.
  */
-export function getRoutes(target: Object): Route[] {
+export function getRoutes<T extends Object>(target: T): Route<T>[] {
     const routes = Reflect.getMetadata("api:routes", target);
     if (routes) {
         return routes;
     }
-    const newRoutes: Route[] = [];
+    const newRoutes: Route<T>[] = [];
     Reflect.defineMetadata("api:routes", newRoutes, target);
     return newRoutes;
 }
@@ -112,10 +112,10 @@ export function getRoutes(target: Object): Route[] {
  * @return A method decorator.
  */
 export function route(method: HTTPMethod, url: string, options?: RouteOptions): RouteFunction {
-    const fn: any = function (target: Object, property: string, descriptor: PropertyDescriptor) {
+    const fn: any = function<T>(target: T, property: keyof T, descriptor: PropertyDescriptor) {
         const { scope, returnType } = fn;
         // Insert the new `Route` into the reflection metadata.
-        const routeMeta = { target, property, method, url, options, scope, returnType };
+        const routeMeta: Route<T> = { target, property, method, url, options, scope, returnType };
         const routes = getRoutes(target);
         routes.push(routeMeta);
 
@@ -129,7 +129,7 @@ export function route(method: HTTPMethod, url: string, options?: RouteOptions): 
         const originalFunction = descriptor.value;
         descriptor.value = function (...args: any[]) {
             // Get the parent @controller and throw an error if the route was created in a non-@controller class.
-            const controller: Controller = Reflect.getMetadata("api:controller", target.constructor);
+            const controller: Controller<T> = Reflect.getMetadata("api:controller", target.constructor);
             if (!controller) {
                 const name = target.constructor.name;
                 throw new Error(`Found @route on a class without @controller. Take a look at ${name}.`);

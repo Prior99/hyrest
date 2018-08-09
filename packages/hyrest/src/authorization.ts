@@ -86,11 +86,11 @@ export function noauth<T extends Function, TContext, TRequest>(
     return configureAuthorization<T, TContext, TRequest>(arg1 || {}, arg2, arg3, AuthorizationMode.NOAUTH);
 }
 
-export function getAuthorization<TContext, TRequest>(
-    target: Object,
-    property: string | symbol,
+export function getAuthorization<T extends Object, TContext, TRequest>(
+    target: T,
+    property: keyof T,
 ): FullAuthorizationOptions<TContext, TRequest> {
-    const routeAuthorization = Reflect.getMetadata("api:authorization", target, property);
+    const routeAuthorization = Reflect.getMetadata("api:authorization", target, property as string | symbol);
     if (typeof routeAuthorization !== "undefined") {
         return routeAuthorization;
     }
