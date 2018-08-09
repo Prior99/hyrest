@@ -1,4 +1,4 @@
-import { PropertyMeta, getPropertyValidation, getSpecifiedType } from "hyrest";
+import { Constructable, PropertyMeta, getPropertyValidation, getSpecifiedType } from "hyrest";
 import { FieldArray } from "./field-array";
 import { FieldSimple } from "./field-simple";
 import { ContextFactory } from "./context-factory";
@@ -18,32 +18,25 @@ export type Field<TModel, TContext> =
     );
 
 export function createField<TModel extends any[], TContext>(
-    propertyMeta: PropertyMeta,
+    modelType: Constructable<TModel[0]>,
     contextFactory: ContextFactory<TContext>,
+    array: true,
 ): FieldArray<TModel[0], TContext>;
 export function createField<TModel, TContext>(
-    propertyMeta: PropertyMeta,
+    modelType: Constructable<TModel>,
     contextFactory: ContextFactory<TContext>,
+    array: false,
 ): FieldSimple<TModel, TContext>;
 export function createField<TModel, TContext>(
-    { expectedType, target, property }: PropertyMeta,
+    modelType: Constructable<TModel>,
     contextFactory: ContextFactory<TContext>,
+    array: boolean,
 ): Field<TModel, TContext> {
     // The casts to `any` are neccessary as Typescript cannot deal with this
     // kind of types. See https://github.com/Microsoft/TypeScript/issues/22628 (for example).
-    if (expectedType === Array) {
-        const modelType = getSpecifiedType(target, property);
-        type TModelArray = TModel & any[];
-        return new FieldArray<TModelArray, TContext>(
-            modelType.property(),
-            contextFactory,
-            getPropertyValidation(target, property),
-        ) as any;
+    if (array) {
+        return new FieldArray<TModel, TContext>(modelType, contextFactory) as any;
     } else {
-        return new FieldSimple<TModel, TContext>(
-            expectedType,
-            contextFactory,
-            getPropertyValidation(target, property),
-        ) as any;
+        return new FieldSimple<TModel, TContext>(modelType, contextFactory) as any;
     }
 }

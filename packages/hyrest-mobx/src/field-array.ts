@@ -37,7 +37,7 @@ export class FieldArray<TModel, TContext> extends Array<TModel> implements Reado
     constructor (
         modelType: Constructable<TModel>,
         contextFactory: ContextFactory<TContext>,
-        validation: ValidationOptions<TModel, TContext>,
+        validation?: ValidationOptions<TModel, TContext>,
     ) {
         super();
         this.contextFactory = contextFactory;

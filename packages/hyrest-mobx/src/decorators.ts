@@ -6,6 +6,7 @@ import {
     populate,
     ValidationOptions,
     universal,
+    getSpecifiedType,
 } from "hyrest";
 import { ValidationStatus } from "./validation-status";
 import { ContextFactory } from "./context-factory";
@@ -37,8 +38,16 @@ export function hasFields<TContext>(
             const instance = new (target as any)(...args);
             const { fieldProperties } = getFieldsMeta(target);
             fieldProperties.forEach(({ property, modelType }) => {
-                const propertyMeta = universal.propertiesForClass(modelType).find(meta => meta.property === property);
-                (instance as any)[property] = fieldFactory(propertyMeta, contextFactory);
+                const { expectedType } = universal.propertiesForClass(modelType)
+                    .find(meta => meta.property === property);
+                if (expectedType === Array) {
+                    throw new Error("TODO: Assert that the specified type was set using `@specify`.");
+                    // TODO: Is `instance.prototype` correct?
+                    const arrayType = getSpecifiedType(instance.prototype, property).property();
+                    (instance as any)[property] = fieldFactory(arrayType, contextFactory, false);
+                } else {
+                    (instance as any)[property] = fieldFactory(modelType, contextFactory, false);
+                }
             });
             return instance;
         };

@@ -7,6 +7,7 @@ import {
     populate,
     ValidationOptions,
     universal,
+    getSpecifiedType,
 } from "hyrest";
 import { observable, computed, action } from "mobx";
 import { ValidationStatus } from "./validation-status";
@@ -82,16 +83,31 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
         }, {} as Fields<TModel, TContext>);
         // Create the outfacing `nested` property: Create a getter for each property which lazily initializes
         // and caches the real value in `_nested`.
-        this.nested = this.properties.reduce((result, propertyMeta) => {
+        this.nested = this.properties.reduce((result, { property, expectedType, target }) => {
             // Create a getter on the `fields` property which will lazily initialize all `Field`s.
-            Object.defineProperty(result, propertyMeta.property, {
+            Object.defineProperty(result, property, {
                 get: () => {
-                    const key = propertyMeta.property as keyof TModel;
+                    const key = property as keyof TModel;
                     if (this._nested[key] !== undefined) { return this._nested[key]; }
                     // The cast to `any` are neccessary as Typescript cannot deal with this
                     // kind of types. See https://github.com/Microsoft/TypeScript/issues/22628 (for example).
-                    this._nested[key] =
-                        createField<TModel[keyof TModel], TContext>(propertyMeta, this.contextFactory) as any;
+                    if (expectedType === Array) {
+                        const arrayType = getSpecifiedType(target, property);
+                        throw new Error("TODO: Assert that the specified type was set using `@specify`.");
+                        this._nested[key] =
+                            createField(
+                                arrayType.property() as Constructable<TModel[keyof TModel]>,
+                                this.contextFactory,
+                                true,
+                            ) as any;
+                    } else {
+                        this._nested[key] =
+                            createField(
+                                expectedType,
+                                this.contextFactory,
+                                false,
+                            ) as any;
+                    }
                 },
                 enumerable: true,
             });
