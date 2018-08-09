@@ -8,7 +8,7 @@ import { Scope, getSpecifiedType, TypeCreator, scope as scopeDecorator, universa
 import { Processed } from "./processed";
 
 export interface ValidationOptions<T, TContext> {
-    fullValidator?: FullValidator<T, TContext>;
+    fullValidator?: FullValidator<T[keyof T], TContext>;
 }
 
 export interface Schema {
@@ -29,7 +29,7 @@ export interface ValidatedProperty<T extends Object> {
 /**
  * A full set of recursive validators featuring schema, array and value validation.
  */
-export interface FullValidator<T extends Object, TContext> {
+export interface FullValidator<T, TContext> {
     /**
      * Call the validator manually with a value and an optional scope to limit the
      * validation to.
@@ -46,11 +46,11 @@ export interface FullValidator<T extends Object, TContext> {
     /**
      * Call the function as a parameter decorator.
      */
-    (target: T, propertyKey: keyof T, index: number): void;
+    <Parent>(target: Parent, propertyKey: keyof Parent, index: number): void;
     /**
      * Call the function as a property decorator.
      */
-    (target: T, propertyKey: keyof T, descriptor?: PropertyDescriptor): void;
+    <Parent>(target: Parent, propertyKey: keyof Parent, descriptor?: PropertyDescriptor): void;
     /**
      * Add a set of validators to the validator.
      *
@@ -321,21 +321,24 @@ export interface FullValidatorIvokationOptions<TContext> {
  *
  * @return A decorator for a parameter in a @route method.
  */
-export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TContext> {
+export function is<ValueType, TContext>(converter?: Converter<ValueType>): FullValidator<ValueType, TContext>;
+export function is<U, K extends keyof U, ValueType extends U[K], TContext>(
+    converter?: Converter<ValueType>,
+): FullValidator<ValueType, TContext> {
     // A list of all validators the check the input with.
-    const validators: Validator<T>[] = [];
+    const validators: Validator<ValueType>[] = [];
     // A factory function to call with the current context of the
     // decorator which will return a list of validators.
-    let validatorFactory: (ctx: any) => Validator<T>[] | Validator<T>;
+    let validatorFactory: (ctx: any) => Validator<ValueType>[] | Validator<ValueType>;
     // An optional schema to match the inputs against.
     let validationSchema: Schema;
     // An optional scope to limit the schema validation to. Only possible if the
     // schema was inferred from a class.
     let scopeLimit: Scope;
-    let fullValidator: FullValidator<T, TContext>;
+    let fullValidator: FullValidator<ValueType, TContext>;
     let propertyType: Function;
     let specifyTypeCreator: TypeCreator<any>;
-    const invoke = (value: T, options?: FullValidatorIvokationOptions<TContext>) => {
+    const invoke = (value: ValueType, options?: FullValidatorIvokationOptions<TContext>) => {
         const guardedScopeLimit = scopeLimit ? scopeLimit : options.scope;
         const context = options && options.context;
         const factoryResult = validatorFactory ? validatorFactory(context) : [];
@@ -360,7 +363,7 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         const guardedSchema = inferSchema ? schemaFrom(propertyType || specifyType) : validationSchema;
         return processValue(value, guardedConverter, allValidators, guardedSchema, guardedScopeLimit, context);
     };
-    const propertyDecorator = (target: T, property: keyof T, descriptor: PropertyDescriptor) => {
+    const propertyDecorator = (target: U, property: keyof U, descriptor: PropertyDescriptor) => {
         const options = getPropertyValidation(target, property);
         options.fullValidator = fullValidator;
         propertyType = Reflect.getMetadata("design:type", target, property as string | symbol);
@@ -378,7 +381,7 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         scopeDecorator(universal)(target, property, descriptor);
         return;
     };
-    const parameterDecorator = (target: T, property: keyof T, index: number) => {
+    const parameterDecorator = (target: U, property: keyof U, index: number) => {
         const options = getParameterValidation(target, property, index);
         options.fullValidator = fullValidator;
         propertyType = Reflect.getMetadata("design:paramtypes", target, property as string | symbol)[index];
@@ -390,7 +393,7 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
     // 3. As a parameter decorator.
     fullValidator = (...args: any[]) => {
         if (args.length !== 3) {
-            return invoke(args[0] as T, args[1] as FullValidatorIvokationOptions<TContext>);
+            return invoke(args[0] as ValueType, args[1] as FullValidatorIvokationOptions<TContext>);
         }
         // Either a parameter or property decorator.
         if (typeof args[2] === "number") {
@@ -400,11 +403,11 @@ export function is<T, TContext>(converter?: Converter<T>): FullValidator<T, TCon
         propertyDecorator(args[0], args[1], args[2]);
     };
     // Create all configuration functions on `fullValidator` for the builder pattern.
-    fullValidator.validate = (...newValidators: Validator<T>[]) => {
+    fullValidator.validate = (...newValidators: Validator<ValueType>[]) => {
         validators.push(...newValidators);
         return fullValidator;
     };
-    fullValidator.validateCtx = (factory: (ctx: TContext) => (Validator<T>[] | Validator<T>)) => {
+    fullValidator.validateCtx = (factory: (ctx: TContext) => (Validator<ValueType>[] | Validator<ValueType>)) => {
         validatorFactory = factory;
         return fullValidator;
     };

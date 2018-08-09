@@ -43,7 +43,12 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "jest-setup.ts"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": true
+      }
+    }
   },
   "devDependencies": {
     "@types/enzyme": "^3.1.13",

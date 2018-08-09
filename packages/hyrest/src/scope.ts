@@ -202,8 +202,8 @@ export function getSpecifiedType<T extends Object>(target: T, property: keyof T)
  *
  * @return A decorator for a property or a parameter.
  */
-export function specify<T extends Object>(factory: TypeCreator<T[keyof T]>) {
-    return function(target: T, property: keyof T, arg3?: any) {
+export function specify(factory: TypeCreator<any>) {
+    return function<T extends Object>(target: T, property: keyof T, arg3?: any) {
         const specified = getSpecifiedType(target, property);
         if (typeof arg3 === "number") {
             specified.params.set(arg3, factory);
