@@ -21,6 +21,19 @@ User {
 }
 `;
 
+exports[`updating with an unkown key 1`] = `
+User {
+  "email": "someone@example.com",
+  "name": "someone",
+}
+`;
+
+exports[`updating with an unvalidated property 1`] = `
+Something {
+  "prop": "some value",
+}
+`;
+
 exports[`validating a nested field structure 1`] = `
 UserList {
   "users": Array [

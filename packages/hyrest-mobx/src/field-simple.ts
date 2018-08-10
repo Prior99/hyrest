@@ -179,6 +179,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
                 if (field instanceof FieldSimple) {
                     return field.update(newValue[modelKey]);
                 }
+                /* istanbul ignore else */
                 if (field instanceof FieldArray) {
                     return field.update(newValue[modelKey] as TModel[keyof TModel] & any[]);
                 }

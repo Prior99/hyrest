@@ -173,6 +173,54 @@ test("with an array directly in the decorator", async () => {
     expect(a.users.status).toBe(ValidationStatus.INVALID);
 });
 
+test("updating with an unvalidated property", () => {
+    const someScope = createScope();
+
+    class Something {
+        @scope(someScope)
+        public prop: string;
+    }
+
+    @hasFields(() => ctx)
+    class A {
+        @field(Something) public something: Field<Something>;
+    }
+
+    const a = new A();
+    a.something.update({
+        prop: "some value",
+    } as any);
+    expect(a.something.value).toMatchSnapshot();
+    expect(a.something.status).toBe(ValidationStatus.UNTOUCHED);
+});
+
+test("updating with an unkown key", () => {
+    @hasFields(() => ctx)
+    class A {
+        @field(User) public user: Field<User>;
+    }
+
+    const a = new A();
+    a.user.update({
+        name: "someone",
+        email: "someone@example.com",
+        anotherKey: "some weird value",
+    } as any);
+    expect(a.user.value).toMatchSnapshot();
+});
+
+test("updating with a nested array", () => {
+    @hasFields(() => ctx)
+    class A {
+        @field(UserList) public users: Field<UserList>;
+    }
+
+    const a = new A();
+    a.users.update({
+        users: [],
+    });
+});
+
 test("with an array directly in the decorator missing the @specify decorator", () => {
     @hasFields(() => ctx)
     class A {
