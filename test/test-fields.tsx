@@ -3,28 +3,33 @@ import { mount } from "enzyme";
 import { observer } from "mobx-react";
 import { bind } from "bind-decorator";
 import { specify, schemaFrom, is, length, oneOf, email, DataType, required, range } from "hyrest";
-import { field, hasFields, Field } from "hyrest-mobx";
+import { field, hasFields, Field, ValidationStatus } from "hyrest-mobx";
 
 class Pet {
     @is().validate(length(5, 10), required)
-    public name: string;
+    public name?: string;
 
     @is(DataType.int).validate(required, range(0, 10))
-    public age: number;
+    public age?: number;
 
     @is().validate(oneOf("cat", "dog"), required)
-    public type: "cat" | "dog";
+    public type?: "cat" | "dog";
 }
 
 class User {
     @is().validate(length(5, 10), required)
-    public name: string;
+    public name?: string;
 
     @is().validate(email, required)
-    public email: string;
+    public email?: string;
 
     @is()
-    public pet: Pet;
+    public pet?: Pet;
+}
+
+class UserList {
+    @is() @specify(() => User)
+    public users?: User[];
 }
 
 const ctx = {
@@ -88,6 +93,56 @@ test("updating with a nested field structure", async () => {
     expect(a.user.value).toMatchSnapshot();
 });
 
+test("validating a nested field structure", async () => {
+    @hasFields(() => ctx)
+    class A {
+        @field(UserList) public users: Field<UserList>;
+    }
+
+    const a = new A();
+    expect(a.users.status).toBe(ValidationStatus.UNTOUCHED);
+    await a.users.update({
+        users: [
+            {
+                email: "someone@example.com",
+                name: "someone",
+                pet: {
+                    type: "dog",
+                    name: "Bonkers",
+                    age: 7,
+                },
+            }, {
+                email: "anotherone@example.com",
+                name: "anotherone",
+                pet: {
+                    type: "cat",
+                    name: "Kitty",
+                    age: 3,
+                },
+            }, {
+                email: "third@example.com",
+                name: "thirdy",
+                pet: {
+                    type: "cat",
+                    name: "Bello",
+                    age: 1,
+                },
+            },
+        ],
+    });
+    expect(a.users.value).toMatchSnapshot();
+    expect(a.users.status).toBe(ValidationStatus.VALID);
+
+    a.users.nested.users
+        .find(subField => subField.nested.name.value === "anotherone")
+        .update({ email: "invalid-email" });
+    expect(a.users.value).toMatchSnapshot();
+    expect(a.users.status).toBe(ValidationStatus.IN_PROGRESS);
+
+    await new Promise(resolve => setTimeout(resolve));
+    expect(a.users.status).toBe(ValidationStatus.INVALID);
+});
+
 test("retrieving the constructed model from a nested field structure", async () => {
     @hasFields(() => ctx)
     class A {
@@ -102,11 +157,6 @@ test("retrieving the constructed model from a nested field structure", async () 
 });
 
 test("with an array in the structure", async () => {
-    class UserList {
-        @is() @specify(() => User)
-        public users: User[];
-    }
-
     @observer @hasFields(() => ctx)
     class UserListForm extends React.Component {
         @field(UserList) public userList: Field<UserList>;

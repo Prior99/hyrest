@@ -19,7 +19,7 @@ export function mergeValidationStatus(statusA: ValidationStatus, statusB: Valida
 
 }
 
-export function combineValidationStatus(status: ValidationStatus[]) {
-    // return status.reduce((result, current) => mergeValidationStatus);
-    throw new Error("TODO");
+export function combineValidationStatus(status: ValidationStatus[]): ValidationStatus {
+    if (status.length === 0) { return ValidationStatus.UNTOUCHED; }
+    return status.reduce((result, current) => mergeValidationStatus(result, current));
 }

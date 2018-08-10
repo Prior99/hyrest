@@ -21,6 +21,74 @@ User {
 }
 `;
 
+exports[`validating a nested field structure 1`] = `
+UserList {
+  "users": Array [
+    User {
+      "email": "someone@example.com",
+      "name": "someone",
+      "pet": Pet {
+        "age": 7,
+        "name": "Bonkers",
+        "type": "dog",
+      },
+    },
+    User {
+      "email": "anotherone@example.com",
+      "name": "anotherone",
+      "pet": Pet {
+        "age": 3,
+        "name": "Kitty",
+        "type": "cat",
+      },
+    },
+    User {
+      "email": "third@example.com",
+      "name": "thirdy",
+      "pet": Pet {
+        "age": 1,
+        "name": "Bello",
+        "type": "cat",
+      },
+    },
+  ],
+}
+`;
+
+exports[`validating a nested field structure 2`] = `
+UserList {
+  "users": Array [
+    User {
+      "email": "someone@example.com",
+      "name": "someone",
+      "pet": Pet {
+        "age": 7,
+        "name": "Bonkers",
+        "type": "dog",
+      },
+    },
+    User {
+      "email": "invalid-email",
+      "name": "anotherone",
+      "pet": Pet {
+        "age": 3,
+        "name": "Kitty",
+        "type": "cat",
+      },
+    },
+    User {
+      "email": "third@example.com",
+      "name": "thirdy",
+      "pet": Pet {
+        "age": 1,
+        "name": "Bello",
+        "type": "cat",
+      },
+    },
+  ],
+}
+`;
+
 exports[`with an array in the structure 1`] = `
 <UserListForm>
   <div>

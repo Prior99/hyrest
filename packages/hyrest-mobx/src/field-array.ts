@@ -8,19 +8,12 @@ import {
     universal,
 } from "hyrest";
 import { observable, computed, action } from "mobx";
-import { ValidationStatus } from "./validation-status";
+import { ValidationStatus, combineValidationStatus } from "./validation-status";
 import { ContextFactory } from "./context-factory";
 import { BaseField } from "./base-field";
 import { Field, createField } from "./field";
 
 export class FieldArray<TModel, TContext> implements BaseField<TModel[]> {
-    readonly [n: number]: Field<TModel, TContext>;
-
-    /**
-     * The validation status for this field.
-     */
-    @observable public status = ValidationStatus.UNTOUCHED;
-
     /**
      * The actual fields.
      */
@@ -175,5 +168,17 @@ export class FieldArray<TModel, TContext> implements BaseField<TModel[]> {
         fn: (value: Field<TModel, TContext>, index: number, array: FieldArray<TModel, TContext>) => boolean,
     ): number {
         return this.fields.findIndex((value, index) => fn(value, index, this));
+    }
+
+    public at(index: number): Field<TModel, TContext> {
+        return this.fields[index];
+    }
+
+    public valueAt(index: number): TModel {
+        return this.fields[index].value as TModel;
+    }
+
+    @computed public get status(): ValidationStatus {
+        return combineValidationStatus(this.fields.map(field => field.status));
     }
 }

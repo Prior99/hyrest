@@ -10,7 +10,7 @@ import {
     getSpecifiedType,
 } from "hyrest";
 import { observable, computed, action } from "mobx";
-import { ValidationStatus } from "./validation-status";
+import { ValidationStatus, combineValidationStatus } from "./validation-status";
 import { ContextFactory } from "./context-factory";
 import { BaseField } from "./base-field";
 import { Fields } from "./fields";
@@ -21,7 +21,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
     /**
      * The validation status for this field.
      */
-    @observable public status = ValidationStatus.UNTOUCHED;
+    @observable private _status = ValidationStatus.UNTOUCHED;
 
     /**
      * Nested fields of this field.
@@ -187,17 +187,30 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
         }
         this.model = newValue;
         if (this.validation.fullValidator) {
-            this.status = ValidationStatus.IN_PROGRESS;
+            this._status = ValidationStatus.IN_PROGRESS;
             const processed = await this.validation.fullValidator(
                 newValue,
                 { context: this.contextFactory() },
             );
-            this.status = processed.hasErrors ? ValidationStatus.INVALID : ValidationStatus.VALID;
+            this._status = processed.hasErrors ? ValidationStatus.INVALID : ValidationStatus.VALID;
         }
     }
 
     @bind @action public async reset() {
         this.initializeNested();
-        this.status = ValidationStatus.UNTOUCHED;
+        this._status = ValidationStatus.UNTOUCHED;
+    }
+
+    @computed public get status(): ValidationStatus {
+        if (this.isManaged) {
+            const statusArray: ValidationStatus[] = Object.keys(this._nested)
+                .map(key => {
+                    const field = this._nested[key as keyof TModel];
+                    if (typeof field === "undefined") { return ValidationStatus.UNTOUCHED; }
+                    return field.status;
+                });
+            return combineValidationStatus(statusArray);
+        }
+        return this._status;
     }
 }
