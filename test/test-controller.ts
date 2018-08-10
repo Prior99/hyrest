@@ -22,7 +22,7 @@ import {
     param,
 } from "hyrest";
 
-let exampleController: Controller;
+let exampleController: Controller<any>;
 
 beforeEach(() => {
     exampleController = new Controller({

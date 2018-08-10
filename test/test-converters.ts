@@ -1,4 +1,4 @@
-import { DataType, is, length, required } from "hyrest";
+import { FullValidator, DataType, is, length, required } from "hyrest";
 
 [
     "10",
@@ -105,7 +105,7 @@ import { DataType, is, length, required } from "hyrest";
             undefined,
         ],
     },
-].forEach(({ dataType, tests }) => {
+].forEach(({ dataType, tests }: { dataType: FullValidator<any, any>, tests: any[][] }) => {
     tests.forEach(value => {
         test("arr with a specific datatype and input detects it as expected", async () => {
             expect(await DataType.arr(dataType)(value)).toMatchSnapshot();

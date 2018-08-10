@@ -103,7 +103,7 @@ test("A hyrest middleware with a special authorization check", async () => {
     @auth
     @controller({ mode: ControllerMode.SERVER })
     class TestController {
-        @route("GET", "/test") @auth({ check: req => req.query["extra"] === "true" })
+        @route("GET", "/test") @auth({ check: (req: Request) => req.query["extra"] === "true" })
         public method() { mock(); return ok(); }
     }
 
