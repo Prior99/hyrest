@@ -30,12 +30,12 @@ exports[`mergeValidationStatus(untouched, invalid) 1`] = `"invalid"`;
 
 exports[`mergeValidationStatus(untouched, untouched) 1`] = `"untouched"`;
 
-exports[`mergeValidationStatus(untouched, valid) 1`] = `"untouched"`;
+exports[`mergeValidationStatus(untouched, valid) 1`] = `"valid"`;
 
 exports[`mergeValidationStatus(valid, in progress) 1`] = `"in progress"`;
 
 exports[`mergeValidationStatus(valid, invalid) 1`] = `"invalid"`;
 
-exports[`mergeValidationStatus(valid, untouched) 1`] = `"untouched"`;
+exports[`mergeValidationStatus(valid, untouched) 1`] = `"valid"`;
 
 exports[`mergeValidationStatus(valid, valid) 1`] = `"valid"`;

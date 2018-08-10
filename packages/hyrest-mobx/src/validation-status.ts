@@ -12,10 +12,10 @@ export function mergeValidationStatus(statusA: ValidationStatus, statusB: Valida
     if (statusA === ValidationStatus.INVALID || statusB === ValidationStatus.INVALID) {
         return ValidationStatus.INVALID;
     }
-    if (statusA === ValidationStatus.UNTOUCHED || statusB === ValidationStatus.UNTOUCHED) {
-        return ValidationStatus.UNTOUCHED;
+    if (statusA === ValidationStatus.VALID || statusB === ValidationStatus.VALID) {
+        return ValidationStatus.VALID;
     }
-    return ValidationStatus.VALID;
+    return ValidationStatus.UNTOUCHED;
 
 }
 

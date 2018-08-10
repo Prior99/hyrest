@@ -39,7 +39,7 @@ export function hasFields<TContext>(
             const { fieldProperties } = getFieldsMeta(target);
             fieldProperties.forEach(({ property, modelType }) => {
                 if (modelType === Array) {
-                    const { property: typeCreator } = getSpecifiedType(instance.prototype, property);
+                    const { property: typeCreator } = getSpecifiedType(target.prototype, property as keyof T);
                     if (!typeCreator) {
                         throw new Error(
                             "Decorated a property of type Array with @field. Make sure to use @specify. " +
@@ -47,7 +47,7 @@ export function hasFields<TContext>(
                         );
                     }
                     const arrayType = typeCreator();
-                    (instance as any)[property] = fieldFactory(arrayType, contextFactory, false);
+                    (instance as any)[property] = fieldFactory(arrayType, contextFactory, true);
                 } else {
                     (instance as any)[property] = fieldFactory(modelType, contextFactory, false);
                 }

@@ -89,6 +89,39 @@ UserList {
 }
 `;
 
+exports[`with a nested array missing the @specify decorator 1`] = `"Accessing a property of type Array without being decorated by  @specify. Check property \\"users\\" on class \\"BrokenUserList\\"."`;
+
+exports[`with an array directly in the decorator 1`] = `
+Array [
+  User {
+    "email": "someone@example.com",
+    "name": "someone",
+  },
+  User {
+    "email": "anotherone@example.com",
+    "name": "anotherone",
+  },
+]
+`;
+
+exports[`with an array directly in the decorator 2`] = `
+Array [
+  User {
+    "email": "someone@example.com",
+    "name": "someone",
+  },
+  User {
+    "email": "anotherone@example.com",
+    "name": "anotherone",
+  },
+  User {
+    "email": "invalid",
+  },
+]
+`;
+
+exports[`with an array directly in the decorator missing the @specify decorator 1`] = `"Decorated a property of type Array with @field. Make sure to use @specify. Check property \\"users\\" on class \\"A\\"."`;
+
 exports[`with an array in the structure 1`] = `
 <UserListForm>
   <div>

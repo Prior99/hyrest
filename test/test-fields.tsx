@@ -2,7 +2,7 @@ import * as React from "react";
 import { mount } from "enzyme";
 import { observer } from "mobx-react";
 import { bind } from "bind-decorator";
-import { specify, schemaFrom, is, length, oneOf, email, DataType, required, range } from "hyrest";
+import { scope, createScope,specify, schemaFrom, is, length, oneOf, email, DataType, required, range } from "hyrest";
 import { field, hasFields, Field, ValidationStatus } from "hyrest-mobx";
 
 class Pet {
@@ -154,6 +154,49 @@ test("retrieving the constructed model from a nested field structure", async () 
     a.user.nested.email.update("someone@example.com");
 
     expect(a.user.value).toMatchSnapshot();
+});
+
+test("with an array directly in the decorator", async () => {
+    @hasFields(() => ctx)
+    class A {
+        @specify(() => User) @field(Array) public users: Field<User[]>;
+    }
+
+    const a = new A();
+    expect(a.users.status).toBe(ValidationStatus.UNTOUCHED);
+    await a.users.add({ email: "someone@example.com", name: "someone" });
+    await a.users.add({ email: "anotherone@example.com", name: "anotherone" });
+    expect(a.users.value).toMatchSnapshot();
+    expect(a.users.status).toBe(ValidationStatus.VALID);
+    await a.users.add({ email: "invalid"});
+    expect(a.users.value).toMatchSnapshot();
+    expect(a.users.status).toBe(ValidationStatus.INVALID);
+});
+
+test("with an array directly in the decorator missing the @specify decorator", () => {
+    @hasFields(() => ctx)
+    class A {
+        @field(Array) public users: Field<User[]>;
+    }
+
+    expect(() => new A()).toThrowErrorMatchingSnapshot();
+});
+
+test("with a nested array missing the @specify decorator", () => {
+    const someScope = createScope();
+
+    class BrokenUserList {
+        @scope(someScope)
+        public users?: User[];
+    }
+
+    @hasFields(() => ctx)
+    class A {
+        @field(BrokenUserList) public users: Field<BrokenUserList>;
+    }
+
+    const a = new A();
+    expect(() => a.users.nested.users.status).toThrowErrorMatchingSnapshot();
 });
 
 test("with an array in the structure", async () => {
