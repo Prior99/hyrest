@@ -23,4 +23,3 @@ export function combineValidationStatus(status: ValidationStatus[]): ValidationS
     if (status.length === 0) { return ValidationStatus.UNKNOWN; }
     return status.reduce((result, current) => mergeValidationStatus(result, current));
 }
-

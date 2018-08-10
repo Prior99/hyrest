@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`concattenating 1`] = `
+Array [
+  A {
+    "something": "a string",
+  },
+  A {
+    "something": "another string",
+  },
+]
+`;
+
+exports[`filter 1`] = `
+Array [
+  A {
+    "something": "4th string",
+  },
+  A {
+    "something": "5th string",
+  },
+]
+`;
+
+exports[`find 1`] = `
+A {
+  "something": "2nd string",
+}
+`;
+
+exports[`forEach 1`] = `
+Array [
+  "1st string",
+  "2nd string",
+  "3rd string",
+]
+`;
+
+exports[`map 1`] = `
+Array [
+  A {
+    "something": "1st string",
+  },
+  A {
+    "something": "2nd string",
+  },
+  A {
+    "something": "3rd string",
+  },
+]
+`;
+
+exports[`reduce 1`] = `"-1st string-2nd string-3rd string"`;
+
+exports[`reduceRight 1`] = `"-3rd string-2nd string-1st string"`;
+
+exports[`resetting 1`] = `
+List {
+  "items": Array [
+    A {
+      "something": "a string",
+    },
+  ],
+}
+`;
+
+exports[`resetting 2`] = `
+List {
+  "items": Array [],
+}
+`;
+
+exports[`slice 1`] = `
+Array [
+  A {
+    "something": "1st string",
+  },
+  A {
+    "something": "2nd string",
+  },
+]
+`;
+
+exports[`updating with existing fields 1`] = `
+List {
+  "items": Array [
+    A {
+      "something": "1st string",
+    },
+    A {
+      "something": 78,
+    },
+    A {
+      "something": "3rd string",
+    },
+    A {
+      "something": "4th string",
+    },
+  ],
+}
+`;
+
+exports[`valueAt 1`] = `
+A {
+  "something": "2nd string",
+}
+`;

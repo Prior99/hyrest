@@ -46,7 +46,9 @@
     ],
     "globals": {
       "ts-jest": {
-        "enableTsDiagnostics": true
+        "enableTsDiagnostics": true,
+        "ignoreCoverageForDecorators": true,
+        "ignoreCoverageForAllDecorators": true
       }
     }
   },

@@ -93,10 +93,6 @@ export class FieldArray<TModel, TContext> implements BaseField<TModel[]> {
         return this.clone([...this.fields, ...other.fields]);
     }
 
-    public join(separator?: string): string {
-        return this.fields.join(separator);
-    }
-
     public slice(start?: number, end?: number): FieldArray<TModel, TContext> {
         return this.clone(this.fields.slice(start, end));
     }
