@@ -45,4 +45,9 @@ export interface BaseField<TModel> {
      * recursively.
      */
     update(newValue: TModel): Promise<void>;
+
+    /**
+     * Erase all values from this and potential nested fields.
+     */
+    reset(): Promise<void>;
 }

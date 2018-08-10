@@ -69,6 +69,25 @@ test("works as expected throughout a journey", async () => {
     expect(form).toMatchSnapshot();
 });
 
+test("updating with a nested field structure", async () => {
+    @hasFields(() => ctx)
+    class A {
+        @field(User) public user: Field<User>;
+    }
+
+    const a = new A();
+    await a.user.update({
+        email: "someone@example.com",
+        name: "someone",
+        pet: {
+            type: "dog",
+            name: "Bonkers",
+            age: 7,
+        },
+    });
+    expect(a.user.value).toMatchSnapshot();
+});
+
 test("retrieving the constructed model from a nested field structure", async () => {
     @hasFields(() => ctx)
     class A {
@@ -88,16 +107,54 @@ test("with an array in the structure", async () => {
         public users: User[];
     }
 
-    @hasFields(() => ctx)
-    class A extends React.Component {
+    @observer @hasFields(() => ctx)
+    class UserListForm extends React.Component {
         @field(UserList) public userList: Field<UserList>;
+        @field(User) public user: Field<User>;
+
+        @bind private handleEmailChange(event: React.SyntheticEvent<HTMLInputElement>) {
+            this.user.nested.email.update((event.target as HTMLInputElement).value);
+        }
+
+        @bind private handleNameChange(event: React.SyntheticEvent<HTMLInputElement>) {
+            this.user.nested.name.update((event.target as HTMLInputElement).value);
+        }
+
+        @bind private async handleUserAddClick() {
+            await this.userList.nested.users.add(this.user.value);
+            this.user.reset();
+        }
 
         public render() {
             return (
-                <ul>
-                    {}
-                </ul>
+                <div>
+                    <ul>
+                        {
+                            this.userList.nested.users.map(subField => {
+                                return (
+                                    <li key={subField.nested.email.value}>
+                                        {subField.nested.name.value} ({subField.nested.email.value})
+                                    </li>
+                                );
+                            })
+                        }
+                    </ul>
+                    <input id="email" value={this.user.nested.email.value || ""} onChange={this.handleEmailChange} />
+                    <input id="name" value={this.user.nested.name.value || ""} onChange={this.handleNameChange} />
+                    <button onClick={this.handleUserAddClick}>Add user to list</button>
+                </div>
             );
         }
     }
+
+    const form = mount(<UserListForm />);
+    expect(form).toMatchSnapshot();
+
+    form.find("input#email").simulate("change", { target: { value: "someone@example.com" }});
+    form.find("input#name").simulate("change", { target: { value: "someone" }});
+    form.find("button").simulate("click");
+
+    await new Promise(resolve => setTimeout(resolve));
+    form.update();
+    expect(form).toMatchSnapshot();
 });

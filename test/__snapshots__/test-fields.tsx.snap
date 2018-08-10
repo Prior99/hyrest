@@ -9,6 +9,73 @@ User {
 }
 `;
 
+exports[`updating with a nested field structure 1`] = `
+User {
+  "email": "someone@example.com",
+  "name": "someone",
+  "pet": Pet {
+    "age": 7,
+    "name": "Bonkers",
+    "type": "dog",
+  },
+}
+`;
+
+exports[`with an array in the structure 1`] = `
+<UserListForm>
+  <div>
+    <ul />
+    <input
+      id="email"
+      onChange={[Function]}
+      value=""
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+      value=""
+    />
+    <button
+      onClick={[Function]}
+    >
+      Add user to list
+    </button>
+  </div>
+</UserListForm>
+`;
+
+exports[`with an array in the structure 2`] = `
+<UserListForm>
+  <div>
+    <ul>
+      <li
+        key="someone@example.com"
+      >
+        someone
+         (
+        someone@example.com
+        )
+      </li>
+    </ul>
+    <input
+      id="email"
+      onChange={[Function]}
+      value="someone@example.com"
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+      value="someone"
+    />
+    <button
+      onClick={[Function]}
+    >
+      Add user to list
+    </button>
+  </div>
+</UserListForm>
+`;
+
 exports[`works as expected throughout a journey 1`] = `
 <UserForm>
   <div>

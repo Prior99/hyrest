@@ -73,6 +73,10 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
         this.modelType = modelType;
         // Gather and cache all property metadata from the universal scope.
         this.properties = universal.propertiesForClass(this.modelType);
+        this.initializeNested();
+    }
+
+    private initializeNested() {
         // Initialize the map of real, underlying values for each nested field to contain an `undefined`
         // value for each key. This is necessary for Mobx, as the addition of new keys later on will not trigger
         // the observable.
@@ -83,40 +87,47 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
         }, {} as Fields<TModel, TContext>);
         // Create the outfacing `nested` property: Create a getter for each property which lazily initializes
         // and caches the real value in `_nested`.
-        this.nested = this.properties.reduce((result, { property, expectedType, target }) => {
+        this.nested = this.properties.reduce((result, propertyMeta) => {
             // Create a getter on the `fields` property which will lazily initialize all `Field`s.
-            Object.defineProperty(result, property, {
-                get: () => {
-                    const key = property as keyof TModel;
-                    if (this._nested[key] !== undefined) { return this._nested[key]; }
-                    const nestedValidation = getPropertyValidation(target, property);
-                    // The cast to `any` are neccessary as Typescript cannot deal with this
-                    // kind of types. See https://github.com/Microsoft/TypeScript/issues/22628 (for example).
-                    if (expectedType === Array) {
-                        const arrayType = getSpecifiedType(target, property);
-                        throw new Error("TODO: Assert that the specified type was set using `@specify`.");
-                        this._nested[key] =
-                            createField(
-                                arrayType.property() as Constructable<TModel[keyof TModel]>,
-                                this.contextFactory,
-                                true,
-                                nestedValidation,
-                            ) as any;
-                    } else {
-                        this._nested[key] =
-                            createField(
-                                expectedType,
-                                this.contextFactory,
-                                false,
-                                nestedValidation,
-                            ) as any;
-                    }
-                    return this._nested[key];
-                },
+            Object.defineProperty(result, propertyMeta.property, {
+                get: () => this.getNested(propertyMeta),
                 enumerable: true,
             });
             return result;
         }, {} as Fields<TModel, TContext>);
+    }
+
+    private getNested({ property, expectedType, target }: PropertyMeta) {
+        const key = property as keyof TModel;
+        if (this._nested[key] !== undefined) { return this._nested[key]; }
+        const nestedValidation = getPropertyValidation(target, property);
+        // The cast to `any` are neccessary as Typescript cannot deal with this
+        // kind of types. See https://github.com/Microsoft/TypeScript/issues/22628 (for example).
+        if (expectedType === Array) {
+            const arrayType = getSpecifiedType(target, property).property;
+            if (!arrayType) {
+                throw new Error(
+                    "Accessing a property of type Array without being decorated by  @specify. " +
+                    `Check property "${property as string}" on class "${target.constructor.name}".`,
+                );
+            }
+            this._nested[key] =
+                createField(
+                    arrayType() as Constructable<TModel[keyof TModel]>,
+                    this.contextFactory,
+                    true,
+                    nestedValidation,
+                ) as any;
+        } else {
+            this._nested[key] =
+                createField(
+                    expectedType,
+                    this.contextFactory,
+                    false,
+                    nestedValidation,
+                ) as any;
+        }
+        return this._nested[key];
     }
 
     /**
@@ -157,9 +168,10 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
 
     @bind @action public async update(newValue: TModel) {
         if (this.isManaged) {
-            await Promise.all(Object.keys(newValue).map((key) => {
+            await Promise.all(Object.keys(newValue).map(key => {
                 const modelKey = key as keyof TModel;
-                const field = this._nested[modelKey];
+                const field = this.nested[modelKey];
+                if (!Object.keys(this.nested).includes(key)) { return; }
                 invariant(
                     field instanceof FieldSimple || field instanceof FieldArray,
                     "Found an invalid wrapped field value.",
@@ -182,5 +194,10 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
             );
             this.status = processed.hasErrors ? ValidationStatus.INVALID : ValidationStatus.VALID;
         }
+    }
+
+    @bind @action public async reset() {
+        this.initializeNested();
+        this.status = ValidationStatus.UNTOUCHED;
     }
 }
