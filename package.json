@@ -76,7 +76,8 @@
     "typescript": "^3.0.1"
   },
   "resolutions": {
-    "jest/**/jsdom": "11.11.0"
+    "jest/**/jsdom": "11.11.0",
+    "typedoc/typescript": "3.0.1"
   },
   "dependencies": {
     "mobx": "^5.0.3",

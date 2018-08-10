@@ -29,6 +29,18 @@ export function createField<TModel, TContext>(
     array: false,
     validation?: ValidationOptions<TModel, TContext>,
 ): FieldSimple<TModel, TContext>;
+/**
+ * Create a new `Field` wrapper based on the provided type.
+ * Might create an `FieldArray` or a `FieldSimple` based on whether it's an array or not.
+ *
+ * @param modelType The type of the model wrapped in the returned `Field`.
+ * @param contextFactory A context factory handed down to the new `Field` which will use it to provide the app's
+ *     context to the validation.
+ * @param array When set to `true` a `FieldArray` will be created.
+ * @param validation An optional validation option metadata as retrieved by `getPropertyValidation`.
+ *
+ * @return The newly created `FieldSimple` or `FieldArray`.
+ */
 export function createField<TModel, TContext>(
     modelType: Constructable<TModel>,
     contextFactory: ContextFactory<TContext>,

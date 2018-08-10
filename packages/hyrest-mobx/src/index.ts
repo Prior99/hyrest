@@ -1,3 +1,4 @@
+export * from "./base-field";
 export * from "./context-factory";
 export * from "./decorators";
 export * from "./field";

@@ -1,5 +1,9 @@
 import { ValidationStatus } from "./validation-status";
 
+/**
+ * Base class for `FieldArray` and `FieldSimple`, providing all mutual properties
+ * and methods.
+ */
 export interface BaseField<TModel> {
     /**
      * The validation status for the current value.
