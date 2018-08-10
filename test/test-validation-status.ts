@@ -4,7 +4,7 @@ const allStatus = [
     ValidationStatus.IN_PROGRESS,
     ValidationStatus.VALID,
     ValidationStatus.INVALID,
-    ValidationStatus.UNTOUCHED,
+    ValidationStatus.UNKNOWN,
 ];
 
 allStatus.forEach(statusA => {
@@ -17,8 +17,8 @@ allStatus.forEach(statusA => {
 
 [
     [ValidationStatus.IN_PROGRESS, ValidationStatus.INVALID, ValidationStatus.INVALID],
-    [ValidationStatus.VALID, ValidationStatus.INVALID, ValidationStatus.UNTOUCHED],
-    [ValidationStatus.IN_PROGRESS, ValidationStatus.INVALID, ValidationStatus.VALID, ValidationStatus.UNTOUCHED],
+    [ValidationStatus.VALID, ValidationStatus.INVALID, ValidationStatus.UNKNOWN],
+    [ValidationStatus.IN_PROGRESS, ValidationStatus.INVALID, ValidationStatus.VALID, ValidationStatus.UNKNOWN],
     [],
 ].forEach(statusArray => {
     test(`combineValidationStatus(${statusArray.join(", ")})`, () => {

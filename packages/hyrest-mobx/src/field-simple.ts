@@ -21,7 +21,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
     /**
      * The validation status for this field.
      */
-    @observable private _status = ValidationStatus.UNTOUCHED;
+    @observable private _status = ValidationStatus.UNKNOWN;
 
     /**
      * Nested fields of this field.
@@ -164,7 +164,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
     @computed public get valid(): boolean { return this.status === ValidationStatus.VALID; }
     @computed public get invalid(): boolean { return this.status === ValidationStatus.INVALID; }
     @computed public get inProgress(): boolean { return this.status === ValidationStatus.IN_PROGRESS; }
-    @computed public get untouched(): boolean { return this.status === ValidationStatus.UNTOUCHED; }
+    @computed public get unknown(): boolean { return this.status === ValidationStatus.UNKNOWN; }
 
     @bind @action public async update(newValue: TModel) {
         if (this.isManaged) {
@@ -199,7 +199,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
 
     @bind @action public async reset() {
         this.initializeNested();
-        this._status = ValidationStatus.UNTOUCHED;
+        this._status = ValidationStatus.UNKNOWN;
     }
 
     @computed public get status(): ValidationStatus {
@@ -207,7 +207,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
             const statusArray: ValidationStatus[] = Object.keys(this._nested)
                 .map(key => {
                     const field = this._nested[key as keyof TModel];
-                    if (typeof field === "undefined") { return ValidationStatus.UNTOUCHED; }
+                    if (typeof field === "undefined") { return ValidationStatus.UNKNOWN; }
                     return field.status;
                 });
             return combineValidationStatus(statusArray);

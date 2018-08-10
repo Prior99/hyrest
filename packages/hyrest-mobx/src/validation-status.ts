@@ -1,5 +1,5 @@
 export enum ValidationStatus {
-    UNTOUCHED = "untouched",
+    UNKNOWN = "unknown",
     VALID = "valid",
     IN_PROGRESS = "in progress",
     INVALID = "invalid",
@@ -15,11 +15,12 @@ export function mergeValidationStatus(statusA: ValidationStatus, statusB: Valida
     if (statusA === ValidationStatus.VALID || statusB === ValidationStatus.VALID) {
         return ValidationStatus.VALID;
     }
-    return ValidationStatus.UNTOUCHED;
+    return ValidationStatus.UNKNOWN;
 
 }
 
 export function combineValidationStatus(status: ValidationStatus[]): ValidationStatus {
-    if (status.length === 0) { return ValidationStatus.UNTOUCHED; }
+    if (status.length === 0) { return ValidationStatus.UNKNOWN; }
     return status.reduce((result, current) => mergeValidationStatus(result, current));
 }
+

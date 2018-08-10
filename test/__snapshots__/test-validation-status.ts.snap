@@ -1,18 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`combineValidationStatus() 1`] = `"untouched"`;
+exports[`combineValidationStatus() 1`] = `"unknown"`;
 
 exports[`combineValidationStatus(in progress, invalid, invalid) 1`] = `"in progress"`;
 
-exports[`combineValidationStatus(in progress, invalid, valid, untouched) 1`] = `"in progress"`;
+exports[`combineValidationStatus(in progress, invalid, valid, unknown) 1`] = `"in progress"`;
 
-exports[`combineValidationStatus(valid, invalid, untouched) 1`] = `"invalid"`;
+exports[`combineValidationStatus(valid, invalid, unknown) 1`] = `"invalid"`;
 
 exports[`mergeValidationStatus(in progress, in progress) 1`] = `"in progress"`;
 
 exports[`mergeValidationStatus(in progress, invalid) 1`] = `"in progress"`;
 
-exports[`mergeValidationStatus(in progress, untouched) 1`] = `"in progress"`;
+exports[`mergeValidationStatus(in progress, unknown) 1`] = `"in progress"`;
 
 exports[`mergeValidationStatus(in progress, valid) 1`] = `"in progress"`;
 
@@ -20,22 +20,23 @@ exports[`mergeValidationStatus(invalid, in progress) 1`] = `"in progress"`;
 
 exports[`mergeValidationStatus(invalid, invalid) 1`] = `"invalid"`;
 
-exports[`mergeValidationStatus(invalid, untouched) 1`] = `"invalid"`;
+exports[`mergeValidationStatus(invalid, unknown) 1`] = `"invalid"`;
 
 exports[`mergeValidationStatus(invalid, valid) 1`] = `"invalid"`;
 
-exports[`mergeValidationStatus(untouched, in progress) 1`] = `"in progress"`;
+exports[`mergeValidationStatus(unknown, in progress) 1`] = `"in progress"`;
 
-exports[`mergeValidationStatus(untouched, invalid) 1`] = `"invalid"`;
+exports[`mergeValidationStatus(unknown, invalid) 1`] = `"invalid"`;
 
-exports[`mergeValidationStatus(untouched, untouched) 1`] = `"untouched"`;
+exports[`mergeValidationStatus(unknown, unknown) 1`] = `"unknown"`;
 
-exports[`mergeValidationStatus(untouched, valid) 1`] = `"valid"`;
+exports[`mergeValidationStatus(unknown, valid) 1`] = `"valid"`;
 
 exports[`mergeValidationStatus(valid, in progress) 1`] = `"in progress"`;
 
 exports[`mergeValidationStatus(valid, invalid) 1`] = `"invalid"`;
 
-exports[`mergeValidationStatus(valid, untouched) 1`] = `"valid"`;
+exports[`mergeValidationStatus(valid, unknown) 1`] = `"valid"`;
 
 exports[`mergeValidationStatus(valid, valid) 1`] = `"valid"`;
+

@@ -54,7 +54,7 @@ export class FieldArray<TModel, TContext> implements BaseField<TModel[]> {
     @computed public get valid(): boolean { return this.status === ValidationStatus.VALID; }
     @computed public get invalid(): boolean { return this.status === ValidationStatus.INVALID; }
     @computed public get inProgress(): boolean { return this.status === ValidationStatus.IN_PROGRESS; }
-    @computed public get untouched(): boolean { return this.status === ValidationStatus.UNTOUCHED; }
+    @computed public get unknown(): boolean { return this.status === ValidationStatus.UNKNOWN; }
 
     @bind @action public async update(newValues: TModel[]) {
         const existingSlice = newValues.slice(0, this.length);

@@ -50,7 +50,7 @@ class UserForm extends React.Component {
                 <input value={this.user.nested.email.value || ""} onChange={this.handleChange} />
                 { this.user.nested.email.valid && <p>Valid!</p> }
                 { this.user.nested.email.invalid && <p>Invalid!</p> }
-                { this.user.nested.email.untouched && <p>Please type something!</p> }
+                { this.user.nested.email.unknown && <p>Please type something!</p> }
                 { this.user.nested.email.inProgress && <p>Loading...</p> }
             </div>
         );
@@ -100,7 +100,7 @@ test("validating a nested field structure", async () => {
     }
 
     const a = new A();
-    expect(a.users.status).toBe(ValidationStatus.UNTOUCHED);
+    expect(a.users.status).toBe(ValidationStatus.UNKNOWN);
     await a.users.update({
         users: [
             {
@@ -163,7 +163,7 @@ test("with an array directly in the decorator", async () => {
     }
 
     const a = new A();
-    expect(a.users.status).toBe(ValidationStatus.UNTOUCHED);
+    expect(a.users.status).toBe(ValidationStatus.UNKNOWN);
     await a.users.add({ email: "someone@example.com", name: "someone" });
     await a.users.add({ email: "anotherone@example.com", name: "anotherone" });
     expect(a.users.value).toMatchSnapshot();
@@ -191,7 +191,7 @@ test("updating with an unvalidated property", () => {
         prop: "some value",
     } as any);
     expect(a.something.value).toMatchSnapshot();
-    expect(a.something.status).toBe(ValidationStatus.UNTOUCHED);
+    expect(a.something.status).toBe(ValidationStatus.UNKNOWN);
 });
 
 test("updating with an unkown key", () => {

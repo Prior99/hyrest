@@ -33,9 +33,9 @@ export interface BaseField<TModel> {
 
     /**
      * Whether the value has never been set before.
-     * Syntactic sugar for `status === ValidationStatus.UNTOUCHED`.
+     * Syntactic sugar for `status === ValidationStatus.UNKNOWN`.
      */
-    untouched: boolean;
+    unknown: boolean;
 
     /**
      * Can be called to update the value, for example when the user typed
