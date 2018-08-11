@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react input double binding 1`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react input double binding 2`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+      value="someone@example.com"
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+      value="someone"
+    />
+  </div>
+</UserForm>
+`;

@@ -321,4 +321,16 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
         }
         return this._errors;
     }
+
+    public get reactInput() {
+        const fieldSimple = this;
+        return {
+            onChange (event: { target: { value: any }}) {
+                fieldSimple.update(event.target.value as any);
+            },
+            get value () {
+                return fieldSimple.value;
+            },
+        };
+    }
 }

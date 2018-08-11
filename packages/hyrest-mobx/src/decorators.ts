@@ -59,7 +59,7 @@ export function getFieldsMeta(target: Object): FieldsMeta {
  * @param fieldFactory An optional function for creating a field. Defaults to `createField`.
  */
 export function hasFields<TContext>(
-    contextFactory: ContextFactory<TContext>,
+    contextFactory: ContextFactory<TContext> = () => undefined,
     fieldFactory: typeof createField = createField,
 ): ClassDecorator {
     const decorator = function <T extends Function>(target: T): T {
