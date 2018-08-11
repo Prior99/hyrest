@@ -349,4 +349,20 @@ export class FieldArray<TModel, TContext> implements BaseField<TModel[]> {
     @computed public get status(): ValidationStatus {
         return combineValidationStatus(this.fields.map(field => field.status));
     }
+
+    /**
+     * One sample error from the `errors` property. The first error from the array.
+     */
+    @computed public get error(): string {
+        return this.errors.length > 0 ? this.errors[0] : undefined;
+    }
+
+    /**
+     * All validation errors of this or nested fields.
+     */
+    @computed public get errors(): string[] {
+        return this.fields.reduce((result, subField) => {
+            return [ ...result, ...subField.errors ];
+        }, []);
+    }
 }

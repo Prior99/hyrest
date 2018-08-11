@@ -18,6 +18,7 @@ import { createField } from "./field";
 import { FieldArray } from "./field-array";
 
 export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
+    @observable private _errors: string[] = [];
     /**
      * The validation status for this field.
      */
@@ -268,6 +269,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
             );
             // Now set the real status as returned by the validation.
             this._status = processed.hasErrors ? ValidationStatus.INVALID : ValidationStatus.VALID;
+            this._errors = processed.errors || [];
         }
     }
 
@@ -296,5 +298,27 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
         }
         // Simply return the cached status from the last call to `update` if this `Field` is wrapping primitive value.
         return this._status;
+    }
+
+    /**
+     * One sample error from the `errors` property. The first error from the array.
+     */
+    @computed public get error(): string {
+        return this.errors.length > 0 ? this.errors[0] : undefined;
+    }
+
+    /**
+     * All validation errors of this or nested fields.
+     */
+    @computed public get errors(): string[] {
+        if (this.isManaged) {
+            return Object.keys(this._nested)
+                .reduce((result, key) => {
+                    const field = this._nested[key as keyof TModel];
+                    if (typeof field === "undefined") { return result; }
+                    return [ ...result, ...field.errors ];
+                }, []);
+        }
+        return this._errors;
     }
 }

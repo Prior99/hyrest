@@ -1,5 +1,101 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`errors 1`] = `
+<UserListForm>
+  <div>
+    <ul />
+    <p>
+      <b />
+    </p>
+    <input
+      id="email"
+      onChange={[Function]}
+      value=""
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+      value=""
+    />
+    <button
+      onClick={[Function]}
+    >
+      Add user to list
+    </button>
+  </div>
+</UserListForm>
+`;
+
+exports[`errors 2`] = `
+<UserListForm>
+  <div>
+    <ul>
+      <li
+        key="invalidmail"
+      >
+        78
+         (
+        invalidmail
+        )
+      </li>
+      <li
+        key="alsonotvalid"
+      >
+         (
+        alsonotvalid
+        )
+      </li>
+    </ul>
+    <p>
+      <b>
+        Not a valid string.
+      </b>
+    </p>
+    <p
+      key="0"
+    >
+      Not a valid string.
+    </p>
+    <p
+      key="1"
+    >
+      String is not a valid email.
+    </p>
+    <p
+      key="2"
+    >
+      Shorter than minimum length of 5.
+    </p>
+    <p
+      key="3"
+    >
+      String is not a valid email.
+    </p>
+    <input
+      id="email"
+      onChange={[Function]}
+      value="alsonotvalid"
+    />
+    <p>
+      String is not a valid email.
+    </p>
+    <input
+      id="name"
+      onChange={[Function]}
+      value=""
+    />
+    <p>
+      Shorter than minimum length of 5.
+    </p>
+    <button
+      onClick={[Function]}
+    >
+      Add user to list
+    </button>
+  </div>
+</UserListForm>
+`;
+
 exports[`retrieving the constructed model from a nested field structure 1`] = `
 User {
   "email": "someone@example.com",
@@ -139,6 +235,9 @@ exports[`with an array in the structure 1`] = `
 <UserListForm>
   <div>
     <ul />
+    <p>
+      <b />
+    </p>
     <input
       id="email"
       onChange={[Function]}
@@ -171,6 +270,9 @@ exports[`with an array in the structure 2`] = `
         )
       </li>
     </ul>
+    <p>
+      <b />
+    </p>
     <input
       id="email"
       onChange={[Function]}
@@ -226,6 +328,9 @@ exports[`works as expected throughout a journey 3`] = `
       value="someone"
     />
     <p>
+      String is not a valid email.
+    </p>
+    <p>
       Invalid!
     </p>
   </div>
@@ -239,6 +344,9 @@ exports[`works as expected throughout a journey 4`] = `
       onChange={[Function]}
       value="someone@example.com"
     />
+    <p>
+      String is not a valid email.
+    </p>
     <p>
       Loading...
     </p>

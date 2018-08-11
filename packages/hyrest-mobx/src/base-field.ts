@@ -54,4 +54,14 @@ export interface BaseField<TModel> {
      * Erase all values from this and potential nested fields.
      */
     reset(): Promise<void>;
+
+    /**
+     * One sample error from the `errors` property. The first error from the array.
+     */
+    error: string;
+
+    /**
+     * All validation errors of this or nested fields.
+     */
+    errors: string[];
 }
