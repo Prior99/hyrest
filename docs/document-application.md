@@ -1,6 +1,6 @@
 ---
 id: document-application
-title: About Documents and Applications
+title: Documents and Applications
 ---
 
 ## The Documents‐to‐Applications Continuum
