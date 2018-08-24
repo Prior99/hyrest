@@ -29,3 +29,7 @@ clean:
 publish: node_modules build lint test
 	git diff-index --quiet HEAD --
 	yarn lerna publish
+
+.PHONY: docs-start
+docs-start:
+	cd website && yarn start
