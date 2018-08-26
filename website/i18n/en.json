@@ -5,8 +5,15 @@
     "previous": "Previous",
     "tagline": "Hyrest Documentation",
     "anatomy": "Anatomy",
+    "architectural-inspirations": "Architectural Inspirations",
+    "companion-technologies": "Companion Technologies",
     "document-application": "Documents and Applications",
+    "drawbacks": "Drawbacks",
+    "example": "Example",
+    "existing-approaches": "Existing approaches",
+    "hyrests-approach": "Hyrest's approach",
     "introduction": "Introduction",
+    "open-topics": "Open Topics",
     "Guide": "Guide"
   },
   "pages-strings": {

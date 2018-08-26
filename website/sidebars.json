@@ -3,7 +3,14 @@
     "Guide": [
       "introduction",
       "document-application",
-      "anatomy"
+      "anatomy",
+      "drawbacks",
+      "existing-approaches",
+      "hyrests-approach",
+      "architectural-inspirations",
+      "companion-technologies",
+      "example",
+      "open-topics"
     ]
   }
 }
