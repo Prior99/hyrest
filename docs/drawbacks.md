@@ -40,6 +40,8 @@ In a template rendered solution, the necessary steps to display the profile page
 3. Perform business logic and derive the data needed for the template to be rendered.
 4. Fill out the template `<div><h1>User {{$username}}</h1> ...` and send the result back to the browser.
 
+![Simple rendering](assets/drawbacks-simple.svg)
+
 While with a single-page application approach this will look a bit more complicated:
 
 1. Perform routing (`app.example.com/user/:username`) and parse the username from the URL.
@@ -50,6 +52,8 @@ While with a single-page application approach this will look a bit more complica
     3. Return a JSON structure with the user's data.
 3. Perform business logic and derive the data needed for the template to be rendered.
 4. Render a template `<div><h1>User {{$username}}</h1> ...` to the DOM.
+
+![Complex rendering](assets/drawbacks-complex.svg)
 
 Essentially, the implementational effort has doubled. The frontend needs to do loading of data from the backend, perform business logic and generate the DOM content. The backend needs to do the same.
 
