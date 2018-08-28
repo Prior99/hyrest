@@ -25,7 +25,7 @@ The reason for this are problems like
 
 ### Implementational overhead
 
-Why are template rendered solutions such as simple PHP applications so much faster to develop compared to single-page applications?
+Why are template rendered solutions such as simple [PHP](https://php.net/) applications so much faster to develop [compared to single-page applications](https://adamsilver.io/articles/the-disadvantages-of-single-page-applications/)?
 
 Because everything lives in one integrated project. The frontend is template-rendered from an application in one codebase, a call to the database is simply a call to a function or a method on an instance.
 

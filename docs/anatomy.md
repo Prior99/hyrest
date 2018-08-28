@@ -27,7 +27,7 @@ the application tier and you're done.
 When developing a web application with a separate frontend application using REST (or any other networking technology for exchanging information such as [GraphQL](https://graphql.org/)),
 the whole thing gets a bit more complicated.
 
-How does the new multi tier model look like now?
+How does the new multitier model look like now?
 
 The presentation tier is now *the frontend* and no changes are made to the application tier and the data tier. Between the *the frontend* and the application tier
 something exposing the REST Api has to exist. Naively the model could look like this now:
