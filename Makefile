@@ -4,6 +4,7 @@ default: test lint build docs
 node_modules:
 	yarn install
 	yarn lerna bootstrap
+	cd website && yarn
 
 .PHONY: build
 build: node_modules
@@ -31,5 +32,5 @@ publish: node_modules build lint test
 	yarn lerna publish
 
 .PHONY: docs-start
-docs-start:
+docs-start: node_modules
 	cd website && yarn start
