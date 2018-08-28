@@ -53,7 +53,7 @@ const Block = props => (
         id={props.id}
         background={props.background}
     >
-        <GridBlock align="center" contents={props.blocks} layout={props.layout} />
+        <GridBlock align="left" contents={props.blocks} layout={props.layout} />
     </Container>
 );
 
@@ -62,17 +62,17 @@ const Connectors = () => (
         layout="threeColumn"
         blocks={[
             {
-                content: "Hyrest is written 100% in Typescript.",
+                content: "Hyrest is written 100% Typescript and exposes a fully typesafe API.",
                 image: imgUrl("typescript.png"),
                 imageAlign: "top",
-                title: "100% Typescript",
+                title: "Typescript ready",
             }, {
-                content: "Utilize the official middleware to use Hyrest in your express application",
+                content: "Utilize the official middleware to use Hyrest in your express application.",
                 image: imgUrl("express.png"),
                 imageAlign: "top",
                 title: "Express ready",
             }, {
-                content: "Utilize the frontend support library for MobX to implement forms",
+                content: "Utilize the frontend support library for MobX to implement forms.",
                 image: imgUrl("mobx.png"),
                 imageAlign: "top",
                 title: "MobX ready",
@@ -84,48 +84,48 @@ const Connectors = () => (
 const Features = () => (
     <Block
         background="light"
-        layout="threeColumn"
+        layout="fourColumn"
         blocks={[
             {
-                content: "Develop a modern SPA stack with a separate frontend and backend application (or microservices) in one project.",
+                content: "Develop a modern SPA with separate frontend and backend applications in one project.",
                 image: imgUrl("code-branch-solid.svg"),
-                imageAlign: "top",
-                title: "Develop one project",
+                imageAlign: "left",
+                title: "One project",
             }, {
                 content: "Reduce the overhead of splitting your frontend and backend applications. Call Apis as if they were methods.",
                 image: imgUrl("chart-line-solid.svg"),
-                imageAlign: "top",
-                title: "Reduce your overhead",
+                imageAlign: "left",
+                title: "Less overhead",
             }, {
                 content: "Despite not dealing with REST at all - a full featured REST Api is generated and used internally.",
                 image: imgUrl("magic-solid.svg"),
-                imageAlign: "top",
-                title: "Generate REST Apis",
+                imageAlign: "left",
+                title: "Generated Api",
             }, {
                 content: "Easily replace or extend a Hyrest backend with any other REST service and continue to use Hyrest.",
                 image: imgUrl("plug-solid.svg"),
-                imageAlign: "top",
-                title: "Stay compatible",
+                imageAlign: "left",
+                title: "Compatible",
             }, {
                 content: "Choose the stack that fits your project. Hyrest is 100% Framework agnostic.",
                 image: imgUrl("stream-solid.svg"),
-                imageAlign: "top",
-                title: "Your project - your stack",
+                imageAlign: "left",
+                title: "Your stack",
             }, {
-                content: "Transparently make REST calls and stay typesafe.",
+                content: "Transparently make REST calls and stay typesafe across your applications.",
                 image: imgUrl("shield-alt-solid.svg"),
-                imageAlign: "top",
-                title: "Typesafe REST Apis",
+                imageAlign: "left",
+                title: "Typesafe",
             }, {
-                content: "Hyrest aims to be reliable and hence has 100% test coverage.",
+                content: "Hyrest aims to be stable and reliable and hence has 100% test coverage.",
                 image: imgUrl("bug-solid.svg"),
-                imageAlign: "top",
+                imageAlign: "left",
                 title: "Fully tested",
             }, {
                 content: "Transparently share logic between sub-applications by utilizing the hybrid REST features.",
                 image: imgUrl("share-alt-square-solid.svg"),
-                imageAlign: "top",
-                title: "Share Logic",
+                imageAlign: "left",
+                title: "Shared Logic",
             },
         ]}
     />

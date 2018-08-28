@@ -5,8 +5,10 @@
     "previous": "Previous",
     "tagline": "Hyrest Documentation",
     "anatomy": "Anatomy",
+    "api": "API",
     "architectural-inspirations": "Architectural Inspirations",
     "companion-technologies": "Companion Technologies",
+    "concepts": "Concepts",
     "document-application": "Documents and Applications",
     "drawbacks": "Drawbacks",
     "example": "Example",
@@ -14,7 +16,9 @@
     "hyrests-approach": "Hyrest's approach",
     "introduction": "Introduction",
     "open-topics": "Open Topics",
-    "Guide": "Guide"
+    "Guide": "Guide",
+    "Concepts": "Concepts",
+    "API": "API"
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",
