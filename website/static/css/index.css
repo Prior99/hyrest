@@ -1,0 +1,26 @@
+.homeContainer {
+    background: $secondaryColor;
+    overflow: hidden;
+    position: relative;
+}
+
+.embeddedLogo {
+    position: absolute;
+    right: -200px;
+    bottom: -220px;
+    filter: blur(5px);
+}
+
+.embeddedLogo img {
+    width: 70%;
+    height: auto;
+}
+
+.projectTitle {
+    color: white;
+}
+
+.button {
+    background-color: $primaryColor;
+    color: white;
+}

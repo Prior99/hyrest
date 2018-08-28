@@ -26,12 +26,9 @@ const SplashContainer = props => (
         <div className="homeSplashFade">
             <div className="wrapper homeWrapper">{props.children}</div>
         </div>
-    </div>
-);
-
-const Logo = props => (
-    <div className="projectLogo">
-        <img src={props.img_src} alt="Project Logo" />
+        <div className="embeddedLogo">
+            <img src={imgUrl("hyrest-logo-monochrome-secondary.svg")} />
+        </div>
     </div>
 );
 
@@ -62,8 +59,7 @@ const Block = props => (
 
 const Connectors = () => (
     <Block
-        background="light"
-        layout="fourColumn"
+        layout="threeColumn"
         blocks={[
             {
                 content: "Hyrest is written 100% in Typescript.",
@@ -87,7 +83,8 @@ const Connectors = () => (
 
 const Features = () => (
     <Block
-        layout="fourColumn"
+        background="light"
+        layout="threeColumn"
         blocks={[
             {
                 content: "Develop a modern SPA stack with a separate frontend and backend application (or microservices) in one project.",
@@ -139,7 +136,6 @@ class Index extends React.Component {
         return (
             <div>
                 <SplashContainer>
-                    <Logo img_src={imgUrl("hyrest-logo.svg")} />
                     <div className="inner">
                         <ProjectTitle />
                         <PromoSection>
