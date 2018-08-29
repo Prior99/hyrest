@@ -1,0 +1,66 @@
+image: node:10
+
+stages:
+  - build
+  - test
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+    - website/node_modules/
+
+
+build:
+  before_script:
+    - apt-get update -qq
+    - apt-get install make git -qq
+    - npm install -g yarn lerna
+    - lerna bootstrap
+  stage: build
+  script:
+    - make build
+    - make docs
+  artifacts:
+    paths:
+      - packages/
+      - website/build/
+
+test:
+  before_script:
+    - apt-get update -qq
+    - apt-get install make git -qq
+    - npm install -g yarn lerna
+    - lerna bootstrap
+  stage: test
+  script:
+    - make test
+  dependencies:
+    - build
+  artifacts:
+    paths:
+      - coverage/
+
+lint:
+  before_script:
+    - apt-get update -qq
+    - apt-get install make git -qq
+    - npm install -g yarn lerna
+    - lerna bootstrap
+  stage: test
+  script:
+    - make lint
+
+pages:
+  stage: deploy
+  script:
+    - mv website/build/hyrest-docs public
+    - mv coverage/lcov-report public/coverage
+  dependencies:
+    - test
+    - build
+  artifacts:
+    paths:
+      - public
+  only:
+    - master

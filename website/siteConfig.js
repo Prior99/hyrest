@@ -2,7 +2,7 @@ module.exports = {
     title: "Hyrest",
     tagline: "Hyrest Documentation",
     url: "https://prior99.github.io/hyrest",
-    baseUrl: "/",
+    baseUrl: "/hyrest/",
     projectName: "hyrest-docs",
     organizationName: "hyrest",
     headerLinks: [

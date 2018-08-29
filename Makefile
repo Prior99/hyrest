@@ -10,9 +10,14 @@ node_modules:
 build: node_modules
 	yarn lerna run build
 
-.PHONE: docs
+.PHONY: docs
 docs: node_modules
 	yarn lerna run docs
+	cd website && yarn build
+	rm -rf website/build/hyrest-docs/api
+	mkdir website/build/hyrest-docs/api
+	cp -rl packages/hyrest/docs website/build/hyrest-docs/api/hyrest
+	cp -rl packages/hyrest-express/docs website/build/hyrest-docs/api/hyrest-express
 
 .PHONY: test
 test: node_modules build

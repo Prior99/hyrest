@@ -3,3 +3,4 @@ coverage/
 dist/
 packages/**/docs/
 *.log
+website/build
