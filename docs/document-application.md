@@ -52,7 +52,7 @@ the comment-section of your newspaper due spam-bots or remove features of apps b
 
 So while deciding for a stack, it is important to not only consider the [minimum viable product](https://en.wikipedia.org/wiki/Minimum_viable_product), but think about the scope it might some day need to extend to.
 
-Something template-rendered might be suitable to [implement a simple TODO-List application](http://todomvc.com/), but after a while your users might express the need for autocompletion or a or cooperative lists or live updates or a gesture-controlled interface or notifications, etc.
+Something template-rendered might be suitable to [implement a simple Todo-List application](http://todomvc.com/), but after a while your users might express the need for autocompletion or a or cooperative lists or live updates or a gesture-controlled interface or notifications, etc.
 
 ![Documents‐to‐Applications Continuum Todo list example](assets/documents-to-applications-continuum-todo.svg)
 
