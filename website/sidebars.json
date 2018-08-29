@@ -1,15 +1,23 @@
 {
   "docs": {
-    "Guide": [
+    "Preamble": [
       "introduction",
       "document-application",
       "anatomy",
       "drawbacks",
-      "existing-approaches",
+      "existing-approaches"
+    ],
+    "Introduction": [
       "hyrests-approach",
       "architectural-inspirations",
       "companion-technologies",
-      "example",
+      "example"
+    ],
+    "Getting Started": [
+      "minimal-setup"
+    ],
+    "Further Resources": [
+      "concepts",
       "open-topics"
     ]
   }

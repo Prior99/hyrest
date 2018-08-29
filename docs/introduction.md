@@ -3,8 +3,6 @@ id: introduction
 title: Introduction
 ---
 
-## Preamble
-
 Hyrest is a framework for developing modern (web) applications full-stack in [Typescript](https://www.typescriptlang.org/).
 
 This guide does not only want to introduce you into using Hyrest, but aims to also help you designing the stack for your application

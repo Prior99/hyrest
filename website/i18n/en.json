@@ -10,15 +10,19 @@
     "companion-technologies": "Companion Technologies",
     "concepts": "Concepts",
     "document-application": "Documents and Applications",
-    "drawbacks": "Drawbacks",
+    "drawbacks": "Problems with SPAs",
     "example": "Example",
     "existing-approaches": "Existing approaches",
     "hyrests-approach": "Hyrest's approach",
     "introduction": "Introduction",
+    "minimal-setup": "Minimal Setup",
     "open-topics": "Open Topics",
-    "Guide": "Guide",
+    "Preamble": "Preamble",
+    "Introduction": "Introduction",
+    "Getting Started": "Getting Started",
     "Concepts": "Concepts",
-    "API": "API"
+    "API": "API",
+    "Further Resources": "Further Resources"
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",

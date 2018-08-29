@@ -6,7 +6,9 @@ module.exports = {
     projectName: "hyrest-docs",
     organizationName: "hyrest",
     headerLinks: [
-        { doc: "introduction", label: "Guide" },
+        { doc: "introduction", label: "Preamble" },
+        { doc: "hyrests-approach", label: "Introduction" },
+        { doc: "minimal-setup", label: "Getting Started" },
         { doc: "concepts", label: "Concepts" },
         { doc: "api", label: "API" },
     ],

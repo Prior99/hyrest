@@ -3,9 +3,9 @@ id: anatomy
 title: Anatomy
 ---
 
-## Multitier Architecture
-
 A design principle that has been around for a while is the [Multitier Architecture](https://en.wikipedia.org/wiki/Multitier_architecture#Three-tier_architecture).
+
+## Multitier Architecture
 
 A simple three-tier project might be (roughly) divided into:
 
@@ -15,7 +15,7 @@ A simple three-tier project might be (roughly) divided into:
 
 ### Simple example
 
-In a minimal desktop application (perhaps written in C++ and [QT](https://www.qt.io/) or [GTK](https://www.gtk.org/) or [Java Swing](https://en.wikipedia.org/wiki/Swing_(Java)),
+In a minimal desktop application (perhaps written in C++ and [QT](https://www.qt.io/) or [GTK](https://www.gtk.org/) or [Java Swing](https://docs.oracle.com/javase/tutorial/uiswing/),
 this might be all you need. Setup an [SQLite](https://www.sqlite.org/index.html) database and connect it to your project using your favorite ORM (Data tier),
 implement some classes or functions containing your business and application logic (Application tier), draw a nice GUI in your favorite editor (Presentation tier) and connect it to 
 the application tier and you're done.
@@ -41,7 +41,7 @@ Api being a presentation tier, it becomes obvious to keep it well-documented, cl
 The frontend application itself will not have a data tier per-se, but a tier consuming the backend's presentation tier (the exposed Api). The frontend can still keep and cache
 data for form-resubmission, rendering lists, tables and so on, but this falls under the governance of its application tier.
 
-In a [React](https://reactjs.org/) application using Hyrest, the architecture could be visualized like this:
+In a single-page application the architecture could be visualized like this:
 
 ![Correct new model](assets/layers-correct.svg)
 

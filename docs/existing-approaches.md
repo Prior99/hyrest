@@ -3,13 +3,13 @@ id: existing-approaches
 title: Existing approaches
 ---
 
-All the problems defined in [Drawbacks](drawbacks) are by no means new and Hyrest does not claim to be the first library to solve them all. Many great solutions already exist and solve some of the problems caused by a service-oriented approach. Check what problems apply to your project and perform research for possible solutions before picking one.
+All the [problems of single-page applications](drawbacks) are by no means new and Hyrest does not claim to be the first library to attempt to solve them. Many great solutions already exist and solve some of the problems caused by an single-page approach. Check what problems apply to your project and perform research for possible solutions before picking one.
 
 ## Hand-picked examples
 
 Please take a look at the following advices for solving many of the problems Hyrest aims to solve - without deciding for Hyrest.
 
-In addition, take a look at existing libraries (like [Sails](https://sailsjs.com/) or [Ionic](https://ionicframework.com/)) which basically solve the same problem in different ways.
+In addition, take a look at existing libraries (like [Sails](https://sailsjs.com/), [Meteor](https://www.meteor.com/) or [Ionic](https://ionicframework.com/)) which basically solve the same problem in different ways.
 
 ### Simply Decide for one ecosystem
 
@@ -33,7 +33,7 @@ Code generators like these make it easier stay consistent and type-safe, share d
 
 You don't have to rely on JSON over REST nowadays.
 
-Facebook has developed a modern alternative to REST called [GraphQL](https://graphql.org/) which makes communication between services much more convenient byfeaturing its own query language. [GraphQL](https://graphql.org/) has support for [visual explorers](https://github.com/graphql/graphiql) of the Api and is basically self-documenting.
+Facebook has developed a modern alternative to REST called [GraphQL](https://graphql.org/) which makes communication between services much more convenient by featuring its own query language. [GraphQL](https://graphql.org/) has support for [visual explorers](https://github.com/graphql/graphiql) of the Api and is basically self-documenting.
 
 Using a modern alternative to REST can ease the pain of communicating between services and hence boost development speed.
 
@@ -45,12 +45,4 @@ It is possible to write parts of the application using a traditional stack, temp
 
 Hyrest is not the first library trying to solve problems related to modern web development.
 
-You are likely not the first one to encounter any problem.
-
-Many great projects have been invented to solve a great number of problems.
-
-It is always a great idea to identify problems and search for existing solutions.
-
-Don't re-invent the wheel and don't trust random guides you found in some library's documentation.
-
-Don't use the first or most obvious solution you found. Good research often is the key to success.
+It is always a great idea to identify problems and search for existing solutions. Good research often is the key to success.

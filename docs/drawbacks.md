@@ -1,7 +1,9 @@
 ---
 id: drawbacks
-title: Drawbacks
+title: Problems with SPAs
 ---
+
+Hyrest such as most modern stacks heavily relies on single-page applications. Single-page applications provide your project with a clean cut between the backend and frontend part of the application and allow a disconnected stack for your frontend application. Implementing your project as a single-page application does not only come with benefits and might not be the best idea for your use case.
 
 ## Drawbacks of a complex stack
 

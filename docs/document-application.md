@@ -3,8 +3,6 @@ id: document-application
 title: Documents and Applications
 ---
 
-## The Documents‐to‐Applications Continuum
-
 [Aral Balkan](https://2018.ar.al/) suggests to arrange web sites along the **[Documents‐to‐Applications Continuum](https://2018.ar.al/notes/the-documents-to-applications-continuum/)**.
 
 On the left side of the continuum static and completely non-interactive documents (such as this guide), which are basically glorified ebooks, reside.
