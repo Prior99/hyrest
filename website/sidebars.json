@@ -8,10 +8,21 @@
       "existing-approaches"
     ],
     "Introduction": [
+      "introduction-about",
       "hyrests-approach",
       "architectural-inspirations",
       "companion-technologies",
       "example"
+    ],
+    "Tutorial": [
+      "tutorial-basic",
+      "tutorial-models",
+      "tutorial-controller",
+      "tutorial-controller-logic",
+      "tutorial-express-setup",
+      "tutorial-dependency-injection",
+      "tutorial-database-setup",
+      "tutorial-compile-backend"
     ],
     "Getting Started": [
       "minimal-setup"
