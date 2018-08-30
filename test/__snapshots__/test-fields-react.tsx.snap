@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`react input double binding 1`] = `
+exports[`react checkbox broken double binding 1`] = `
 <UserForm>
   <div>
     <input
@@ -11,11 +11,307 @@ exports[`react input double binding 1`] = `
       id="name"
       onChange={[Function]}
     />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
   </div>
 </UserForm>
 `;
 
-exports[`react input double binding 2`] = `
+exports[`react checkbox broken double binding 2`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react checkbox double binding 1`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react checkbox double binding 2`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+    />
+    <input
+      checked={true}
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      checked={true}
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react checkbox double binding with reactInput handler 1`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react checkbox double binding with reactInput handler 2`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+      value={true}
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+      value={true}
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react date input double binding 1`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react date input double binding 2`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+      value="2018-11-15"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react text input double binding 1`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react text input double binding 2`] = `
 <UserForm>
   <div>
     <input
@@ -27,6 +323,96 @@ exports[`react input double binding 2`] = `
       id="name"
       onChange={[Function]}
       value="someone"
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+      value="someone"
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react textarea double binding 1`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
+    />
+  </div>
+</UserForm>
+`;
+
+exports[`react textarea double binding 2`] = `
+<UserForm>
+  <div>
+    <input
+      id="email"
+      onChange={[Function]}
+    />
+    <input
+      id="name"
+      onChange={[Function]}
+      value="someone"
+    />
+    <textarea
+      id="name-textarea"
+      onChange={[Function]}
+      value="someone"
+    />
+    <input
+      id="premium"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <input
+      id="premium-broken"
+      onChange={[Function]}
+      type="text"
+    />
+    <input
+      id="birthday"
+      onChange={[Function]}
+      type="date"
     />
   </div>
 </UserForm>

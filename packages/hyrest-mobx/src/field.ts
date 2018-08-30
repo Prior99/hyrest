@@ -29,6 +29,7 @@ export function createField<TModel, TContext>(
     array: false,
     validation?: ValidationOptions<TModel, TContext>,
 ): FieldSimple<TModel, TContext>;
+
 /**
  * Create a new `Field` wrapper based on the provided type.
  * Might create an `FieldArray` or a `FieldSimple` based on whether it's an array or not.

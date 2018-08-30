@@ -16,6 +16,7 @@ import { BaseField } from "./base-field";
 import { Fields } from "./fields";
 import { createField } from "./field";
 import { FieldArray } from "./field-array";
+import { ReactEvent } from "./react-types";
 
 export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
     @observable private _errors: string[] = [];
@@ -322,14 +323,49 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
         return this._errors;
     }
 
+    public get reactCheckbox() {
+        const fieldSimple = this;
+        return {
+            onChange ({ target }: ReactEvent) {
+                if (target.type !== "checkbox") {
+                    console.warn(`"Field.reactCheckbox" received an event with a target of type "${target.type}".`);
+                    return;
+                }
+                fieldSimple.update(target.checked as any);
+                return;
+            },
+            get checked () {
+                return fieldSimple.value;
+            },
+        };
+    }
+
     public get reactInput() {
         const fieldSimple = this;
         return {
-            onChange (event: { target: { value: any }}) {
-                fieldSimple.update(event.target.value as any);
+            onChange ({ target }: ReactEvent) {
+                switch (target.type) {
+                    case "checkbox":
+                        console.warn(
+                            `"Field.reactInput" used with an inpput of type "${target.type}". ` +
+                            `Use "Field.reactCheckbox" instead.`,
+                        );
+                        fieldSimple.update(target.checked as any);
+                        return;
+                    case "date":
+                    case "datetime-local":
+                        fieldSimple.update(new Date(target.value as string) as any);
+                        return;
+                    default:
+                        fieldSimple.update(target.value as any);
+                        return;
+                }
             },
             get value () {
-                return fieldSimple.value;
+                if (typeof fieldSimple.value === "object" && fieldSimple.value.constructor === Date) {
+                    return (fieldSimple.value as any as Date).toISOString().split("T")[0];
+                }
+                return fieldSimple.value as any;
             },
         };
     }
