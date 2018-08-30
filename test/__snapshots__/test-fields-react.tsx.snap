@@ -6,21 +6,26 @@ exports[`react checkbox broken double binding 1`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
       onChange={[Function]}
+      value=""
     />
     <textarea
       id="name-textarea"
       onChange={[Function]}
+      value=""
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -29,6 +34,7 @@ exports[`react checkbox broken double binding 1`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -40,21 +46,26 @@ exports[`react checkbox broken double binding 2`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
       onChange={[Function]}
+      value=""
     />
     <textarea
       id="name-textarea"
       onChange={[Function]}
+      value=""
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -63,6 +74,7 @@ exports[`react checkbox broken double binding 2`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -74,21 +86,26 @@ exports[`react checkbox double binding 1`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
       onChange={[Function]}
+      value=""
     />
     <textarea
       id="name-textarea"
       onChange={[Function]}
+      value=""
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -97,6 +114,7 @@ exports[`react checkbox double binding 1`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -108,14 +126,17 @@ exports[`react checkbox double binding 2`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
       onChange={[Function]}
+      value=""
     />
     <textarea
       id="name-textarea"
       onChange={[Function]}
+      value=""
     />
     <input
       checked={true}
@@ -133,6 +154,7 @@ exports[`react checkbox double binding 2`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -144,21 +166,26 @@ exports[`react checkbox double binding with reactInput handler 1`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
       onChange={[Function]}
+      value=""
     />
     <textarea
       id="name-textarea"
       onChange={[Function]}
+      value=""
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -167,6 +194,7 @@ exports[`react checkbox double binding with reactInput handler 1`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -178,6 +206,7 @@ exports[`react checkbox double binding with reactInput handler 2`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
@@ -190,11 +219,13 @@ exports[`react checkbox double binding with reactInput handler 2`] = `
       value={true}
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -203,6 +234,7 @@ exports[`react checkbox double binding with reactInput handler 2`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -214,21 +246,26 @@ exports[`react date input double binding 1`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
       onChange={[Function]}
+      value=""
     />
     <textarea
       id="name-textarea"
       onChange={[Function]}
+      value=""
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -237,6 +274,7 @@ exports[`react date input double binding 1`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -248,21 +286,26 @@ exports[`react date input double binding 2`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
       onChange={[Function]}
+      value=""
     />
     <textarea
       id="name-textarea"
       onChange={[Function]}
+      value=""
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -283,21 +326,26 @@ exports[`react text input double binding 1`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
       onChange={[Function]}
+      value=""
     />
     <textarea
       id="name-textarea"
       onChange={[Function]}
+      value=""
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -306,6 +354,7 @@ exports[`react text input double binding 1`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -330,11 +379,13 @@ exports[`react text input double binding 2`] = `
       value="someone"
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -343,6 +394,7 @@ exports[`react text input double binding 2`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -354,21 +406,26 @@ exports[`react textarea double binding 1`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
       onChange={[Function]}
+      value=""
     />
     <textarea
       id="name-textarea"
       onChange={[Function]}
+      value=""
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -377,6 +434,7 @@ exports[`react textarea double binding 1`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>
@@ -388,6 +446,7 @@ exports[`react textarea double binding 2`] = `
     <input
       id="email"
       onChange={[Function]}
+      value=""
     />
     <input
       id="name"
@@ -400,11 +459,13 @@ exports[`react textarea double binding 2`] = `
       value="someone"
     />
     <input
+      checked={false}
       id="premium"
       onChange={[Function]}
       type="checkbox"
     />
     <input
+      checked={false}
       id="premium-broken"
       onChange={[Function]}
       type="text"
@@ -413,6 +474,7 @@ exports[`react textarea double binding 2`] = `
       id="birthday"
       onChange={[Function]}
       type="date"
+      value=""
     />
   </div>
 </UserForm>

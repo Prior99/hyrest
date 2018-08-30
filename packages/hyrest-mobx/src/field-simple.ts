@@ -335,6 +335,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
                 return;
             },
             get checked () {
+                if (typeof fieldSimple.value === "undefined") { return false; }
                 return fieldSimple.value;
             },
         };
@@ -365,6 +366,7 @@ export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
                 if (typeof fieldSimple.value === "object" && fieldSimple.value.constructor === Date) {
                     return (fieldSimple.value as any as Date).toISOString().split("T")[0];
                 }
+                if (typeof fieldSimple.value === "undefined") { return ""; }
                 return fieldSimple.value as any;
             },
         };
