@@ -38,16 +38,24 @@ import { Todo } from "../models";
 
 @controller
 export class TodosController {
-    public create(todo: Todo) {
+    public async create(todo: Todo): Promise<Todo> {
+        return;
     }
 
-    public list() {
+    public async list(): Promise<Todo[]> {
+        return;
     }
 
-    public remove(id: string) {
+    public async remove(id: string): Promise<void> {
+        return;
     }
 
-    public check(id: string) {
+    public async byId(id: string): Promise<Todo> {
+        return;
+    }
+
+    public async check(id: string): Promise<Todo> {
+        return;
     }
 }
 ```
@@ -63,19 +71,28 @@ import { Todo } from "../models";
 @controller
 export class TodosController {
     @route("POST", "/todos")
-    public create(todo: Todo) {
+    public async create(todo: Todo): Promise<Todo> {
+        return;
     }
 
     @route("GET", "/todos")
-    public list() {
+    public async list(): Promise<Todo[]> {
+        return;
     }
 
     @route("DELETE", "/todo/:id")
-    public remove(id: string) {
+    public async remove(id: string): Promise<void> {
+        return;
+    }
+
+    @route("GET", "/todo/:id")
+    public async byId(id: string): Promise<Todo> {
+        return;
     }
 
     @route("POST", "/todo/:id/check")
-    public check(id: string) {
+    public async check(id: string): Promise<Todo> {
+        return;
     }
 }
 ```
@@ -93,19 +110,28 @@ import { createTodo } from "../scopes";
 @controller
 export class TodosController {
     @route("POST", "/todos")
-    public create(@body(createTodo) todo: Todo) {
+    public async create(@body(createTodo) todo: Todo): Promise<Todo> {
+        return;
     }
 
     @route("GET", "/todos")
-    public list() {
+    public async list(): Promise<Todo[]> {
+        return;
     }
 
     @route("DELETE", "/todo/:id")
-    public remove(@param("id") id: string) {
+    public async remove(@param("id") id: string): Promise<void> {
+        return;
+    }
+
+    @route("GET", "/todo/:id")
+    public async byId(@param("id") id: string): Promise<Todo> {
+        return;
     }
 
     @route("POST", "/todo/:id/check")
-    public check(@param("id") id: string) {
+    public async check(@param("id") id: string): Promise<Todo> {
+        return;
     }
 }
 ```

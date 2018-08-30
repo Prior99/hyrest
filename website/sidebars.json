@@ -20,8 +20,8 @@
       "tutorial-models",
       "tutorial-controller",
       "tutorial-controller-logic",
-      "tutorial-express-setup",
       "tutorial-dependency-injection",
+      "tutorial-express-setup",
       "tutorial-database-setup",
       "tutorial-compile-backend"
     ],
