@@ -21,6 +21,7 @@ Add the following dependencies:
 - `express`: For serving the backend.
 - `hyrest-express`: For connecting Hyrest to Express.
 - `hyrest`
+- `hyrest-mobx`: For connecting Hyrest to MobX.
 - `mobx-react`: For connecting MobX to React.
 - `mobx`: As statemanagement in the frontend.
 - `pg`: Postgres backend for Typeorm.

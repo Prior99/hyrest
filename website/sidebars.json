@@ -35,13 +35,6 @@
     "Getting Started": [
       "getting-started-about",
       "getting-started-minimal-setup"
-    ],
-    "API": [
-      "api-about"
-    ],
-    "Further Resources": [
-      "further-resources-concepts",
-      "further-resources-open-topics"
     ]
   }
 }

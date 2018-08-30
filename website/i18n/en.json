@@ -4,11 +4,6 @@
     "next": "Next",
     "previous": "Previous",
     "tagline": "Hyrest Documentation",
-    "api-about": "About",
-    "further-resources-concepts": "Concepts",
-    "further-resources-open-topics": "Open Topics",
-    "getting-started-about": "About",
-    "getting-started-minimal-setup": "Minimal Setup",
     "introduction-about": "About",
     "introduction-architectural-inspirations": "Architectural Inspirations",
     "introduction-companion-technologies": "Companion Technologies",
@@ -37,12 +32,9 @@
     "tutorial-webpack": "10. Setup Webpack",
     "Guide": "Guide",
     "Tutorial": "Tutorial",
-    "Getting started": "Getting started",
-    "API": "API",
     "Preamble": "Preamble",
     "Introduction": "Introduction",
-    "Getting Started": "Getting Started",
-    "Further Resources": "Further Resources"
+    "Getting Started": "Getting Started"
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",
