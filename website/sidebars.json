@@ -31,10 +31,6 @@
       "tutorial-todo-store",
       "tutorial-list-component",
       "tutorial-form-component"
-    ],
-    "Getting Started": [
-      "getting-started-about",
-      "getting-started-minimal-setup"
     ]
   }
 }
