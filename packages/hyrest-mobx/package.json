@@ -33,13 +33,13 @@
   ],
   "devDependencies": {
     "@types/invariant": "^2.2.29",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.3"
   },
   "dependencies": {
     "bind-decorator": "^1.0.11",
     "hyrest": "^0.8.0",
     "invariant": "^2.2.4",
-    "mobx": "^5.0.3",
+    "mobx": "^5.1.0",
     "reflect-metadata": "^0.1.12"
   }
 }
