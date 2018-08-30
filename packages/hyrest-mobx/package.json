@@ -1,6 +1,6 @@
 {
   "name": "hyrest-mobx",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A hybrid REST library for the frontend and backend. Mobx connector package.",
   "keywords": [
     "hyrest",
@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "bind-decorator": "^1.0.11",
-    "hyrest": "^0.8.0",
+    "hyrest": "^0.9.0",
     "invariant": "^2.2.4",
     "mobx": "^5.1.0",
     "reflect-metadata": "^0.1.12"
