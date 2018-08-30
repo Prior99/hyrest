@@ -11,7 +11,7 @@ One part is still missing: The database needs to be configured.
 If you already have a running postgres server on your machine, this might be as simple as:
 
 ```sh
-$ createdb todos
+createdb todos
 ```
 
 ## Create a database factory
