@@ -23,7 +23,14 @@
       "tutorial-dependency-injection",
       "tutorial-express-setup",
       "tutorial-database-setup",
-      "tutorial-compile-backend"
+      "tutorial-compile-backend",
+      "tutorial-cors",
+      "tutorial-webpack",
+      "tutorial-react",
+      "tutorial-dependency-injection-frontend",
+      "tutorial-todo-store",
+      "tutorial-list-component",
+      "tutorial-form-component"
     ],
     "Getting Started": [
       "getting-started-about",
