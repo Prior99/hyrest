@@ -6,12 +6,10 @@ module.exports = {
     projectName: "hyrest-docs",
     organizationName: "hyrest",
     headerLinks: [
-        { doc: "introduction", label: "Preamble" },
-        { doc: "hyrests-approach", label: "Introduction" },
-        { doc: "tutorial-basic", label: "Tutorial" },
-        { doc: "minimal-setup", label: "Getting Started" },
-        { doc: "concepts", label: "Concepts" },
-        { doc: "api", label: "API" },
+        { doc: "preamble-about", label: "Guide" },
+        { doc: "tutorial-about", label: "Tutorial" },
+        { doc: "getting-started-about", label: "Getting started" },
+        { doc: "api-about", label: "API" }
     ],
     headerIcon: "img/hyrest-logo-monochrome.svg",
     footerIcon: "img/hyrest-logo-monochrome.svg",

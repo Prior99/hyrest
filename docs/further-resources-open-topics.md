@@ -1,5 +1,5 @@
 ---
-id: open-topics
+id: further-resources-open-topics
 title: Open Topics
 ---
 

@@ -1,19 +1,23 @@
 ---
-id: hyrests-approach
+id: introduction-hyrests-approach
 title: Hyrest's approach
 ---
 
-With all the problems denoted in [Drawbacks](drawbacks) and [existing solutions listed previously](existing-approaches), what role does Hyrest take?
+With all the [problems SPAs have](preamble-problems-with-spas) and [existing solutions listed previously](introduction-existing-approaches), what role does Hyrest take?
 
 ## Motivation
 
-Hyrest aims to keep the architecture of each application intact and tries to [not mix up the different tiers](anatomy#don-t-mix-up-the-tiers). While doing so, it still wants to bridge the gaps between sub-projects and make them essentially one (This is greatly inspired by the trend to use mono-repositories).
+Hyrest aims to keep the architecture of each application intact and tries to [not mix up the different tiers](preamble-anatomy#don-t-mix-up-the-tiers).
+While doing so, it still wants to bridge the gaps between sub-projects and make them essentially one (This is greatly inspired by the trend to use mono-repositories).
 
-Calling the route of another service will be as easy as calling a method implemented in the same sub-project. Interfaces can be consistently shared between projects and logic can dynamically be re-used while still maintaining a consistent Api.
+Calling the route of another service will be as easy as calling a method implemented in the same sub-project.
+Interfaces can be consistently shared between projects and logic can dynamically be re-used while still maintaining a consistent Api.
 
 ## Solutions
 
-When thinking back about the target multitier architecture discussed in [Anatomy](anatomy), each application deserves its own three tiers, connected by a networking tier. Each application has its own presentation tier, the one of the backend being the REST Api consumed by the frontend:
+When thinking back about the suggested multitier architecture discussed in [Anatomy](preamble-anatomy), each application deserves its own three tiers.
+Multiple applications are connected by a networking tier.
+Each application has its own presentation tier, the one of the backend being the REST Api consumed by the frontend:
 
 ![Multitier Architecture](assets/layers-correct.svg)
 
@@ -25,9 +29,10 @@ Each application still has a data tier, an application tier and a presentation t
 
 ### Unifying the stack
 
-When developing an application using Hyrest, you will implement your whole project (backend and frontend) in Typescript. It is of course possible to implement specialized services using other technologies, but Hyrest can't help you much here.
+When developing an application using Hyrest, you will implement your whole project (backend and frontend) in Typescript.
+It is of course possible to implement specialized services using other technologies, but Hyrest can't help you much here.
 
-Personally, I recommend using a mono-repository with different domain-specific packages using Lerna and Yarn workspaces when dealing with more than one set of backend and frontent.
+> Personally, I recommend using a mono-repository with different domain-specific packages using [Lerna](https://github.com/lerna/lerna) and [Yarn workspaces](https://yarnpkg.com/en/docs/workspaces) when dealing with more than one set of backend and frontent.
 
 When implementing a set of one backend consumed by one frontend, a single project with two entry-points can be enough:
 
@@ -53,11 +58,15 @@ Code in both `src/server` and `src/ui` can access `src/common`, but they would n
 
 ### Aligning your teams correctly
 
-Hyrest essentially merges separate sub-projects back into one project, while still keeping it different applications. This encourages teams to be split across specific domains of your project instead of having a dedicated frontend and a dedicated backend team (a team per services). A team can still consist of backend-experts and frontend-experts but by easing the access and inclusions between multiple sub-projects and unifying the stack no dedicated teams per service are necessary anymore.
+Hyrest essentially merges separate sub-projects back into one project, while still keeping it different applications.
+This encourages teams to be split across specific domains of your project instead of having a dedicated frontend and a dedicated backend team (a team per services).
+A team can still consist of backend-experts and frontend-experts but by easing the access and inclusions between multiple sub-projects and unifying the stack no dedicated teams per service are necessary anymore.
 
 ### Bridging the networking gap
 
-Hyrest is heavily decorator-oriented. Logic consuming data from the persistence tier should be implemented in controller classes decorated with a `@controller` decorator marking it as a controller. Each method that should be callable from any other sub-project has to be decorated with `@route("GET", "/route/to/resource")` and will hence be exposed as a REST route.
+Hyrest is heavily decorator-oriented.
+Logic consuming data from the persistence tier should be implemented in controller classes decorated with a `@controller` decorator marking it as a controller.
+Each method that should be callable from any other sub-project has to be decorated with `@route("GET", "/route/to/resource")` and will hence be exposed as a REST route.
 
 When calling such a method on a controller ...
 
@@ -158,7 +167,9 @@ The code for the backend is essentially the same, just some decorators were adde
 - The `@route` decorator configures how the method can be accessed using REST.
 - The `@param` and `@query` decorators will inject the URL and query parameters into the method.
 
-Nothing more is necessary. In the frontend a simple `await statisticsController.getStatistics("my-user-id", 11)` will be enough. At the same time, it is still possible to perform a call to `https://api.example.com/user/my-user-id/statistics?month=11`.
+Nothing more is necessary.
+In the frontend a simple `await statisticsController.getStatistics("my-user-id", 11)` will be enough.
+At the same time, it is still possible to perform a call to `https://api.example.com/user/my-user-id/statistics?month=11`.
 
 When using utility functions inside the backend which call `StatisticsController.getStatistics`, the decorators are ignored and the method's logic is executed.
 
@@ -166,7 +177,8 @@ When using utility functions inside the frontend which call `StatisticsControlle
 
 ### Interfaces, schemas and validation
 
-Apart from the networking gap, interfaces also need to be shared between applications. Let's say the following model is returned by the ORM utilized in the backend:
+Apart from the networking gap, interfaces also need to be shared between applications.
+Let's say the following model is returned by the ORM utilized in the backend:
 
 ```typescript
 class User {
@@ -177,7 +189,8 @@ class User {
 }
 ```
 
-One of Hyrests core principles is to introduce descriptive decorators which add additional metadata where it belongs. This metadata will later be consumed by who-ever needs it.
+One of Hyrests core principles is to introduce [descriptive decorators](further-resources-concepts#descriptive-decorators) which add additional metadata where it belongs.
+This metadata will later be consumed by who-ever needs it.
 
 In this example, as well when implementing a form for signup in the frontend as when validating an incoming request in the backend, metadata about datatype, password validity and so on is needed.
 
@@ -214,7 +227,7 @@ class User {
 }
 ```
 
-*Please note that the `DataType.string` part can be omitted as Hyrest can infer it from the Typescript typings.*
+> Please note that the `DataType.string` part can be omitted as Hyrest can [infer it from the Typescript typings](https://www.typescriptlang.org/docs/handbook/decorators.html#metadata).
 
 These decorators do nothing but add additional metadata to the class which will later be consumed by [hyrest-express](https://www.npmjs.com/package/hyrest-express) for validation and parsing of incoming requests or [hyrest-mobx](https://www.npmjs.com/package/hyrest-mobx) for frontend-validation.
 

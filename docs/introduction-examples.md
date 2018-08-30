@@ -1,9 +1,9 @@
 ---
-id: example
+id: introduction-examples
 title: Examples
 ---
 
-To understand Hyrest better, for learning by example or to evaluate it, example can proove helpfull.
+To understand Hyrest better, for learning by example or to evaluate it, example can proove helpful.
 
 ## Realworld examples
 
@@ -15,5 +15,5 @@ Some opensource projects have been based on Hyrest:
 
 ## Fullstack Todo Example
 
-Follow along the [official tutorial](tutorial-basic) and write a Todo Example application on your to get your hands dirty with Hyrest.
+Follow along the [official tutorial](tutorial-about) and write a Todo Example application on your to get your hands dirty with Hyrest.
 The example [is published as a git repository](https://github.com/Prior99/hyrest-todo-example) on Github with commits for every step.

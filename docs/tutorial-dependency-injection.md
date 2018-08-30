@@ -1,4 +1,6 @@
 ---
 id: tutorial-dependency-injection
-title: 5. Configure dependency injection
+title: 6. Dependency injection
 ---
+
+# TODO

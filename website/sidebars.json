@@ -1,20 +1,21 @@
 {
   "docs": {
     "Preamble": [
-      "introduction",
-      "document-application",
-      "anatomy",
-      "drawbacks",
-      "existing-approaches"
+      "preamble-about",
+      "preamble-documents-applications",
+      "preamble-anatomy",
+      "preamble-problems-with-spas",
+      "preamble-existing-approaches"
     ],
     "Introduction": [
       "introduction-about",
-      "hyrests-approach",
-      "architectural-inspirations",
-      "companion-technologies",
-      "example"
+      "introduction-hyrests-approach",
+      "introduction-architectural-inspirations",
+      "introduction-companion-technologies",
+      "introduction-examples"
     ],
     "Tutorial": [
+      "tutorial-about",
       "tutorial-basic",
       "tutorial-models",
       "tutorial-controller",
@@ -25,11 +26,15 @@
       "tutorial-compile-backend"
     ],
     "Getting Started": [
-      "minimal-setup"
+      "getting-started-about",
+      "getting-started-minimal-setup"
+    ],
+    "API": [
+      "api-about"
     ],
     "Further Resources": [
-      "concepts",
-      "open-topics"
+      "further-resources-concepts",
+      "further-resources-open-topics"
     ]
   }
 }

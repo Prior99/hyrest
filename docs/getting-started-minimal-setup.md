@@ -1,5 +1,5 @@
 ---
-id: minimal-setup
+id: getting-started-minimal-setup
 title: Minimal Setup
 ---
 
