@@ -1,6 +1,6 @@
 ---
 id: tutorial-list-component
-title: 16. List component
+title: 14. List component
 ---
 
 Let's display all todos as a list.

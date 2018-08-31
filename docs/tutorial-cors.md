@@ -1,11 +1,11 @@
 ---
 id: tutorial-cors
-title: 10. Cors
+title: 9. CORS
 ---
 
-In order to make the backend reachable for a frontend on another domain, we need to add cors support.
+In order to make the backend reachable for a frontend on another domain, we need to add CORS support.
 
-Put the following lines somwhere into the initialize function in your `src/server/server.ts`:
+Put the following lines somewhere into the initialize function in your `src/server/server.ts`:
 
 ```typescript
 this.app.use((req: Express.Request, res: Express.Response, next: Express.NextFunction) => {

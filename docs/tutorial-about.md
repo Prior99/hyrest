@@ -7,7 +7,7 @@ Follow this tutorial in which a full-stack todo application will be implemented 
 
 The example [is published as a git repository](https://github.com/Prior99/hyrest-todo-example) on Github with commits for every step.
 
-## Contents
+## Backend
 
 1. [Basic project setup](tutorial-basic): Explanation of all used dependencies and setup of a basic JS project.
 2. [Define models](tutorial-models): Define the models for the project used in both the database and for the controllers.
@@ -17,7 +17,10 @@ The example [is published as a git repository](https://github.com/Prior99/hyrest
 6. [Express Setup](tutorial-express-setup): In order to serve the Api, Hyrest needs to be connected to Express.
 7. [Database setup](tutorial-database-setup): The models need to be store somewhere. A database connection needs to be provided by the dependency injector.
 8. [Compile the backend](tutorial-compile-backend): The backend is implemented. It can now be compiled, executed and used.
-9. [Cors](tutorial-cors): Add CORS support to your backend.
+9. [CORS](tutorial-cors): Add [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) support to your backend.
+
+## Frontend
+
 10. [Setup Webpack](tutorial-webpack): Configure webpack to properly compile the frontend part of the application.
 11. [Setup React](tutorial-react): Setup basic react code and render a hello world.
 12. [Dependency Injection (Frontend)](tutorial-dependency-injection-frontend): Add dependency injection support for the frontend.

@@ -1,5 +1,5 @@
 {
-  "docs": {
+  "guide": {
     "Preamble": [
       "preamble-about",
       "preamble-documents-applications",
@@ -13,8 +13,10 @@
       "introduction-architectural-inspirations",
       "introduction-companion-technologies",
       "introduction-examples"
-    ],
-    "Tutorial": [
+    ]
+  },
+  "tutorial": {
+    "Backend": [
       "tutorial-about",
       "tutorial-basic",
       "tutorial-models",
@@ -24,7 +26,9 @@
       "tutorial-express-setup",
       "tutorial-database-setup",
       "tutorial-compile-backend",
-      "tutorial-cors",
+      "tutorial-cors"
+    ],
+    "Frontend": [
       "tutorial-webpack",
       "tutorial-react",
       "tutorial-dependency-injection-frontend",
