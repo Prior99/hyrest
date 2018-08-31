@@ -139,10 +139,10 @@ class Index extends React.Component {
                     <div className="inner">
                         <ProjectTitle />
                         <PromoSection>
-                            <Button href={docUrl("preamble-about")}>Guide</Button>
-                            <Button href={docUrl("tutorial-about")}>Tutorial</Button>
+                            <Button href={docUrl("preamble-about.html")}>Guide</Button>
+                            <Button href={docUrl("tutorial-about.html")}>Tutorial</Button>
                             <Button href={siteConfig.repoUrl}>GitHub</Button>
-                            <Button href={docUrl("api-about")}>API</Button>
+                            <Button href={docUrl("api-about.html")}>API</Button>
                         </PromoSection>
                     </div>
                 </SplashContainer>

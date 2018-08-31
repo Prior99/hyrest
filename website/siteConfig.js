@@ -25,6 +25,5 @@ module.exports = {
     },
     scripts: ["https://buttons.github.io/buttons.js"],
     onPageNav: "separate",
-    cleanUrl: true,
     repoUrl: "https://github.com/prior99/hyrest",
 };

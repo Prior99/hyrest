@@ -9,7 +9,7 @@
     "api-client": "Usage as client",
     "api-forms": "Forms",
     "api-routes-controllers": "Routes and controllers",
-    "api-serialize": "Serializing and Deserializing",
+    "api-serialize": "Serializing and deserializing",
     "api-server": "Usage as server",
     "api-validation": "Validation",
     "introduction-about": "About",
