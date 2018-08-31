@@ -3,11 +3,11 @@ id: introduction-hyrests-approach
 title: Hyrest's approach
 ---
 
-With all the [problems SPAs have](preamble-problems-with-spas) and [existing solutions listed previously](introduction-existing-approaches.md), what role does Hyrest take?
+With all the [problems SPAs have](preamble-problems-with-spas.md) and [existing solutions listed previously](preamble-existing-approaches.md), what role does Hyrest take?
 
 ## Motivation
 
-Hyrest aims to keep the architecture of each application intact and tries to [not mix up the different tiers](preamble-anatomy#don-t-mix-up-the-tiers).
+Hyrest aims to keep the architecture of each application intact and tries to [not mix up the different tiers](preamble-anatomy.md#don-t-mix-up-the-tiers).
 While doing so, it still wants to bridge the gaps between sub-projects and make them essentially one (This is greatly inspired by the trend to use mono-repositories).
 
 Calling the route of another service will be as easy as calling a method implemented in the same sub-project.
@@ -15,13 +15,13 @@ Interfaces can be consistently shared between projects and logic can dynamically
 
 ## Solutions
 
-When thinking back about the suggested multitier architecture discussed in [Anatomy](preamble-anatomy), each application deserves its own three tiers.
+When thinking back about the suggested multitier architecture discussed in [Anatomy](preamble-anatomy.md), each application deserves its own three tiers.
 Multiple applications are connected by a networking tier.
 Each application has its own presentation tier, the one of the backend being the REST API consumed by the frontend:
 
 ![Multitier Architecture](assets/layers-correct.svg)
 
-Hyrest still honours this idea, but will allow the developers to share the backend application tier across all applications and autogenerating the networking tier:
+Hyrest still honours this idea, but will allow the developers to share the backend application tier across all applications and auto generating the networking tier:
 
 ![Multitier Architecture - Hyrest style](assets/layers-new.svg)
 
@@ -52,7 +52,7 @@ project-root
 │   │   ├── index.tsx
 ```
 
-The code in `src/server` would be compiled for [Node](https://nodejs.org/) and serve an Express backend, while webpack could compile `src/ui` into a web application bundle.
+The code in `src/server` would be compiled for [Node](https://nodejs.org/) and serve an Express backend, while Webpack could compile `src/ui` into a web application bundle.
 
 Code in both `src/server` and `src/ui` can access `src/common`, but they would never cross-reference each other.
 
@@ -130,7 +130,7 @@ class StatisticsApi {
 
 While this is all quite overheady, the real problem is, that utility functions inside the backend might depend on `getStatistics` and hence can not be used inside the frontend.
 
-Another problem is that developers might forget to wrap the response in a real `Statistics` instance or flood the project with new interfaces for the Api's responses, all expressing the same thing but with some fields missing, hence creating inconsistencies.
+Another problem is that developers might forget to wrap the response in a real `Statistics` instance or flood the project with new interfaces for the API's responses, all expressing the same thing but with some fields missing, hence creating inconsistencies.
 
 Hyrest will reduce the overhead to make you write only what really matters:
 
@@ -189,10 +189,10 @@ class User {
 }
 ```
 
-One of Hyrests core principles is to introduce [descriptive decorators](further-resources-concepts#descriptive-decorators) which add additional metadata where it belongs.
+One of Hyrests core principles is to introduce descriptive decorators which add additional metadata where it belongs.
 This metadata will later be consumed by who-ever needs it.
 
-In this example, as well when implementing a form for signup in the frontend as when validating an incoming request in the backend, metadata about datatype, password validity and so on is needed.
+In this example, as well when implementing a form for sign up in the frontend as when validating an incoming request in the backend, metadata about data type, password validity and so on is needed.
 
 Validation without Hyrest could naively be implemented with a function like this:
 

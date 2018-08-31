@@ -3,7 +3,7 @@ id: introduction-about
 title: About
 ---
 
-In [the last chapter](preamble-about) some basic problems, existing solutions and basic principles were discussed.
+In [the last chapter](preamble-about.md) some basic problems, existing solutions and basic principles were discussed.
 After reading it, you should have a better idea about whether Hyrest is the best choice for you.
 Furthermore it hopefully gave you some insights about how to roughly structure your project.
 
@@ -13,4 +13,3 @@ This chapter will dive deeper into Hyrest's approach and give some general advis
 2. Instead of providing a scaffolding preset or a boilerplate, Hyrest will provide you with **[architectural inspirations](introduction-architectural-inspirations.md)** for structuring your project.
 3. Hyrest itself is mostly a framework for bridging the gap between your backend and frontend. Suggested **[companion technologies](introduction-companion-technologies.md)** which are tested to work well together with Hyrest can make your stack complete.
 4. Finally, some **[examples](introduction-examples.md)** will be linked.
-

@@ -40,7 +40,7 @@ Instead of simply listing [some of Hyrest's features with examples](api-about.md
 
 For this, the following topics will be discussed:
 
-1. **[Documents and Applications](preamble-documents-applications)**. Figuring out whether it is a document or an application you are developing and locating your project in the Document-to-application continuum can help you figure out how scalable your stack needs to be.
-2. General **[anatomy](preamble-anatomy)** of a single-page application stack. Hyrest targets medium sized projects with separate frontend and backend applications. A rough understanding of frontend and backend architecture in the context of single-page applications will be given in this section.
-3. By discussing the **[problems of SPAs](preamble-problems-with-spas)** in comparison to template-rendering the problems solved by Hyrest will be outlined.
-4. **[Existing approaches](preamble-existing-approaches)** for solving the problems outlined in [Problems with SPAs](preamble-problems-with-spas) exist and you should consider whether these might be more fit-for-purpose in the context of your project.
+1. **[Documents and Applications](preamble-documents-applications.md)**. Figuring out whether it is a document or an application you are developing and locating your project in the Document-to-application continuum can help you figure out how scalable your stack needs to be.
+2. General **[anatomy](preamble-anatomy.md)** of a single-page application stack. Hyrest targets medium sized projects with separate frontend and backend applications. A rough understanding of frontend and backend architecture in the context of single-page applications will be given in this section.
+3. By discussing the **[problems of SPAs](preamble-problems-with-spas.md)** in comparison to template-rendering the problems solved by Hyrest will be outlined.
+4. **[Existing approaches](preamble-existing-approaches.md)** for solving the problems outlined in [Problems with SPAs](preamble-problems-with-spas.md) exist and you should consider whether these might be more fit-for-purpose in the context of your project.

@@ -15,7 +15,7 @@ This sections wants to give you some inspirations about how to structure and des
 
 ## Properly layer your application
 
-Take a look at [Anatomy](preamble-anatomy) and consider structuring your application in a similar way.
+Take a look at [Anatomy](preamble-anatomy.md) and consider structuring your application in a similar way.
 Other frameworks such as [Ionic in its example app](https://github.com/ionic-team/ionic-conference-app/tree/master/src/app) already suggest (or enforce) a certain structure.
 Even though Hyrest does not enforce anything, it is probably a good idea to think about your project's structure.
 
@@ -192,7 +192,7 @@ It depends on a *Provider* being the parent of all components consuming the data
 
 ## Dependency Injection
 
-As stated in [the previous section](don-t-mix-up-markup-and-data-flow), it is a good idea to separate markup and data flow to keep your application's layout flexible.
+As stated in [the previous section](#don-t-mix-up-markup-and-data-flow), it is a good idea to separate markup and data flow to keep your application's layout flexible.
 Especially in the Java ecosystem, dependency injection has been a trend long since.
 Major ecosystems such as [Java Spring](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-spring-beans-and-dependency-injection.html) or [Android](http://square.github.io/dagger/) encourage the use of such dependency injectors and multiple [agnostic solutions](https://github.com/google/guice) have been published.
 
