@@ -142,6 +142,7 @@ class Index extends React.Component {
                             <Button href={docUrl("preamble-about")}>Guide</Button>
                             <Button href={docUrl("tutorial-about")}>Tutorial</Button>
                             <Button href={siteConfig.repoUrl}>GitHub</Button>
+                            <Button href={docUrl("api-about")}>API</Button>
                         </PromoSection>
                     </div>
                 </SplashContainer>

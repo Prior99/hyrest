@@ -1,7 +1,7 @@
 {
   "name": "hyrest-mobx",
   "version": "0.1.0",
-  "description": "A hybrid REST library for the frontend and backend. Mobx connector package.",
+  "description": "A hybrid REST library for the frontend and backend. MobX connector package.",
   "keywords": [
     "hyrest",
     "hybrid",
@@ -18,7 +18,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "docs": "typedoc --mode file --out docs/ src/"
   },
   "typings": "dist/index.d.ts",
   "repository": {
@@ -33,6 +34,7 @@
   ],
   "devDependencies": {
     "@types/invariant": "^2.2.29",
+    "typedoc": "^0.12.0",
     "typescript": "^3.0.3"
   },
   "dependencies": {

@@ -7,7 +7,8 @@ module.exports = {
     organizationName: "hyrest",
     headerLinks: [
         { doc: "preamble-about", label: "Guide" },
-        { doc: "tutorial-about", label: "Tutorial" }
+        { doc: "tutorial-about", label: "Tutorial" },
+        { doc: "api-about", label: "API" }
     ],
     headerIcon: "img/hyrest-logo-monochrome.svg",
     footerIcon: "img/hyrest-logo-monochrome.svg",

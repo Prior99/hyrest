@@ -36,5 +36,17 @@
       "tutorial-list-component",
       "tutorial-form-component"
     ]
+  },
+  "api": {
+    "API": [
+      "api-about",
+      "api-routes-controllers",
+      "api-validation",
+      "api-forms",
+      "api-scopes",
+      "api-client",
+      "api-server",
+      "api-authorization"
+    ]
   }
 }

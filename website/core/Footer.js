@@ -35,6 +35,8 @@ class Footer extends React.Component {
           <div>
             <h5>Docs</h5>
             <a href={this.docUrl('preamble-about')}>Guide</a>
+            <a href={this.docUrl('tutorial-about')}>Tutorial</a>
+            <a href={this.docUrl('api-about')}>API</a>
           </div>
           <div>
             <h5>Community</h5>
@@ -44,11 +46,18 @@ class Footer extends React.Component {
               rel="noreferrer noopener">
               Stack Overflow
             </a>
+            <a
+              href="https://github.com/Prior99/hyrest/issues"
+              target="_blank"
+              rel="noreferrer noopener">
+              Issues
+            </a>
           </div>
           <div>
             <h5>More</h5>
             <a href="https://fontawesome.com">Icons by Fontawesome</a>
             <a href="https://github.com/prior99/hyrest">GitHub</a>
+            <a href="https://gitlab.com/prior99/hyrest/pipelines">CI/CD</a>
             <a
               className="github-button"
               href={this.props.config.repoUrl}

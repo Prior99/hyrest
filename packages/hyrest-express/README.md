@@ -1,17 +1,16 @@
 # Hyrest Express
 
-[![npm](https://img.shields.io/npm/v/hyrest.svg)](https://www.npmjs.com/package/hyrest)
-[![Build Status](https://travis-ci.org/Prior99/hyrest.svg?branch=master)](https://travis-ci.org/Prior99/hyrest)
-[![Coverage Status](https://coveralls.io/repos/github/Prior99/hyrest/badge.svg?branch=master)](https://coveralls.io/github/Prior99/hyrest?branch=master)
+<img align="right" width="200" height="200" src="https://github.com/Prior99/hyrest/raw/master/logo/hyrest-logo-400px.png">
+
+[![npm](https://img.shields.io/npm/v/hyrest-express.svg)](https://www.npmjs.com/package/hyrest-express)
+[![pipeline status](https://gitlab.com/prior99/hyrest/badges/master/pipeline.svg)](https://github.com/Prior99/hyrest)
+[![coverage report](https://gitlab.com/prior99/hyrest/badges/master/coverage.svg)](https://github.com/Prior99/hyrest)
 
 Hyrest is a hybrid REST framework for both the client and the server.
 
-This is the express middleware package.
+**This is the express middleware package.**
 
-The idea is to define routes using decorators and use them to both serve the REST endpoint
-and call them from the frontend. When developing both server and client in the same repository
-or sharing a common library with all endpoints between the both, a call to a REST endoint
-is transparent, type-safe and as easy calling a method.
+Connect your [hyrest](../hyrest) controllers to [Express](http://expressjs.com/) and server them as a REST API.
 
 ## Usage
 
@@ -34,4 +33,12 @@ app.use(hyrest(
 app.listen(3000);
 ```
 
-Everything else happens magically.
+Everything else happens automatically.
+
+## Resources
+
+- [Tutorial](http://localhost:3000/hyrest/docs/tutorial-about)
+- [Minimal example project](https://github.com/Prior99/hyrest-todo-example)
+- [Documentation](https://prior99.gitlab.io/hyrest/)
+- [Guide](https://prior99.gitlab.io/hyrest/docs/preamble-about/)
+- [API Reference](https://prior99.gitlab.io/hyrest/api/hyrest-express/)

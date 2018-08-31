@@ -16,8 +16,9 @@ docs: node_modules
 	cd website && yarn build
 	rm -rf website/build/hyrest-docs/api
 	mkdir website/build/hyrest-docs/api
-	cp -rl packages/hyrest/docs website/build/hyrest-docs/api/hyrest
-	cp -rl packages/hyrest-express/docs website/build/hyrest-docs/api/hyrest-express
+	for package in `ls packages/`; do \
+	    cp -rl packages/$$package/docs website/build/hyrest-docs/api/$$package 2> /dev/null || true;\
+	done
 
 .PHONY: test
 test: node_modules build
