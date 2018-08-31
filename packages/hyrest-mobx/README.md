@@ -1,4 +1,4 @@
-# Hyrest Express
+# Hyrest MobX
 
 <img align="right" width="200" height="200" src="https://github.com/Prior99/hyrest/raw/master/logo/hyrest-logo-400px.png">
 
@@ -66,7 +66,7 @@ The injected values already utilize Mobx under the hood and hence no `@observabl
 
 ## Resources
 
-- [Tutorial](http://localhost:3000/hyrest/docs/tutorial-about)
+- [Tutorial](https://prior99.gitlab.io/hyrest/docs/tutorial-about)
 - [Minimal example project](https://github.com/Prior99/hyrest-todo-example)
 - [Documentation](https://prior99.gitlab.io/hyrest/)
 - [Guide](https://prior99.gitlab.io/hyrest/docs/preamble-about/)

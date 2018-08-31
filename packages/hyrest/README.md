@@ -17,7 +17,7 @@ Please refer to the [resources](#resources) for getting you started.
 
 ## Resources
 
-- [Tutorial](http://localhost:3000/hyrest/docs/tutorial-about)
+- [Tutorial](https://prior99.gitlab.io/hyrest/docs/tutorial-about)
 - [Minimal example project](https://github.com/Prior99/hyrest-todo-example)
 - [Documentation](https://prior99.gitlab.io/hyrest/)
 - [Guide](https://prior99.gitlab.io/hyrest/docs/preamble-about/)
