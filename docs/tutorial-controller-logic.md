@@ -27,7 +27,7 @@ export class TodosController {
 
 Let us implement the `create` method of the controller.
 The todo is already provided as the method's first argument.
-We defined [the validation and data types](tutorial-model) when defining the model, so at this point the received data can safely be expected to be correct.
+We defined [the validation and data types](tutorial-models.md) when defining the model, so at this point the received data can safely be expected to be correct.
 If the validation would have failed, the method's body wouldn't have been called at all and a "400 Bad request" status would have been returned.
 
 Calls to the database are asynchronous, so the method will be marked as `async`.

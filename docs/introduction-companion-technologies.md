@@ -8,7 +8,7 @@ Find some inspiration in this set of suggested companion technologies.
 
 ## Typeorm
 
-[Typeorm](http://typeorm.io/) is an [ORM](introduction-architectural-inspirations#use-an-orm) written entirely in [Typescript](https://www.typescriptlang.org/).
+[Typeorm](http://typeorm.io/) is an [ORM](introduction-architectural-inspirations.md#use-an-orm) written entirely in [Typescript](https://www.typescriptlang.org/).
 It defines models as classes using decorators and works exceptionally well together with Hyrest.
 When utilizing both libraries together, a model can be written once, then annotated and used basically everywhere throughout the application.
 As opposed to its bigger competitor [Sequelize](http://docs.sequelizejs.com/), [Typeorm](http://typeorm.io/) is modern, being actively developed, uses [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and can infer much from [Typescript](https://www.typescriptlang.org/)'s typings.
@@ -17,7 +17,7 @@ As opposed to its bigger competitor [Sequelize](http://docs.sequelizejs.com/), [
 
 ## TSDI
 
-[Dependency injection](introduction-architectural-inspirations#dependency-injection) can be used as the backbone and hidden wiring of your application.
+[Dependency injection](introduction-architectural-inspirations.md#dependency-injection) can be used as the backbone and hidden wiring of your application.
 [Multiple solutions for dependency injection in JavaScript](https://www.npmjs.com/search?q=keywords:dependency%20injection) and [some even support Typescript](https://www.npmjs.com/search?q=keywords%3Adependency%20injection%20typescript).
 I found [TSDI](https://tsdi.js.org/) to be the best solution to work with [Typescript](https://www.typescriptlang.org/) due to its simple syntax, full decorator support and good documentation.
 

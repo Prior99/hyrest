@@ -15,10 +15,11 @@ Generated documentation from the code's comments is also available for all packa
 
 ## Detailed explanations
 
-- [Routes and controllers](api-routes-controllers)
-- [Validation](api-validation)
-- [Forms](api-forms)
-- [Serializing and deserializing](api-serialize)
-- [Usage as client](api-client)
-- [Usage as server](api-server)
-- [Authorization](api-authorization)
+- [Routes and controllers](api-routes-controllers.md)
+- [Validation](api-validation.md)
+- [Forms](api-forms.md)
+- [Serializing and deserializing](api-serialize.md)
+- [Usage as client](api-client.md)
+- [Usage as server](api-server.md)
+- [Authorization](api-authorization.md)
+

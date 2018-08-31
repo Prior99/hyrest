@@ -4,7 +4,7 @@ title: 15. Form component
 ---
 
 We can list todos, but how to create them?
-Create a new component in `src/components/form.tsx` similar to the components you already created [in the previous section](tutorial-list-component):
+Create a new component in `src/components/form.tsx` similar to the components you already created [in the previous section](tutorial-list-component.md):
 
 ## Basic component
 
@@ -144,7 +144,7 @@ public render() {
 
 The property `invalid` will return `true` if the field itself or any nested field failed validation.
 The `error` property will return the first error.
-This is using the validation [defined on the model](tutorial-models) internally.
+This is using the validation [defined on the model](tutorial-models.md) internally.
 
 ## Submit the form
 

@@ -8,7 +8,7 @@ Take a look at the [documentation for TSDI](https://tsdi.js.org/) to better unde
 
 ## Make the controller a component
 
-We will inject the controller [we just implemented](tutorial-controller-logic) into stores, components and the server later.
+We will inject the controller [we just implemented](tutorial-controller-logic.md) into stores, components and the server later.
 To have the controller managed by TSDI, we need to make it a "component".
 
 > The name "component" is ambiguous with "component" in the terms of frontend UI components.

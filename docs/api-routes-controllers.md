@@ -125,8 +125,8 @@ class UserController {
 }
 ```
 
-It is possible to automatically perform a [schema validation](api-validation#schema-validation) and [populate
-the parameter with the correct type](api-scopes#populating) limited to a [scope](api-scopes#scopes) when using [@body](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#body):
+It is possible to automatically perform a [schema validation](api-validation.md#schema-validation) and [populate
+the parameter with the correct type](api-scopes.md#populating) limited to a [scope](api-scopes.md#scopes) when using [@body](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#body):
 
 ```typescript
 ...
@@ -136,7 +136,7 @@ public async postSignup(@body(signupScope) user: User) {
 }
 ```
 
-Returning a serialized body limited to a certain [scope](api-scopes#scopes) can also be automated.
+Returning a serialized body limited to a certain [scope](api-scopes.md#scopes) can also be automated.
 Call `.dump(Type, scope)` on the [@route](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#route) decorator to have it be automatically populated on the client side and safely dumped on the server side:
 
 ```typescript

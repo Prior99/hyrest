@@ -11,7 +11,7 @@ from the ground up.
 Hyrest provides and utilizes many design patterns which make developing your application fast, scalable and understandable.
 This guide wants to introduce you to some of these.
 
-Before diving right [into the tutorial](tutorial-about) and starting to develop your application, you should carefully read this guide,
+Before diving right [into the tutorial](tutorial-about.md) and starting to develop your application, you should carefully read this guide,
 decide what set of patterns, decisions and technologies is the correct one for your project.
 
 After reading this guide you will know whether you should use Hyrest at all and hopefully have a better understanding about how to structure your web project.
@@ -36,7 +36,7 @@ Before starting to develop anything, or even select a stack it is crucial to dec
 ## About this preamble
 
 **Before diving into Hyrest, This guide wants to help you decide for the correct stack for your application.**
-Instead of simply listing [some of Hyrest's features with examples](api-about) here, it aims to enable you to design and setup the architecture for your project on your own.
+Instead of simply listing [some of Hyrest's features with examples](api-about.md) here, it aims to enable you to design and setup the architecture for your project on your own.
 
 For this, the following topics will be discussed:
 

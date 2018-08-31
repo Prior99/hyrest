@@ -3,12 +3,12 @@ id: tutorial-express-setup
 title: 6. Setup Express
 ---
 
-[The controller](tutorial-controller-logic) we just implemented can now be used to serve the backend.
+[The controller](tutorial-controller-logic.md) we just implemented can now be used to serve the backend.
 For this, we need to setup a simple [Express](https://expressjs.com/) application and mount the Hyrest middleware in it.
 
 ## Create class for server
 
-As we will be using [dependency injection](tutorial-dependency-injection) to handle startup and teardown of the server later, we will implement the server in a class.
+As we will be using [dependency injection](tutorial-dependency-injection.md) to handle startup and teardown of the server later, we will implement the server in a class.
 Create a new file in `src/server/` called `server.ts` and add an empty class with some Express boilerplate already present:
 
 ```typescript

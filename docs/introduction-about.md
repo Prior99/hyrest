@@ -9,7 +9,8 @@ Furthermore it hopefully gave you some insights about how to roughly structure y
 
 This chapter will dive deeper into Hyrest's approach and give some general advises about implementing a project with Hyrest.
 
-1. After learning about other existing solutions, this section will explain **[Hyrest's approach](introduction-hyrests-approach)** for bridging the gap between your sub-projects.
-2. Instead of providing a scaffolding preset or a boilerplate, Hyrest will provide you with **[architectural inspirations](introduction-architectural-inspirations)** for structuring your project.
-3. Hyrest itself is mostly a framework for bridging the gap between your backend and frontend. Suggested **[companion technologies](introduction-companion-technologies)** which are tested to work well together with Hyrest can make your stack complete.
-4. Finally, some **[examples](introduction-examples)** will be linked.
+1. After learning about other existing solutions, this section will explain **[Hyrest's approach](introduction-hyrests-approach.md)** for bridging the gap between your sub-projects.
+2. Instead of providing a scaffolding preset or a boilerplate, Hyrest will provide you with **[architectural inspirations](introduction-architectural-inspirations.md)** for structuring your project.
+3. Hyrest itself is mostly a framework for bridging the gap between your backend and frontend. Suggested **[companion technologies](introduction-companion-technologies.md)** which are tested to work well together with Hyrest can make your stack complete.
+4. Finally, some **[examples](introduction-examples.md)** will be linked.
+

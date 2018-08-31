@@ -39,7 +39,7 @@ export class ListItem extends React.Component {
 
 ### A getter for the todo
 
-As explained earlier, [keep the properties for your components as tidy as possible](introduction-architectural-inspirations#don-t-mix-up-markup-and-dataflow).
+As explained earlier, [keep the properties for your components as tidy as possible](introduction-architectural-inspirations.md#don-t-mix-up-markup-and-dataflow).
 
 What do we need to render an item in the list? Only the id for the todo to render.
 Add the property to the generic parameter of the extended class: `export class ListItem extends React.Component<{ id: string }> {`.

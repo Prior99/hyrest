@@ -3,7 +3,7 @@ id: tutorial-dependency-injection-frontend
 title: 12. Dependency injection
 ---
 
-The frontend will also be using dependency injection, much [like already setup in the backend](tutorial-dependency-injection).
+The frontend will also be using dependency injection, much [like already setup in the backend](tutorial-dependency-injection.md).
 
 ## Setup TSDI
 

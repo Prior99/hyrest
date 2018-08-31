@@ -9,7 +9,7 @@ You have the full freedom of designing your application's stack as you need it.
 
 Still, a suggested set of patterns and designs that work well together exists.
 
-These suggestions will be the basics for the [suggested companion technologies](introduction-companion-technologies) which have been found to work well with Hyrest.
+These suggestions will be the basics for the [suggested companion technologies](introduction-companion-technologies.md) which have been found to work well with Hyrest.
 
 This sections wants to give you some inspirations about how to structure and design your project.
 

@@ -280,4 +280,5 @@ Otherwise an `InvariantError` will be thrown.
 
 The [populate](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#populate) function is not intended to be used for validation and does not feature a validation layer of any kind.
 If a class expects property `a` to be a `string`, but a `number` is provided, nothing will break.
-Take a look at [validation](api-validation) if you need this.
+Take a look at [validation](api-validation.md) if you need this.
+

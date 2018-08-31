@@ -52,7 +52,7 @@ middleware.context(async (request) => {
 });
 ```
 
-The context can then be used in a [context validation](api-validation#context-sensitive-validation) or injected as an argument using [@context](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#context):
+The context can then be used in a [context validation](api-validation#context-sensitive-validation.md) or injected as an argument using [@context](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#context):
 
 ```typescript
 @route("GET", "/user/:id")
@@ -64,7 +64,7 @@ It is recommended to make the context argument an optional argument to be able t
 
 ## Authorization
 
-[Authorization](api-authorization) comes in two modes in Hyrest:
+[Authorization](api-authorization.md) comes in two modes in Hyrest:
 
 1. All routes are protected by default.
 2. No routes are protected by default.
@@ -75,4 +75,5 @@ This can be configured by [setting the default authorization mode](https://prior
 middleware.defaultAuthorizationMode(AuthorizationMode.AUTH);
 ```
 
-[A callback performing the actual authorization](https://prior99.gitlab.io/hyrest/api/hyrest-express/interfaces/hyrestbuilder.html#defaultauthorizationmode) can be provided as explained in [Authorization](api-authorization).
+[A callback performing the actual authorization](https://prior99.gitlab.io/hyrest/api/hyrest-express/interfaces/hyrestbuilder.html#defaultauthorizationmode) can be provided as explained in [Authorization](api-authorization.md).
+

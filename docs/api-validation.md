@@ -8,7 +8,7 @@ The library itself is typesafe but the REST endpoint might be called by 3rd part
 Apart from that consistency checks are also necessary in a typesafe environment.
 
 Hyrest provides a set of [free functions with a simple interface](#custom-validators), [low-level schema validation](#manually) and a [decorator](#inferred-from-model) for inferring the schema from a model.
-These schemas can then be used to validate incoming data [in the backend](api-routes-controllers#route-configuration) as well as for validation of [forms in the frontend](api-forms).
+These schemas can then be used to validate incoming data [in the backend](api-routes-controllers.md#route-configuration) as well as for validation of [forms in the frontend](api-forms.md).
 
 ## Parameters
 
@@ -249,7 +249,7 @@ function required<T>(value: T): Validation {
 
 A method called [validateCtx](https://prior99.gitlab.io/hyrest/api/hyrest/interfaces/fullvalidator.html#validatectx) exists on [@is](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#is), which takes a factory with the context passed in as the first argument.
 
-> It is possible to specify the context by calling [context on the hyrest middleware](api-server#context).
+> It is possible to specify the context by calling [context on the hyrest middleware](api-server.md#context).
 > This way a context object can be passed through to the validation.
 
 ```typescript

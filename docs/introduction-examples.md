@@ -15,5 +15,6 @@ Some opensource projects have been based on Hyrest:
 
 ## Full-stack Todo Example
 
-Follow along the [official tutorial](tutorial-about) and write a Todo Example application on your to get your hands dirty with Hyrest.
+Follow along the [official tutorial](tutorial-about.md) and write a Todo Example application on your to get your hands dirty with Hyrest.
 The example [is published as a git repository](https://github.com/Prior99/hyrest-todo-example) on GitHub with commits for every step.
+

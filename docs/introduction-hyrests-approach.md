@@ -3,7 +3,7 @@ id: introduction-hyrests-approach
 title: Hyrest's approach
 ---
 
-With all the [problems SPAs have](preamble-problems-with-spas) and [existing solutions listed previously](introduction-existing-approaches), what role does Hyrest take?
+With all the [problems SPAs have](preamble-problems-with-spas) and [existing solutions listed previously](introduction-existing-approaches.md), what role does Hyrest take?
 
 ## Motivation
 

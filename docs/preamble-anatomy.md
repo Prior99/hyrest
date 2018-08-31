@@ -16,7 +16,7 @@ A simple three-tier project might be (roughly) divided into:
 ### Simple example
 
 In a minimal desktop application (perhaps written in C++ and [QT](https://www.qt.io/), [GTK](https://www.gtk.org/) or [Java Swing](https://docs.oracle.com/javase/tutorial/uiswing/), this might be all you need.
-Setup an [SQL](https://www.sqlite.org/index.html) database and connect it to your project using your favorite [ORM](introduction-architectural-inspirations#use-an-orm) (Data tier), implement some classes or functions containing your business and application logic (Application tier), draw a nice GUI in your favorite editor (Presentation tier), connect it to the application tier and you're done.
+Setup an [SQL](https://www.sqlite.org/index.html) database and connect it to your project using your favorite [ORM](introduction-architectural-inspirations.md#use-an-orm) (Data tier), implement some classes or functions containing your business and application logic (Application tier), draw a nice GUI in your favorite editor (Presentation tier), connect it to the application tier and you're done.
 
 ![Simple three tier application](assets/layers-initial.svg)
 
