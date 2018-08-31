@@ -3,7 +3,7 @@ id: tutorial-cors
 title: 9. CORS
 ---
 
-In order to make the backend reachable for a frontend on another domain, we need to add CORS support.
+In order to make the backend reachable for a frontend on another domain, we need to add [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) support.
 
 Put the following lines somewhere into the initialize function in your `src/server/server.ts`:
 

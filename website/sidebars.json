@@ -43,7 +43,7 @@
       "api-routes-controllers",
       "api-validation",
       "api-forms",
-      "api-scopes",
+      "api-serialize",
       "api-client",
       "api-server",
       "api-authorization"

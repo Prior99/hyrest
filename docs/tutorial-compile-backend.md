@@ -28,7 +28,7 @@ Place a file called `tsconfig.json` into the project's root with the following c
 
 Explanation of the chosen compiler options:
 
-- `"target": "es6"`: Node long since supports ES6 and we will use [webpack](https://webpack.js.org/) to bundle for the browser later.
+- `"target": "es6"`: Node long since supports ES6 and we will use [Webpack](https://webpack.js.org/) to bundle for the browser later.
 - `"module": "commonjs"`: Even though node supports ES6, it doesn't support ES modules yet, so we will have to fall back to [CommonJS](http://www.commonjs.org/).
 - `"experimentalDecorators": true`: [Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html) are still an experimental feature in Typescript as the [proposal is still stage 2](https://github.com/tc39/proposal-decorators). This is needed to enable decorator support.
 - `"jsx": "react"`: In the frontend, React will be used, hence `"react"`.
@@ -67,7 +67,7 @@ You should see Typeorm logging it's SQL queries.
 
 ## Test the API
 
-You are probably eager to test what you just implemented. Grab [curl](https://curl.haxx.se/) or even better: **[httpie](https://httpie.org/)**.
+You are probably eager to test what you just implemented. Grab [CURL](https://curl.haxx.se/) or even better: **[httpie](https://httpie.org/)**.
 
 ### Create a todo
 

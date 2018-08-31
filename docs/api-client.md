@@ -3,8 +3,8 @@ id: api-client
 title: Usage as client
 ---
 
-Sometimes you might want to use Hyrest controllers as clients in Node.JS.
-Just configure the controller and create an instance in any way:
+Sometimes you might want to use Hyrest controllers as clients in [Node](https://nodejs.org/).
+Just configure the controller and create an instance:
 
 ```typescript
 import { configureController } from "hyrest";

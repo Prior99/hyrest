@@ -7,8 +7,8 @@ One part is still missing: The database needs to be configured.
 
 ## Create a Postgres database
 
-[Create a new postgres database](https://wiki.postgresql.org/wiki/Detailed_installation_guides).
-If you already have a running postgres server on your machine, this might be as simple as:
+[Create a new Postgres database](https://wiki.postgresql.org/wiki/Detailed_installation_guides).
+If you already have a running Postgres server on your machine, this might be as simple as:
 
 ```sh
 createdb todos

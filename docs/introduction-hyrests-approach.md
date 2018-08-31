@@ -17,7 +17,7 @@ Interfaces can be consistently shared between projects and logic can dynamically
 
 When thinking back about the suggested multitier architecture discussed in [Anatomy](preamble-anatomy), each application deserves its own three tiers.
 Multiple applications are connected by a networking tier.
-Each application has its own presentation tier, the one of the backend being the REST Api consumed by the frontend:
+Each application has its own presentation tier, the one of the backend being the REST API consumed by the frontend:
 
 ![Multitier Architecture](assets/layers-correct.svg)
 
@@ -52,7 +52,7 @@ project-root
 │   │   ├── index.tsx
 ```
 
-The code in `src/server` would be compiled for Node.JS and serve an Express backend, while webpack could compile `src/ui` into a web application bundle.
+The code in `src/server` would be compiled for [Node](https://nodejs.org/) and serve an Express backend, while webpack could compile `src/ui` into a web application bundle.
 
 Code in both `src/server` and `src/ui` can access `src/common`, but they would never cross-reference each other.
 

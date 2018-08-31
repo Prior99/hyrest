@@ -1,4 +1,4 @@
-# Hyrest Express
+# hyrest-express
 
 <img align="right" width="200" height="200" src="https://github.com/Prior99/hyrest/raw/master/logo/hyrest-logo-400px.png">
 

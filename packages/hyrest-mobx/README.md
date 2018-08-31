@@ -1,4 +1,4 @@
-# Hyrest MobX
+# hyrest-mobx
 
 <img align="right" width="200" height="200" src="https://github.com/Prior99/hyrest/raw/master/logo/hyrest-logo-400px.png">
 
@@ -10,7 +10,7 @@ Hyrest is a hybrid REST framework for both the client and the server.
 
 **This is the MobX frontend utility package.**
 
-After creating and exposing a REST Api using [hyrest](../hyrest) and [hyrest-express](../hyrest-express) it might be useful to re-use the existing models and validation from the server side in the client to store data next to forms and perform validation on it.
+After creating and exposing a REST API using [hyrest](../hyrest) and [hyrest-express](../hyrest-express) it might be useful to re-use the existing models and validation from the server side in the client to store data next to forms and perform validation on it.
 
 ## Usage
 

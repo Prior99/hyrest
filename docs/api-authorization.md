@@ -5,7 +5,7 @@ title: Authorization
 
 Authorization is a necessary part of almost any REST server.
 Hyrest solves authorization by providing two decorators: [@auth](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#auth) and [@noauth](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#noauth).
-When initially configuring your [Hyrest Express middleware](https://www.npmjs.com/hyrest-express), you can [decide](https://prior99.gitlab.io/hyrest/api/hyrest-express/interfaces/hyrestbuilder.html#authorization) whether you want all routes to be protected by authorization by default or not.
+When initially configuring your [hyrest-express middleware](https://www.npmjs.com/hyrest-express), you can [decide](https://prior99.gitlab.io/hyrest/api/hyrest-express/interfaces/hyrestbuilder.html#authorization) whether you want all routes to be protected by authorization by default or not.
 
 ## Authorization Configuration
 
@@ -97,7 +97,7 @@ The check is performed in addition to the check from the middleware.
 ## Configuring the server
 
 If the server encounters an authorized route, a checker must be configured.
-A checker will receive [Express's](http://expressjs.com/de/api.html#req) as the first,
+A checker will receive [Express's request](http://expressjs.com/de/api.html#req) as the first,
 and the [context](#context) as the second argument. It should return `true` or `false`,
 with `true` meaning that the access should be allowed and `false` meaning, that a `401 UNAUTHORIZED`
 should be returned.

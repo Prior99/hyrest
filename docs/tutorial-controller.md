@@ -6,7 +6,7 @@ title: 3. Add a controller
 The model only defines the shape of the data to store. In order to do something with it, we need a controller.
 It can be a good pattern to create one controller per model and supply the basic [CRUD operations](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete).
 
-Let's create a controller for dealing woth Todo models. Creating a controller is as simple as creating a new class and decorating it with `@controller`.
+Let's create a controller for dealing with Todo models. Creating a controller is as simple as creating a new class and decorating it with `@controller`.
 
 ## Empty class
 

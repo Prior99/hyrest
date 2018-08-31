@@ -3,13 +3,16 @@ id: api-validation
 title: Validation
 ---
 
-Of course it is important to validate all input. The library itself is typesafe but the REST
-endpoint might be called by 3rd parties. Apart from that consistency checks are also necessary
-in a typesafe environment.
+Of course, it is important to validate all input.
+The library itself is typesafe but the REST endpoint might be called by 3rd parties.
+Apart from that consistency checks are also necessary in a typesafe environment.
+
+Hyrest provides a set of [free functions with a simple interface](#custom-validators), [low-level schema validation](#manually) and a [decorator](#inferred-from-model) for inferring the schema from a model.
+These schemas can then be used to validate incoming data [in the backend](api-routes-controllers#route-configuration) as well as for validation of [forms in the frontend](api-forms).
 
 ## Parameters
 
-Parameters can be validated and converted using the `@is` decorator like this:
+Parameters can be validated and converted using the [@is](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#is) decorator like this:
 
 ```typescript
 import { query, controller, ok, is, DataType } from "hyrest";
@@ -25,13 +28,11 @@ class GameController {
 }
 ```
 
-When using an `@is` decorator with a data type, the input is validated and automatically converted,
-so in the example above `count` is of type number.
+When using an [@is](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#is) decorator with a data type, the input is validated and automatically converted, so in the example above `count` is of type number.
 
 ## Advanced validation
 
-In addition to validating the data type and converting the input advanced validation can be
-performed:
+In addition to validating the data type and converting the input, advanced validation can be performed:
 
 ```typescript
 import { query, controller, ok, is, DataType, required, oneOf } from "hyrest";
@@ -54,8 +55,9 @@ class GameController {
 
 ## Schema validation
 
-It is possible to perform schema validation of object using the same infrastructure as for
-parameters:
+### Manually
+
+It is possible to perform schema validation of object using the same infrastructure as for parameters:
 
 ```typescript
 import { controller, body, created, is, DataType, required, oneOf, schema } from "hyrest";
@@ -83,7 +85,7 @@ const UserSchema = {
 };
 
 @controller()
-class UserControllre {
+class UserController {
     @route("POST", "/user")
     public async createUser(@body() @is(DataType.obj).schema(UserSchema) user: User) {
         ...
@@ -92,7 +94,10 @@ class UserControllre {
 }
 ```
 
-Schemas can be generated from classes. The data types can be inferred from the typescript type.
+### Inferred from model
+
+Schemas can be generated from classes.
+The data types can be inferred from the typescript type.
 In order to infer the data type from the property, simply omit the converter from the decorator.
 
 ```typescript
@@ -122,7 +127,7 @@ class User {
 }
 ```
 
-Still, all properties included in the schema have to be included by decorating them with `@is`.
+Still, all properties included in the schema have to be included by decorating them with [@is](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#is).
 The schema can then be used by using `schemaFrom()`:
 
 ```typescript
@@ -131,8 +136,10 @@ public async createUser(@body() @is(DataType.obj).schema(schemaFrom(User)) user:
     ...
 ```
 
+> The whole `@is(DataType.obj).schema(schemaFrom(User))` part can be left out, as Hyrest will automatically detect that the parameter's type `User` has a schema defined and perform a schema validation.
+
 This also works for arrays, however it is not possible to infer the array type from the property,
-so `@specify` has to be used:
+so [@specify](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#specify) has to be used:
 
 ```typescript
 class User {
@@ -173,8 +180,10 @@ public async createUser(@body() @is(DataType.obj).schema(schemaFrom(User)).scope
     ...
 ```
 
-It is also possible to limit individual validators to certain scopes using `only`. Just wrap the
-validator in `only`, specifying a scope:
+> As mentioned above, the whole `@is(DataType.obj).schema(schemaFrom(User))` part can be left out.
+> When leaving it out, provide the scope as the first argument to the [@body](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#body) decorator.
+
+It is also possible to limit individual validators to certain scopes using [only](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#only). Just wrap the validator in [only](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#only), specifying a scope:
 
 ```typescript
 only(signup, email)
@@ -182,12 +191,10 @@ only(signup, email)
 
 ## Failing validation
 
-When the validation fails a `422 UNPROCESSABLE ENTITY` is returned, containing a body with
-`{ message: "Error message." }`. Only the first error message will be returned.
+When the validation fails a "422 UNPROCESSABLE ENTITY" is returned, containing a body with `{ message: "Error message." }`.
+Only the first error message will be returned.
 
-## Custom validators
-
-Validators are not black magic. It is easy to define custom validators and converters.
+## Custom data types
 
 A new data type can be introduced by implementing a function following this interface:
 
@@ -210,11 +217,14 @@ export function float(input: any): Converted<number> {
     if (typeof input === "undefined") { return { value: input }; }
     const value = parseFloat(input);
     if (isNaN(value)) { return { error: "Not a valid float." }; }
-    return { value} ;
+    return { value } ;
 }
 ```
 
-It is just as easy to add custom validators. The interface looks like this:
+## Custom validators
+
+It is just as easy to add custom validators, as it is to add new data types.
+The interface looks like this:
 
 ```typescript
 interface Validation {
@@ -225,8 +235,8 @@ type Validator<T> = (input: T) => Validation | Promise<Validation>;
 
 ```
 
-It's very similar to introducing new data types. In case of success an empty object (`{}`)  is
-returned, when an error occurred, an error message should be provided.
+It's very similar to introducing new data types.
+In case of success an empty object (`{}`)  is returned, when an error occurred, an error message should be provided.
 
 ```typescript
 function required<T>(value: T): Validation {
@@ -237,9 +247,10 @@ function required<T>(value: T): Validation {
 
 ## Context sensitive validation
 
-Another method called `validateCtx` exists, which takes a factory with the context passed in as the
-first argument. It is possible to specify the context by calling `.context(obj)` on the hyrest
-middleware. This way a context object can be passed through to the validation.
+A method called [validateCtx](https://prior99.gitlab.io/hyrest/api/hyrest/interfaces/fullvalidator.html#validatectx) exists on [@is](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#is), which takes a factory with the context passed in as the first argument.
+
+> It is possible to specify the context by calling [context on the hyrest middleware](api-server#context).
+> This way a context object can be passed through to the validation.
 
 ```typescript
 app.use(hyrest(...controllers).context({
@@ -265,8 +276,9 @@ class SomeController {
 
 ### Database example
 
-This is not a problem. All validators can be `async` or return `Promise`s. This way, a validator
-might just as well perform a request against the database.
+Using the database for validating a property is not a problem.
+All validators can be asynchronous or return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+This way, a validator might just as well perform a request against the database.
 
 ```typescript
 function emailAvailable(value: string): Validation {
@@ -284,7 +296,7 @@ is(...).validateCtx(context => context.validation.emailAvailable)
 
 ### In the frontend
 
-This is not a problem either:
+The frontend can also perform validation against the database, if the method used for checking is a route on a controller:
 
 ```typescript
 import { controller, route, body } from "hyrest";
@@ -300,5 +312,5 @@ class ValidationController {
 }
 ```
 
-Afterwards just use the method as a validator in any schema or decorator. The frontend will call
-the REST endpoint and the server will perform the check on the database.
+Afterwards just use the method as a validator in any schema or decorator.
+The frontend will call the REST endpoint and the server will perform the check on the database.

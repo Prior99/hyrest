@@ -4,11 +4,11 @@ title: 10. Setup Webpack
 ---
 
 Hyrest will include the backend's code in the frontend. If this is of concern to you, [reconsider your security concept](https://en.wikipedia.org/wiki/Security_through_obscurity#Criticism).
-As the code will be included but not really executed, it is neccessary to configure webpack to ignore certain dependencies.
+As the code will be included but not really executed, it is necessary to configure Webpack to ignore certain dependencies.
 
 ## Basic configuration
 
-Create a basic webpack configuration in a file named `webpack.config.js`.
+Create a basic Webpack configuration in a file named `webpack.config.js`.
 Refer to [Webpack's documentation](https://webpack.js.org/) for further insights of what is happening here.
 
 The configuration should look like this:
@@ -40,10 +40,10 @@ This is all pretty much boilerplate and will not be explained here.
 
 ## Typescript
 
-Hyrest is using [Typescript](https://www.typescriptlang.org), so support is needed in webpack.
-Two major loaders for Typescript and webpack exist:
+Hyrest is using [Typescript](https://www.typescriptlang.org), so support is needed in Webpack.
+Two major loaders for Typescript and Webpack exist:
 
-- [awesome-typescript-loader](https://github.com/s-panferov/awesome-typescript-loader): Inofficial alternative.
+- [awesome-typescript-loader](https://github.com/s-panferov/awesome-typescript-loader): Unofficial alternative.
 - [ts-loader](https://github.com/TypeStrong/ts-loader): Recommended loader.
 
 We will be using [ts-loader](https://github.com/TypeStrong/ts-loader) in this tutorial.
@@ -74,7 +74,7 @@ module.exports = {
 
 Typeorm is used from the browser's side but not really executed.
 Typeorm comes with browser support, but the entrypoint for that is in another file.
-We need to tell webpack to rewrite all includes of `"typeorm"` to `"typeorm/browser"`.
+We need to tell Webpack to rewrite all includes of `"typeorm"` to `"typeorm/browser"`.
 
 This can be done via an [alias](https://webpack.js.org/configuration/resolve/#resolve-alias):
 

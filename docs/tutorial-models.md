@@ -92,9 +92,9 @@ export class Todo {
 }
 ```
 
-We need to use `@specify(() => Date)` for the three properies having `Date` as type. Is is a special case only needed for `Date` and when two classes import each other in a circular way.
+We need to use `@specify(() => Date)` for the three properties having `Date` as type. Is is a special case only needed for `Date` and when two classes import each other in a circular way.
 
-The `DataType` can be omitted from every `@is()` as Hyrest can infer them automatically from Typescript's reflection metadata Api.
+The `DataType` can be omitted from every `@is()` as Hyrest can infer them automatically from Typescript's reflection Metadata API.
 
 ## Scopes
 

@@ -92,15 +92,15 @@ const Features = () => (
                 imageAlign: "left",
                 title: "One project",
             }, {
-                content: "Reduce the overhead of splitting your frontend and backend applications. Call Apis as if they were methods.",
+                content: "Reduce the overhead of splitting your frontend and backend applications. Call APIs as if they were methods.",
                 image: imgUrl("chart-line-solid.svg"),
                 imageAlign: "left",
                 title: "Less overhead",
             }, {
-                content: "Despite not dealing with REST at all - a full featured REST Api is generated and used internally.",
+                content: "Despite not dealing with REST at all - a full featured REST API is generated and used internally.",
                 image: imgUrl("magic-solid.svg"),
                 imageAlign: "left",
-                title: "Generated Api",
+                title: "Generated API",
             }, {
                 content: "Easily replace or extend a Hyrest backend with any other REST service and continue to use Hyrest.",
                 image: imgUrl("plug-solid.svg"),

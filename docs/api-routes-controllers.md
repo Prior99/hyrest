@@ -3,7 +3,8 @@ id: api-routes-controllers
 title: Routes and controllers
 ---
 
-Controllers bundle Routes. Routes can only be defined within controllers.
+[Controllers](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#controller) bundle [Routes](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#route).
+Routes can only be defined within controllers.
 Defining a controller and a route is as simple as:
 
 ```typescript
@@ -39,12 +40,11 @@ await controller.getUser("the-id-of-some-user");
 ```
 
 All the HTTP calls will happen automatically.
-Of course the methods can still be used within the backend itself, without an HTTP
-request happening.
+Of course, the methods can still be used within the backend itself, without an HTTP request happening.
 
 ## Controller configuration
 
-Controller's take an optional configuration object as a parameter: `@controller(options)`.
+Controller's take an [optional configuration object](https://prior99.gitlab.io/hyrest/api/hyrest/interfaces/controlleroptions.html) as a parameter: `@controller(options)`.
 
 | Option       | used by     | type                            | example                     | default    |
 |--------------|-------------|---------------------------------|-----------------------------|------------|
@@ -52,6 +52,8 @@ Controller's take an optional configuration object as a parameter: `@controller(
 | throwOnError | client only | boolean                         | true                        | true       |
 | errorHandler | client only | function(error: Error) { ... }  | (err) => console.error(err) | undefined  |
 | baseUrl      | client only | string                          | http://example.com          | undefined  |
+
+### Configuring controllers manually
 
 It is also possible to configure a controller manually later using `configureController`:
 
@@ -61,8 +63,7 @@ import { configureController, ControllerMode } from "hyrest";
 configureContoller(UserController, { mode: ControllerMode.CLIENT, ...  });
 ```
 
-Please note that the `class` is passed and not an `instance` as the configuration is always
-applying to all instances of a controller class.
+Please note that the class is passed and not an instance, as the configuration always applies to all instances of a controller class.
 
 > [configureController](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#configurecontroller) can also take an array of controllers as a first argument. It will then apply the configuration to all controllers.
 
@@ -91,18 +92,16 @@ reach the backend.
 
 ## Route configuration
 
-A route can be defined using the `@route` decorator. It takes two arguments: The HTTP method and
-[an express compatible URL pattern](https://www.npmjs.com/package/path-to-regexp).
+A route can be defined using the [@route](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#route) decorator.
+The decorator takes two arguments: The [HTTP method](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#httpmethod) and [an express compatible URL pattern](https://www.npmjs.com/package/path-to-regexp).
 
-The URL parameters, query parameters and the body can be injected into the arguments of the 
-route's method by using the `@param` (URL parameter), `@query` (query parameter) and `@body`
-decorators.
+The URL parameters, query parameters and the body can be injected into the arguments of the route's method by using:
 
-Both `@param` and `@query` taken the name for the parameter as an argument, so if the URL is
-defined as `/user/:id/game/:gameId` and is called with an URL like:
-`http://example.com/user/891/game/15532?search=cards&page=3&count=100`
+- The [@param](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#param) decorator for [URL parameters](http://expressjs.com/en/guide/routing.html#route-parameters).
+- The [@query](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#query) decorator for [query parameter](https://en.wikipedia.org/wiki/Query_string).
+- The [@body](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#body) decorator for the [request's body](https://en.wikipedia.org/wiki/HTTP_message_body).
 
-Then a route could take the parameters like this:
+Both [@param](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#param) and [@query](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#query) taken the name for the parameter as an argument, so if the URL is defined as `/user/:id/game/:gameId` and is called with an URL like `http://example.com/user/891/game/15532?search=cards&page=3&count=100`, then a route could take the parameters like this:
 
 ```typescript
 import { param, query, controller, ok } from "hyrest";
@@ -126,19 +125,19 @@ class UserController {
 }
 ```
 
-It is possible to automatically perform a [schema validation ](#schema-validation) and [populate
-the parameter with the correct type](#populating) limited to a [scope](#scopes) with only `@body`:
+It is possible to automatically perform a [schema validation](api-validation#schema-validation) and [populate
+the parameter with the correct type](api-scopes#populating) limited to a [scope](api-scopes#scopes) when using [@body](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#body):
 
 ```typescript
 ...
 @route("POST", "/signup")
 public async postSignup(@body(signupScope) user: User) {
-    // `user` is now validated against `User` and a propert instance of `User`.
+    // `user` is now validated with the schema inferred from `User`.
 }
 ```
 
-The other direction can also be automated. Call `.dump(Type, scope)` on the route decorator to have
-it be automatically populated on the client side and safely dumped on the server side:
+Returning a serialized body limited to a certain [scope](api-scopes#scopes) can also be automated.
+Call `.dump(Type, scope)` on the [@route](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#route) decorator to have it be automatically populated on the client side and safely dumped on the server side:
 
 ```typescript
 ...

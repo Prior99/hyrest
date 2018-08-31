@@ -9,10 +9,10 @@ This preamble does not only want to introduce you into using Hyrest, but aims to
 from the ground up.
 
 Hyrest provides and utilizes many design patterns which make developing your application fast, scalable and understandable.
-This guide wants to introduce you to some of these ideas and patterns.
+This guide wants to introduce you to some of these.
 
 Before diving right [into the tutorial](tutorial-about) and starting to develop your application, you should carefully read this guide,
-decide what set of patterns, decisions, technologies (including Hyrest) and architecture is the correct one for your project.
+decide what set of patterns, decisions and technologies is the correct one for your project.
 
 After reading this guide you will know whether you should use Hyrest at all and hopefully have a better understanding about how to structure your web project.
 
@@ -25,7 +25,7 @@ The web now has been around for a while and many ways of getting your content ou
 - [Server-side (template) rendering](https://en.wikipedia.org/wiki/Server-side_scripting)
 - [Single-page Applications](https://en.wikipedia.org/wiki/Single-page_application)
 - [Interactive editors](https://en.wikipedia.org/wiki/List_of_HTML_editors)
-- [Hosted (blog) solutions](https://en.wikipedia.org/wiki/Blog)
+- [Hosted solutions](https://en.wikipedia.org/wiki/Blog)
 - [Websites in the Blockchain](https://www.reddit.com/r/Bitcoin/comments/544iwk/host_webpage_on_blockchain/)
 - ...
 
@@ -36,7 +36,7 @@ Before starting to develop anything, or even select a stack it is crucial to dec
 ## About this preamble
 
 **Before diving into Hyrest, This guide wants to help you decide for the correct stack for your application.**
-Instead of simply listing some Hyrest features with examples here, it aims to enable you to design and setup the architecture for your project on your own.
+Instead of simply listing [some of Hyrest's features with examples](api-about) here, it aims to enable you to design and setup the architecture for your project on your own.
 
 For this, the following topics will be discussed:
 

@@ -4,7 +4,7 @@ title: 4. Implement controller logic
 ---
 
 Previously, an empty controller has been sketched.
-The controller could already be used from the frontend when configured to work with an external Api, as the method's bodies are never actually called.
+The controller could already be used from the frontend when configured to work with an external API, as the method's bodies are never actually called.
 For this project, let us fill the methods with life.
 
 Assume for now, that a reference to an existing database connection exists on the controller:
@@ -30,7 +30,7 @@ The todo is already provided as the method's first argument.
 We defined [the validation and data types](tutorial-model) when defining the model, so at this point the received data can safely be expected to be correct.
 If the validation would have failed, the method's body wouldn't have been called at all and a "400 Bad request" status would have been returned.
 
-Calls to the database are asynchroneous, so the method will be marked as `async`.
+Calls to the database are asynchronous, so the method will be marked as `async`.
 After creating a new todo, the method should return the created `Todo`.
 The method's signature will be adjusted accordingly:
 

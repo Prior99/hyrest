@@ -60,4 +60,4 @@ const tsdi = new TSDI();
 tsdi.enableComponentScanner();
 ```
 
-Nothing more is neccessary. Take a look at [TSDI's component scanner](https://tsdi.js.org/docs/en/features.html#component-scanner) for better understanding.
+Nothing more is necessary. Take a look at [TSDI's component scanner](https://tsdi.js.org/docs/en/features.html#component-scanner) for better understanding.

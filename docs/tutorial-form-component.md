@@ -4,7 +4,7 @@ title: 15. Form component
 ---
 
 We can list todos, but how to create them?
-Create a new component in `src/components/form.tsx` similar to the components you alread created [in the previous section](tutorial-list-component):
+Create a new component in `src/components/form.tsx` similar to the components you already created [in the previous section](tutorial-list-component):
 
 ## Basic component
 
@@ -31,7 +31,7 @@ export class Form extends React.Component {
 
 The utility package [hyrest-mobx](https://www.npmjs.com/package/hyrest-mobx) provides a decorator for dealing with forms in a convenient way.
 
-As described in the [package's readme](https://www.npmjs.com/package/hyrest-mobx#usage), add a `@field` property to the component like so:
+As described in the [package's README](https://www.npmjs.com/package/hyrest-mobx#usage), add a `@field` property to the component like so:
 
 ```tsx
 import * as React from "react";
@@ -80,7 +80,7 @@ public render() {
 }
 ```
 
-For every property of our `Todo` model, the field (typesafely) contains a property on it's member `nested`.
+For every property of our `Todo` model, the field (completely typesafe) contains a property on it's member `nested`.
 For the field itself and for every sub-field (even with deeply nested fields), utilities for accessing the value,
 updating it, validating it, etc. exist.
 

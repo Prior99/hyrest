@@ -36,9 +36,9 @@ And the following development dependencies:
  - `@types/express`
  - `@types/node`
  - `@types/react`
- - `ts-loader`: Loading typescript from webpack.
+ - `ts-loader`: Loading typescript from Webpack.
  - `ts-node`: For quickly starting the backend. Don't use this in production.
- - `typescript`: For compiling Typescript to Javascript.
+ - `typescript`: For compiling Typescript to JavaScript.
  - `webpack-cli`
  - `webpack-dev-server`:
  - `webpack`: For compiling the frontend into a bundle.

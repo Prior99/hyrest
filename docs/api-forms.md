@@ -52,18 +52,18 @@ class Signup extends React.Component {
 }
 ```
 
-The decorator `@field` will mark the property as a field with the type `User`.
+The decorator [@field](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/globals.html#field) will mark the property as a field with the type `User`.
 
-After marking the class with `@hasFields`, new `Field`s will automatically be injected upon creation.
+After marking the class with [@hasFields](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/globals.html#hasfields), new [Fields](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/interfaces/basefield.html) will automatically be injected upon creation.
 
-The injected values already utilize Mobx under the hood and hence no `@observable`s are no longer necessary.
+The injected values already utilize Mobx under the hood and hence no [@observable](https://mobx.js.org/refguide/observable-decorator.html)s are no longer necessary.
 
 ## Arrays
 
-Hyrest Mobx supports arrays. Arrays are wrapped in a special array wrapper instead of the default wrapper.
-This wrapper behaves much like a readonly version of the default JS array, with added methods for usability.
+Arrays are wrapped in a special array wrapper instead of the default wrapper.
+This wrapper behaves much like a read only version of the default JS array, with added methods for usability.
 
-Wrapped fields are accessed using `.at(index)` instead of the `[index]` operator.
+Wrapped fields are accessed using [at](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/classes/fieldarray.html#at) instead of the `[index]` operator.
 
 ### Inside a nested class
 
@@ -130,15 +130,13 @@ class Signup extends React.Component {
 
 ## Validation
 
-All validation as defined in using the `@is` decorators on the model is used in the injected field.
-
-The includes [context validation](#context-validation).
-
+All validation as defined in using the [decorators on the model](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#is) is used in the injected field.
+This includes [context validation](#context-validation).
 The validation will be automatically performed when updating a field.
 
 ### Validation status
 
-The status cann be retrieved using `Field.status` on any field. If the field is not a primitive one,
+The status can be retrieved using [Field.status](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/interfaces/basefield.html#status) on any field. If the field is not a primitive one,
 but wrapping other fields (such as the directly injected one), then the status of all sub fields will be merged into one:
 
 ```typescript
@@ -175,11 +173,11 @@ await container.wrapper.nested.something.nested.name.update("longenough");
 console.log(wrapper.status); // Will log `"valid"` (`ValidationStatus.VALID`).
 ```
 
-Initially, before assigning any values, the validation status of all fields will be `"unknown"` (`ValidationStatus.UNKNOWN`).
+Initially, before assigning any values, the validation status of all fields will be `"unknown"` ([ValidationStatus.UNKNOWN](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/enums/validationstatus.html#unknown)).
 
-The operation of `.update`ing a field is an asynchronous operation (as validators could be asynchronous).
+Calling [update](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/interfaces/basefield.html#update) on a field is an asynchronous operation (as validators could be asynchronous).
 
-While the validation is running, the status is `"in progress"` (`ValidationStatus.IN_PROGRESS`).
+While the validation is running, the status is `"in progress"` ([ValidationStatus.IN_PROGRESS](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/enums/validationstatus.html#in_progress)).
 
 Shorthands for checking for a specific status exist: `Field.valid`, `Field.invalid`, `Field.unknown` and `Field.inProgress`.
 
@@ -192,5 +190,5 @@ console.log(wrapper.errors); // An array of all error messages,
 console.log(wrapper.error); // The first error message (Same as `wrapper.errors[0]`).
 ```
 
-When calling `Field.errors` or `Field.error` on a structure with nested fields, a combined
-array of all sub-field's errors will be returned.
+When calling [Field.errors](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/interfaces/basefield.html#errors) or on a structure with nested fields, a combined array of all sub-field's errors will be returned.
+The same also applies to [Field.error](https://prior99.gitlab.io/hyrest/api/hyrest-mobx/interfaces/basefield.html#error).

@@ -30,7 +30,7 @@ In general, you should aim to keep your state normalized at all times.
 Hence the map will have the todo's ids as keys and the corresponding todo instances as values.
 
 > We are not dealing with Redux here, but I very much recommend reading its [guide about normalized state](https://redux.js.org/recipes/structuringreducers/normalizingstateshape).
-> It's a very helpfull pattern and applies to all state-management, not just to Redux.
+> It's a very helpful pattern and applies to all state-management, not just to Redux.
 
 As we are using MobX, decorate the map with [@observable](https://mobx.js.org/refguide/observable.html):
 
@@ -41,7 +41,7 @@ As we are using MobX, decorate the map with [@observable](https://mobx.js.org/re
 ## Loading the todos
 
 At application startup, the todos should be loaded.
-For this, add an asynchroneous [initialize lifecycle hook](https://tsdi.js.org/docs/en/features.html#lifecycle-methods) in which the controller's `list()` method is used to load an array of all todos.
+For this, add an asynchronous [initialize lifecycle hook](https://tsdi.js.org/docs/en/features.html#lifecycle-methods) in which the controller's `list()` method is used to load an array of all todos.
 Insert each todo instance into the map:
 
 ```typescript

@@ -18,7 +18,7 @@ Generated documentation from the code's comments is also available for all packa
 - [Routes and controllers](api-routes-controllers)
 - [Validation](api-validation)
 - [Forms](api-forms)
-- [Scopes](api-scopes)
+- [Serializing and deserializing](api-serialize)
 - [Usage as client](api-client)
 - [Usage as server](api-server)
 - [Authorization](api-authorization)

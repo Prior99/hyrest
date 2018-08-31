@@ -15,7 +15,7 @@ Add a file `list-item.tsx` to `src/web/components`, which will hold our `<ListIt
 
 Add [a basic react component](https://reactjs.org/docs/react-component.html) to it and make it an [@observer](https://mobx.js.org/refguide/observer-component.html).
 
-We need to inject our `TodosStore` into it, but we don't want it to be managed by tsdi. Hence, we have to decorate it with [@external](https://tsdi.js.org/docs/en/features.html#externals).
+We need to inject our `TodosStore` into it, but we don't want it to be managed by TSDI. Hence, we have to decorate it with [@external](https://tsdi.js.org/docs/en/features.html#externals).
 
 ```tsx
 import * as React from "react";
@@ -82,7 +82,7 @@ export class ListItem extends React.Component<{ id: string }> {
 Currently, we have no way of seeing whether a todo was checked.
 Add a [@computed](https://mobx.js.org/refguide/computed-decorator.html) getter for returning [inline styles](https://reactjs.org/docs/dom-elements.html#style) applied to the `<li>` element.
 
-> In a real application you will probably want to use [styled components](https://www.styled-components.com/) or [css modules](https://github.com/css-modules/css-modules) instead of inline styles.
+> In a real application you will probably want to use [styled components](https://www.styled-components.com/) or [CSS modules](https://github.com/css-modules/css-modules) instead of inline styles.
 
 ```tsx
 ...
@@ -110,7 +110,7 @@ export class ListItem extends React.Component<{ id: string }> {
 }
 ```
 
-This will make the list item appear grey and striked through if a todo was checked.
+This will make the list item appear grey and strike through if a todo was checked.
 
 ### Checking a todo
 

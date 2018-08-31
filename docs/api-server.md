@@ -3,7 +3,7 @@ id: api-server
 title: Usage as server
 ---
 
-Use the `hyrest` middleware from the [hyrest-express package](https://www.npmjs.com/package/hyrest-express) to connect your controllers to [Express](http://expressjs.com):
+Use the [hyrest](https://prior99.gitlab.io/hyrest/api/hyrest-express/globals.html#hyrest) middleware from the [hyrest-express package](https://www.npmjs.com/package/hyrest-express) to connect your controllers to [Express](http://expressjs.com):
 
 ```typescript
 import { hyrest } from "hyrest-express";
@@ -22,15 +22,15 @@ app.use(hyrest(
 app.listen(3000);
 ```
 
-Everything else happens magically.
+Everything else happens automatically.
 
 ## Context
 
-It is possible to inject a context into each route on the server side. This context can be created by
-a factory or simply specified as an object or instance. It could carry the database connection, a property
-with the current user from the database, a unique id for this request or anything similar.
+It is possible to inject a context into each route on the server side.
+This context can be created by a factory or simply specified as an object or instance.
+It could carry the database connection, a property with the current user from the database, a unique id for this request or anything else.
 
-Specify the context by calling `.context()` on the [hyrest Express middleware](https://prior99.gitlab.io/hyrest/api/hyrest-express/interfaces/hyrestbuilder.html#context):
+Specify the context by calling [context](https://prior99.gitlab.io/hyrest/api/hyrest-express/interfaces/hyrestbuilder.html#context) on the middleware:
 
 ```typescript
 const anObject = {
@@ -52,20 +52,22 @@ middleware.context(async (request) => {
 });
 ```
 
-The context can then be used in a [context validation](#how-about-validation-against-my-database) or
-injected as an argument:
+The context can then be used in a [context validation](api-validation#context-sensitive-validation) or injected as an argument using [@context](https://prior99.gitlab.io/hyrest/api/hyrest/globals.html#context):
 
 ```typescript
 @route("GET", "/user/:id")
 public async getUser(@param("id") id: string, @context ctx?: any)
 ```
 
-It can afterwards be used in the route method. It is recommended to make the context argument an optional
-one to be able to skip it when calling the route from the frontend.
+It can afterwards be used in the route method.
+It is recommended to make the context argument an optional argument to be able to skip it when calling the route from the frontend.
 
 ## Authorization
 
-[Authorization](api-authorization) comes in two modes in Hyrest: All routes are protected by default, or no routes are protected.
+[Authorization](api-authorization) comes in two modes in Hyrest:
+
+1. All routes are protected by default.
+2. No routes are protected by default.
 
 This can be configured by [setting the default authorization mode](https://prior99.gitlab.io/hyrest/api/hyrest-express/interfaces/hyrestbuilder.html#defaultauthorizationmode) on the middleware:
 
