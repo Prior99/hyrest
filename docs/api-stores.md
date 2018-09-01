@@ -47,6 +47,11 @@ These methods will keep the internal `entities` map in sync and perform the corr
 class DemoStore extends Store(DemoController) {
     protected controller = new DemoController();
 }
+
+// `DemoStore.create` exists.
+// `DemoStore.get` exists.
+// `DemoStore.getLazy` exists.
+// `DemoStore.search` exists.
 ```
 
 The `DemoStore` class will now extend the following classes:

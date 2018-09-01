@@ -14,6 +14,8 @@ After creating and exposing a REST API using [hyrest](../hyrest) and [hyrest-exp
 
 ## Usage
 
+### Fields
+
 Let's say a model has been defined which is already used by a controller:
 
 ```typescript
@@ -63,6 +65,47 @@ The decorator `@field` will mark the property as a field with the type `User`.
 After marking the class with `@hasFields`, new `Field`s will automatically be injected upon creation.
 
 The injected values already utilize Mobx under the hood and hence no `@observable`s are no longer necessary.
+
+### Store
+
+A utility for generating stores from controllers exists.
+
+Let's say you implemented a controller with `search`, `get` and `create` methods:
+
+```typescript
+class Model {
+    id?: string;
+    name?: string;
+}
+
+class DemoController {
+    public async create(model: Model) {
+        ...
+    }
+
+    public async search(name: string, id?: string) {
+        ...
+    }
+
+    public async get(id: string) {
+        ...
+    }
+}
+```
+
+It is then possible to generate similar [actions](https://mobx.js.org/refguide/action.html) on the store's base class.
+These methods will keep the internal `entities` map in sync and perform the corresponding operations on the controller:
+
+```typescript
+class DemoStore extends Store(DemoController) {
+    protected controller = new DemoController();
+}
+
+// `DemoStore.create` exists.
+// `DemoStore.get` exists.
+// `DemoStore.getLazy` exists.
+// `DemoStore.search` exists.
+```
 
 ## Resources
 
