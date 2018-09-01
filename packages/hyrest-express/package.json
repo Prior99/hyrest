@@ -37,9 +37,7 @@
   },
   "dependencies": {
     "express": "^4.16.3",
+    "hyrest": "^0.9.0",
     "reflect-metadata": "^0.1.12"
-  },
-  "peerDependencies": {
-    "hyrest": "^0.9.0"
   }
 }
