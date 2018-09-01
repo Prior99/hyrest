@@ -3,15 +3,15 @@ import { Constructable } from "hyrest";
 import { Indexable } from "../types";
 import { BaseStore } from "./base-store";
 
-export interface ListingController<KeyType, TModel extends Indexable<KeyType>> {
+export interface ListingController<TKey, TModel extends Indexable<TKey>> {
     list(): Promise<TModel[]>;
 }
 
 export abstract class ListingStore<
-    KeyType,
-    TModel extends Indexable<KeyType>,
-    TController extends ListingController<KeyType, TModel>,
-> extends BaseStore<KeyType, TModel, TController> {
+    TKey,
+    TModel extends Indexable<TKey>,
+    TController extends ListingController<TKey, TModel>,
+> extends BaseStore<TKey, TModel, TController> {
     @action public async list(): Promise<TModel[]> {
         const models = await this.controller.list();
         models.forEach(model => this.entities.set(model.id, model));
@@ -19,9 +19,9 @@ export abstract class ListingStore<
     }
 }
 
-export function isListingController<KeyType, TModel extends Indexable<KeyType>>(
+export function isListingController<TKey, TModel extends Indexable<TKey>>(
     controller: any,
-): controller is Constructable<ListingController<KeyType, TModel>> {
+): controller is Constructable<ListingController<TKey, TModel>> {
     if (typeof controller !== "function") { return false; }
     return typeof controller.prototype.list === "function";
 }

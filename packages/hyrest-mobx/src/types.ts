@@ -1,5 +1,5 @@
-export interface Indexable<KeyType> {
-    id?: KeyType;
+export interface Indexable<TKey> {
+    id?: TKey;
 }
 
 export interface Target {

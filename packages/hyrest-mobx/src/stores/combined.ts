@@ -8,21 +8,38 @@ import { UpdatingStore, UpdatingController, isUpdatingController } from "./updat
 import { ListingStore, ListingController, isListingController } from "./listing";
 import { SearchingStore, SearchingController, isSearchingController } from "./searching";
 
-export type CombinedStore<KeyType, TModel extends Indexable<KeyType>, TController, Query extends any[]> =
-    (TController extends CreatingController<KeyType, TModel> ? CreatingStore<KeyType, TModel, TController> : {}) &
-    (TController extends DeletingController<KeyType, TModel> ? DeletingStore<KeyType, TModel, TController> : {}) &
-    (TController extends ReadingController<KeyType, TModel> ? ReadingStore<KeyType, TModel, TController> : {}) &
-    (TController extends UpdatingController<KeyType, TModel> ? UpdatingStore<KeyType, TModel, TController> : {}) &
-    (TController extends ListingController<KeyType, TModel> ? ListingStore<KeyType, TModel, TController> : {}) &
+export type CombinedStore<TKey, TModel extends Indexable<TKey>, TController, TQuery extends any[]> =
+    (TController extends CreatingController<TKey, TModel> ? CreatingStore<TKey, TModel, TController> : {}) &
+    (TController extends DeletingController<TKey, TModel> ? DeletingStore<TKey, TModel, TController> : {}) &
+    (TController extends ReadingController<TKey, TModel> ? ReadingStore<TKey, TModel, TController> : {}) &
+    (TController extends UpdatingController<TKey, TModel> ? UpdatingStore<TKey, TModel, TController> : {}) &
+    (TController extends ListingController<TKey, TModel> ? ListingStore<TKey, TModel, TController> : {}) &
     (
-        TController extends SearchingController<KeyType, TModel, Query> ?
-            SearchingStore<KeyType, TModel, TController, Query> : {}
+        TController extends SearchingController<TKey, TModel, TQuery> ?
+            SearchingStore<TKey, TModel, TController, TQuery> : {}
     );
 
-export function Store<KeyType, TModel extends Indexable<KeyType>, TController, Query extends any[]>(
+export type AnyController<TKey, TModel extends Indexable<TKey>, TQuery extends any[]> =
+    CreatingController<TKey, TModel> |
+    DeletingController<TKey, TModel> |
+    ReadingController<TKey, TModel> |
+    UpdatingController<TKey, TModel> |
+    ListingController<TKey, TModel> |
+    SearchingController<TKey, TModel, TQuery>;
+
+type KeyType<TController> = TController extends AnyController<infer TKey, any, any> ? TKey : never;
+type ModelType<TController> = TController extends AnyController<any, infer TModel, any> ? TModel : never;
+type QueryType<TController> = TController extends AnyController<any, any, infer TQuery> ? TQuery : never;
+
+export function Store<
+    TKey,
+    TModel extends Indexable<TKey>,
+    TQuery extends any[],
+    TController extends AnyController<TKey, TModel, TQuery>,
+>(
     controllerClass: Constructable<TController>,
-): Constructable<CombinedStore<KeyType, TModel, TController, Query>> {
-    abstract class TempStore extends BaseStore<KeyType, TModel, TController> {}
+): Constructable<CombinedStore<KeyType<TController>, ModelType<TController>, TController, QueryType<TController>>> {
+    abstract class TempStore extends BaseStore<TKey, TModel, TController> {}
     const mutableTempStore = TempStore as any;
     const matchingStoreClasses: any[] = [];
 
