@@ -137,13 +137,13 @@ Let us add a button for removing a todo.
 Add an action and update the markup like [above](#checking-a-todo).
 
 ```typescript
-@action.bound private async handleRemove() { await this.todos.remove(this.todo.id); }
+@action.bound private async handleDelete() { await this.todos.delete(this.todo.id); }
 ```
 
 ```tsx
 <li style={this.style}>
     <b>{this.todo.name}:</b> {this.todo.description}
-    <button onClick={this.handleRemove}>Remove</button>
+    <button onClick={this.handleDelete}>Delete</button>
     <button onClick={this.handleCheck}>Check</button>
 </li>
 ```
@@ -172,7 +172,7 @@ export class ListItem extends React.Component<{ id: string }> {
         };
     }
 
-    @action.bound private async handleRemove() { await this.todos.remove(this.todo.id); }
+    @action.bound private async handleDelete() { await this.todos.delete(this.todo.id); }
 
     @action.bound private async handleCheck() { await this.todos.check(this.todo.id); }
 
@@ -180,7 +180,7 @@ export class ListItem extends React.Component<{ id: string }> {
         return (
             <li style={this.style}>
                 <b>{this.todo.name}:</b> {this.todo.description}
-                <button onClick={this.handleRemove}>Remove</button>
+                <button onClick={this.handleDelete}>Delete</button>
                 <button onClick={this.handleCheck}>Check</button>
             </li>
         );

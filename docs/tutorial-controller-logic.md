@@ -77,7 +77,7 @@ When listing the todos, all entries with a timestamp present in the `deleted` co
 
 ```typescript
 @route("DELETE", "/todo/:id")
-public async remove(@param("id") id: string): Promise<void> {
+public async delete(@param("id") id: string): Promise<void> {
     if (!await this.db.getRepository(Todo).findOne(id)) {
         return notFound<void>("No such todo.");
     }
@@ -103,7 +103,7 @@ Retrieving an individual todo now seems rather simple:
 
 ```typescript
 @route("GET", "/todo/:id").dump(Todo, world)
-public async byId(@param("id") id: string): Promise<Todo> {
+public async get(@param("id") id: string): Promise<Todo> {
     const todo = await this.db.getRepository(Todo).findOne(id);
     if (!todo) {
         return notFound<Todo>("No such todo.");
@@ -115,20 +115,18 @@ public async byId(@param("id") id: string): Promise<Todo> {
 ## Checking a todo
 
 Last but not least it needs to be possible to check and uncheck a todo.
-This is basically the same as [when deleting a todo](#deleting-a-todo), but with a bit more logic and the updated todo being returned.
-At the end of the method's implementation, we want to return the updated todo. For this we have to select the todo from the database again.
+This route accepts a `patch` argument which will be used to update the entity in the database.
 We can now reuse what we already implemented [above](#reading-a-single-todo-by-id), by utilizing Hyrest's hybrid approach:
 
 ```typescript
-@route("POST", "/todo/:id/check").dump(Todo, world)
-public async check(@param("id") id: string): Promise<Todo> {
+@route("POST", "/todo/:id").dump(Todo, world)
+public async update(@param("id") id: string, @body(updateTodo) patch: Todo): Promise<Todo> {
     const todo = await this.db.getRepository(Todo).findOne(id);
     if (!todo) {
         return notFound<Todo>("No such todo.");
     }
-    const checked = Boolean(todo.checked) ? null : new Date();
-    await this.db.getRepository(Todo).update(id, { checked });
-    return ok(this.byId(id));
+    await this.db.getRepository(Todo).update(id, patch);
+    return ok(await this.get(id));
 }
 ```
 
@@ -163,7 +161,7 @@ export class TodosController {
     }
 
     @route("DELETE", "/todo/:id")
-    public async remove(@param("id") id: string): Promise<void> {
+    public async delete(@param("id") id: string): Promise<void> {
         if (!await this.db.getRepository(Todo).findOne(id)) {
             return notFound<void>("No such todo.");
         }
@@ -172,7 +170,7 @@ export class TodosController {
     }
 
     @route("GET", "/todo/:id").dump(Todo, world)
-    public async byId(@param("id") id: string): Promise<Todo> {
+    public async get(@param("id") id: string): Promise<Todo> {
         const todo = await this.db.getRepository(Todo).findOne(id);
         if (!todo) {
             return notFound<Todo>("No such todo.");
@@ -180,15 +178,14 @@ export class TodosController {
         return ok(todo);
     }
 
-    @route("POST", "/todo/:id/check").dump(Todo, world)
-    public async check(@param("id") id: string): Promise<Todo> {
+    @route("POST", "/todo/:id").dump(Todo, world)
+    public async check(@param("id") id: string, @body(updateTodo) patch: Todo): Promise<Todo> {
         const todo = await this.db.getRepository(Todo).findOne(id);
         if (!todo) {
             return notFound<Todo>("No such todo.");
         }
-        const checked = Boolean(todo.checked) ? null : new Date();
-        await this.db.getRepository(Todo).update(id, { checked });
-        return ok(this.byId(id));
+        await this.db.getRepository(Todo).update(id, patch);
+        return ok(await this.get(id));
     }
 }
 ```

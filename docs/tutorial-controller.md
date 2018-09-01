@@ -46,19 +46,22 @@ export class TodosController {
         return;
     }
 
-    public async remove(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         return;
     }
 
-    public async byId(id: string): Promise<Todo> {
+    public async get(id: string): Promise<Todo> {
         return;
     }
 
-    public async check(id: string): Promise<Todo> {
+    public async update(id: string, patch: Todo): Promise<Todo> {
         return;
     }
 }
 ```
+
+> It is important that you name the basic operations `create`, `list`, `delete`, `get`, `update` and `search`.
+> [hyrest-mobx](https://www.npmjs.com/package/hyrest-mobx) can then infer the frontend state-management for you.
 
 ## Create routes from methods
 
@@ -81,17 +84,17 @@ export class TodosController {
     }
 
     @route("DELETE", "/todo/:id")
-    public async remove(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         return;
     }
 
     @route("GET", "/todo/:id")
-    public async byId(id: string): Promise<Todo> {
+    public async get(id: string): Promise<Todo> {
         return;
     }
 
-    @route("POST", "/todo/:id/check")
-    public async check(id: string): Promise<Todo> {
+    @route("POST", "/todo/:id")
+    public async update(id: string, patch: Todo): Promise<Todo> {
         return;
     }
 }
@@ -120,17 +123,17 @@ export class TodosController {
     }
 
     @route("DELETE", "/todo/:id")
-    public async remove(@param("id") id: string): Promise<void> {
+    public async delete(@param("id") id: string): Promise<void> {
         return;
     }
 
     @route("GET", "/todo/:id")
-    public async byId(@param("id") id: string): Promise<Todo> {
+    public async get(@param("id") id: string): Promise<Todo> {
         return;
     }
 
-    @route("POST", "/todo/:id/check")
-    public async check(@param("id") id: string): Promise<Todo> {
+    @route("POST", "/todo/:id")
+    public async update(@param("id") id: string, @body(updateTodo) patch: Todo): Promise<Todo> {
         return;
     }
 }

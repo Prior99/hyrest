@@ -14,7 +14,7 @@ Think about what properties your model will have first.
 
 ## Basic model
 
-Our Todo entries will need a unique id, a name, a description. They will have been created at some point, can be checked and deleted.
+Our Todo entries will need a unique id, a name, a description. They will have been created at some point and can be checked as well as deleted.
 
 Fire up your IDE and implement the class for the Todo model in `src/common/models/todo.ts`:
 
@@ -24,7 +24,7 @@ export class Todo {
     public name?: string;
     public description?: string;
     public created?: Date;
-    public checked?: Date;
+    public checked?: boolean;
     public deleted?: Date;
 }
 ```
@@ -49,8 +49,8 @@ export class Todo {
     @CreateDateColumn()
     public created?: Date;
 
-    @Column("timestamp without time zone", { nullable: true })
-    public checked?: Date;
+    @Column("bool", { default: false })
+    public checked?: boolean;
 
     @Column("timestamp without time zone", { nullable: true })
     public deleted?: Date;
@@ -82,9 +82,9 @@ export class Todo {
     @is() @specify(() => Date)
     public created?: Date;
 
-    @Column("timestamp without time zone", { nullable: true })
-    @is() @specify(() => Date)
-    public checked?: Date;
+    @Column("bool", { default: false })
+    @is()
+    public checked?: boolean;
 
     @Column("timestamp without time zone", { nullable: true })
     @is() @specify(() => Date)
@@ -92,7 +92,7 @@ export class Todo {
 }
 ```
 
-We need to use `@specify(() => Date)` for the three properties having `Date` as type. Is is a special case only needed for `Date` and when two classes import each other in a circular way.
+We need to use `@specify(() => Date)` for the properties having `Date` as type. Is is a special case only needed for `Date` and when two classes import each other in a circular way.
 
 The `DataType` can be omitted from every `@is()` as Hyrest can infer them automatically from Typescript's reflection Metadata API.
 
@@ -108,10 +108,13 @@ import { createScope } from "hyrest";
 
 export const world = createScope();
 export const createTodo = createScope();
+export const updateTodo = createScope().include(createScope);
 ```
 
-This defines two scopes: `world` and `createTodo`. The world scope should be contain all properties readable by the world.
-The other scope is for creating a new todo. It will only contain `name` and `description`, as all other fields will be filled out by the controller.
+This defines three scopes: `updateTodo`, `world` and `createTodo`.
+The scope `createTodo` is for creating a new todo. It will only contain `name` and `description`, as all other fields will be filled out by the controller.
+The world scope should be contain all properties readable by the world.
+The `updateTodo` scope includes all properties known to the `createTodo` scope, but also allow updating the `checked` flag.
 
 ```
 import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn } from "typeorm";
@@ -137,7 +140,7 @@ export class Todo {
 
     @Column("timestamp without time zone", { nullable: true })
     @is() @specify(() => Date) @scope(world)
-    public checked?: Date;
+    public checked?: boolean;
 
     @Column("timestamp without time zone", { nullable: true })
     @is() @specify(() => Date) @scope(world)
@@ -145,7 +148,7 @@ export class Todo {
 }
 ```
 
-We assigned `createTodo` the properties `name` and `description`. For now there are no private properties, so all properties are included in the `world` scope.
+For now there are no private properties, so all properties are included in the `world` scope.
 
 You can think of scopes as different circles in a [Venn-Diagram](https://en.wikipedia.org/wiki/Venn_diagram).
 In the following example, a model for a basic user with email, name, password and id exists:
