@@ -9,7 +9,7 @@ import {
 } from "hyrest";
 import { observable, computed, action } from "mobx";
 import { ValidationStatus, combineValidationStatus } from "./validation-status";
-import { ContextFactory } from "./context-factory";
+import { ContextFactory } from "../types";
 import { BaseField } from "./base-field";
 import { Field, createField } from "./field";
 

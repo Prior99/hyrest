@@ -9,7 +9,7 @@ import {
     getSpecifiedType,
 } from "hyrest";
 import { ValidationStatus } from "./validation-status";
-import { ContextFactory } from "./context-factory";
+import { ContextFactory } from "../types";
 import { createField } from "./field";
 
 /**

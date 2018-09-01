@@ -1,7 +1,7 @@
 import { Constructable, PropertyMeta, getPropertyValidation, getSpecifiedType, ValidationOptions } from "hyrest";
 import { FieldArray } from "./field-array";
 import { FieldSimple } from "./field-simple";
-import { ContextFactory } from "./context-factory";
+import { ContextFactory } from "../types";
 
 /**
  * A single field on a model or returned by the `@field` decorator.

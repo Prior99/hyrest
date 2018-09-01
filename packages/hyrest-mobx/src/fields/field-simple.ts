@@ -11,12 +11,11 @@ import {
 } from "hyrest";
 import { observable, computed, action } from "mobx";
 import { ValidationStatus, combineValidationStatus } from "./validation-status";
-import { ContextFactory } from "./context-factory";
 import { BaseField } from "./base-field";
 import { Fields } from "./fields";
 import { createField } from "./field";
 import { FieldArray } from "./field-array";
-import { ReactEvent } from "./react-types";
+import { ContextFactory, ReactEvent } from "../types";
 
 export class FieldSimple<TModel, TContext = any> implements BaseField<TModel> {
     @observable private _errors: string[] = [];
