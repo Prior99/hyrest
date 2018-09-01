@@ -18,6 +18,7 @@ Generated documentation from the code's comments is also available for all packa
 - [Routes and controllers](api-routes-controllers.md)
 - [Validation](api-validation.md)
 - [Forms](api-forms.md)
+- [Stores](api-stores.md)
 - [Serializing and deserializing](api-serialize.md)
 - [Usage as client](api-client.md)
 - [Usage as server](api-server.md)

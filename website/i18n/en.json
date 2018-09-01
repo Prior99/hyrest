@@ -11,6 +11,7 @@
     "api-routes-controllers": "Routes and controllers",
     "api-serialize": "Serializing and deserializing",
     "api-server": "Usage as server",
+    "api-stores": "Stores",
     "api-validation": "Validation",
     "introduction-about": "About",
     "introduction-architectural-inspirations": "Architectural Inspirations",

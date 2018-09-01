@@ -43,6 +43,7 @@
       "api-routes-controllers",
       "api-validation",
       "api-forms",
+      "api-stores",
       "api-serialize",
       "api-client",
       "api-server",
