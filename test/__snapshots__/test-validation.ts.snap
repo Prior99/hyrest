@@ -518,15 +518,3 @@ Processed {
   },
 }
 `;
-
-exports[`The test schema detects a invalid input as invalid 8`] = `
-Processed {
-  "nested": Object {
-    "d": Processed {
-      "errors": Array [
-        "Missing required field.",
-      ],
-    },
-  },
-}
-`;

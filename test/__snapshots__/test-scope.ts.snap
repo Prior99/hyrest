@@ -188,6 +188,42 @@ CInternal {
 }
 `;
 
+exports[`populating a structure referencing itself 1`] = `
+Class1 {
+  "parent": Class1 {
+    "parent": Class1 {
+      "parent": Class1 {
+        "id": "some-id",
+      },
+    },
+  },
+}
+`;
+
+exports[`populating a structure referencing itself 2`] = `
+Object {
+  "parent": Object {
+    "parent": Object {
+      "parent": Object {
+        "id": "some-id",
+      },
+    },
+  },
+}
+`;
+
+exports[`populating a structure referencing itself 3`] = `
+Class1 {
+  "parent": Class1 {
+    "parent": Class1 {
+      "parent": Class1 {
+        "id": "some-id",
+      },
+    },
+  },
+}
+`;
+
 exports[`populating a structure with an (un-)typed array 1`] = `
 Typed {
   "test": Array [

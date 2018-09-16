@@ -147,6 +147,7 @@ test("@is as property decorator", () => {
                 e: [1, 2, 1, 2, 1],
                 f: [{ g: "foo" }, { g: "bar" }, { g: "bas" }, { g: "baz" } ],
             },
+            undefined,
         ] as any[],
         invalid: [
             {
@@ -167,7 +168,6 @@ test("@is as property decorator", () => {
                 e: [5, 6, 20],
                 f: [{ g: "test" }],
             },
-            undefined,
         ] as any[],
     },
 

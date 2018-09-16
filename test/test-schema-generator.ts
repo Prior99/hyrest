@@ -104,10 +104,6 @@ beforeEach(() => {
 });
 
 [
-    {},
-    {
-        bs: [],
-    },
     {
         a: { email: "invalid-email" },
     },
@@ -137,6 +133,7 @@ beforeEach(() => {
         a: { email: "some@exmaple.com", anInteger: 2 },
         bs: [ { dangling: "invalid" } ],
     },
+    [],
 ].forEach((input, index) => {
     test(`the generated schema detects invalid inputs as invalid (${index})`, async () => {
         const result = await validateSchema(schemaFrom(B), input);
@@ -152,4 +149,40 @@ test("throws an error if decorated incorrectly", () => {
             public test: string[];
         }
     }).toThrowErrorMatchingSnapshot();
+});
+
+[
+    {},
+    {
+        parent: {
+            parent: {
+                parent: {
+                    id: "some-id",
+                },
+            },
+        },
+    },
+    {
+        id: 10,
+    },
+    {
+        parent: {
+            parent: {
+                parent: {
+                    id: false,
+                },
+            },
+        },
+    },
+].forEach((input, index) => {
+    test(`with the class referencing itself ${index}`, async () => {
+        class Class1 {
+            @is()
+            public id?: string;
+
+            @is()
+            public parent?: Class1;
+        }
+        expect(await validateSchema(schemaFrom(Class1), input)).toMatchSnapshot();
+    });
 });

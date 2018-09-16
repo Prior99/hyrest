@@ -4,44 +4,6 @@ exports[`the generated schema detects invalid inputs as invalid (0) 1`] = `
 Processed {
   "nested": Object {
     "a": Processed {
-      "errors": Array [
-        "Missing required field.",
-      ],
-      "nested": Object {
-        "email": Processed {
-          "errors": Array [
-            "Missing required field.",
-          ],
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`the generated schema detects invalid inputs as invalid (1) 1`] = `
-Processed {
-  "nested": Object {
-    "a": Processed {
-      "errors": Array [
-        "Missing required field.",
-      ],
-      "nested": Object {
-        "email": Processed {
-          "errors": Array [
-            "Missing required field.",
-          ],
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`the generated schema detects invalid inputs as invalid (2) 1`] = `
-Processed {
-  "nested": Object {
-    "a": Processed {
       "nested": Object {
         "email": Processed {
           "errors": Array [
@@ -54,7 +16,7 @@ Processed {
 }
 `;
 
-exports[`the generated schema detects invalid inputs as invalid (3) 1`] = `
+exports[`the generated schema detects invalid inputs as invalid (1) 1`] = `
 Processed {
   "nested": Object {
     "a": Processed {
@@ -70,7 +32,7 @@ Processed {
 }
 `;
 
-exports[`the generated schema detects invalid inputs as invalid (4) 1`] = `
+exports[`the generated schema detects invalid inputs as invalid (2) 1`] = `
 Processed {
   "nested": Object {
     "bs": Processed {
@@ -82,7 +44,7 @@ Processed {
 }
 `;
 
-exports[`the generated schema detects invalid inputs as invalid (5) 1`] = `
+exports[`the generated schema detects invalid inputs as invalid (3) 1`] = `
 Processed {
   "nested": Object {
     "as": Processed {
@@ -102,7 +64,7 @@ Processed {
 }
 `;
 
-exports[`the generated schema detects invalid inputs as invalid (6) 1`] = `
+exports[`the generated schema detects invalid inputs as invalid (4) 1`] = `
 Processed {
   "nested": Object {
     "bs": Processed {
@@ -113,13 +75,6 @@ Processed {
               "errors": Array [
                 "Missing required field.",
               ],
-              "nested": Object {
-                "email": Processed {
-                  "errors": Array [
-                    "Missing required field.",
-                  ],
-                },
-              },
             },
             "dangling": Processed {
               "errors": Array [
@@ -129,6 +84,18 @@ Processed {
           },
         },
       },
+    },
+  },
+}
+`;
+
+exports[`the generated schema detects invalid inputs as invalid (5) 1`] = `
+Processed {
+  "nested": Object {
+    "a": Processed {
+      "errors": Array [
+        "Missing required field.",
+      ],
     },
   },
 }
@@ -209,3 +176,42 @@ Processed {
 
 exports[`throws an error if decorated incorrectly 1`] = `"Decorated property of type array without specifying @specify after @is."`;
 
+exports[`with the class referencing itself 0 1`] = `Processed {}`;
+
+exports[`with the class referencing itself 1 1`] = `Processed {}`;
+
+exports[`with the class referencing itself 2 1`] = `
+Processed {
+  "nested": Object {
+    "id": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`with the class referencing itself 3 1`] = `
+Processed {
+  "nested": Object {
+    "parent": Processed {
+      "nested": Object {
+        "parent": Processed {
+          "nested": Object {
+            "parent": Processed {
+              "nested": Object {
+                "id": Processed {
+                  "errors": Array [
+                    "Not a valid string.",
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;

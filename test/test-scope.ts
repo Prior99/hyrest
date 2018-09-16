@@ -632,3 +632,30 @@ test("populating and dumping multiple structures with a @precompute getter", asy
         expect(dumped.sub2.precomputed).toEqual(`populated instance #${i} sub 2`);
     }
 });
+
+test("populating a structure referencing itself", async () => {
+    const scope1 = createScope();
+
+    class Class1 {
+        @scope(scope1)
+        public id?: string;
+
+        @scope(scope1)
+        public parent?: Class1;
+    }
+
+    const populated = populate(scope1, Class1, {
+        parent: {
+            parent: {
+                parent: {
+                    id: "some-id",
+                },
+            },
+        },
+    });
+    expect(populated).toMatchSnapshot();
+
+    const dumped = dump(scope1, populated);
+    expect(dumped).toMatchSnapshot();
+    expect(populated).toMatchSnapshot();
+});

@@ -109,6 +109,9 @@ export async function validateSchema<T extends { [key: string]: any }>(
     validationSchema: Schema, input: T, scope?: Scope, context?: any,
 ): Promise<Processed<T>> {
     const result = new Processed<T>();
+    if (typeof input === "undefined" || input === null) {
+        return result;
+    }
     // The class the schema originated from. Will only be set if the schema was inferred from a class.
     const origin = Reflect.getMetadata("validation:schema:origin", validationSchema);
     // All properties available in the current scope on the current class.
@@ -122,7 +125,7 @@ export async function validateSchema<T extends { [key: string]: any }>(
     // properties on the object are valid.
     await Promise.all(validationKeys.map(async key => {
         const schemaValue = validationSchema[key];
-        const inputValue = input ? input[key] : undefined;
+        const inputValue = input[key];
         // Get the validation result. If the value from the schema was a function, use it
         // as a validator, otherwise it was a nested schema.
         const schemaResult = typeof schemaValue === "function" ?
@@ -133,7 +136,7 @@ export async function validateSchema<T extends { [key: string]: any }>(
             result.addNested(key, schemaResult);
         }
     }));
-    if (typeof input !== "undefined" && input !== null && !Array.isArray(input)) {
+    if (!Array.isArray(input)) {
         // Check that no extra keys exist on the input.
         Object.keys(input).forEach(key => {
             if (!validationKeys.includes(key)) {
