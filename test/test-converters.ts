@@ -144,3 +144,24 @@ test("arr with a validator and a non-empty array", async () => {
         expect(DataType.bool(input)).toMatchSnapshot();
     });
 });
+
+[
+    true,
+    false,
+    "true",
+    "false",
+    "",
+    10,
+    {},
+    [],
+    {
+        nested: {},
+    },
+    "10",
+    null, // tslint:disable-line
+    undefined,
+].forEach(input => {
+    test(`empty handles "${input}", correctly`, () => {
+        expect(DataType.empty(input)).toMatchSnapshot();
+    });
+});

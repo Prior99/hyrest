@@ -230,6 +230,78 @@ Object {
 }
 `;
 
+exports[`empty handles "", correctly 1`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "", correctly 2`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "[object Object]", correctly 1`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "[object Object]", correctly 2`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "10", correctly 1`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "10", correctly 2`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "false", correctly 1`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "false", correctly 2`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "null", correctly 1`] = `
+Object {
+  "value": null,
+}
+`;
+
+exports[`empty handles "true", correctly 1`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "true", correctly 2`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
+exports[`empty handles "undefined", correctly 1`] = `
+Object {
+  "error": "Not null.",
+}
+`;
+
 exports[`float handles "" correctly 1`] = `
 Object {
   "error": "Not a valid float.",

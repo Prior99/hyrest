@@ -120,3 +120,15 @@ export function arr<T, TContext>(validator?: FullValidator<T, TContext>): Conver
         return processed;
     };
 }
+
+/**
+ * Makes sure the given input is `null`.
+ *
+ * @param input The input to check.
+ *
+ * @return `null` if it was a `null` and an error otherwise.
+ */
+export function empty(value: any): Converted<null> {
+    if (value === null) { return { value }; }
+    return { error: "Not null." };
+}

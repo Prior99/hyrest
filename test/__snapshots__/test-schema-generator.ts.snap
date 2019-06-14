@@ -176,6 +176,36 @@ Processed {
 
 exports[`throws an error if decorated incorrectly 1`] = `"Decorated property of type array without specifying @specify after @is."`;
 
+exports[`with a nullable data type 0 1`] = `Processed {}`;
+
+exports[`with a nullable data type 1 1`] = `
+Processed {
+  "nested": Object {
+    "id": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`with a nullable data type 2 1`] = `Processed {}`;
+
+exports[`with a nullable data type 3 1`] = `
+Processed {
+  "nested": Object {
+    "id": Processed {
+      "errors": Array [
+        "Not a valid string.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`with a nullable data type 4 1`] = `Processed {}`;
+
 exports[`with the class referencing itself 0 1`] = `Processed {}`;
 
 exports[`with the class referencing itself 1 1`] = `Processed {}`;

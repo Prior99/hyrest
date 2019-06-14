@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { Constructable } from "./types";
 import { Validator, Validation } from "./validators";
 import { schemaFrom } from "./schema-generator";
-import { Converter, bool, str, float, obj, arr } from "./converters";
+import { Converter, bool, str, float, obj, arr, empty } from "./converters";
 import * as invariant from "invariant";
 import { Scope, getSpecifiedType, TypeCreator, scope as scopeDecorator, universal } from "./scope";
 import { Processed } from "./processed";
@@ -13,6 +13,10 @@ export interface ValidationOptions<T, TContext> {
 
 export interface Schema {
     [key: string]: Schema | FullValidator<any, any>;
+}
+
+export interface IsOptions {
+    nullable?: boolean;
 }
 
 /**
@@ -163,12 +167,15 @@ export async function processValue<T>(
     schema?: Schema,
     scope?: Scope,
     context?: any,
+    configuration: IsOptions = { nullable: false },
 ): Promise<Processed<T>> {
     const processed = new Processed<T>();
     // If a converter existed, grab the error and the value from it. Otherwise just consider the
     // input valid.
     let value: T;
-    const conversionResult = converter && await converter(input, scope, context);
+    const conversionResult = input === null && configuration.nullable
+        ? empty(input)
+        : (converter && await converter(input, scope, context));
     if (typeof converter === "undefined") {
         value = input;
     }
@@ -324,9 +331,13 @@ export interface FullValidatorIvokationOptions<TContext> {
  *
  * @return A decorator for a parameter in a @route method.
  */
-export function is<ValueType, TContext>(converter?: Converter<ValueType>): FullValidator<ValueType, TContext>;
+export function is<ValueType, TContext>(
+    converter?: Converter<ValueType>,
+    configuration?: IsOptions,
+): FullValidator<ValueType, TContext>;
 export function is<U, K extends keyof U, ValueType extends U[K], TContext>(
     converter?: Converter<ValueType>,
+    configuration: IsOptions = { nullable: false },
 ): FullValidator<ValueType, TContext> {
     // A list of all validators the check the input with.
     const validators: Validator<ValueType>[] = [];
@@ -364,7 +375,15 @@ export function is<U, K extends keyof U, ValueType extends U[K], TContext>(
             !validationSchema &&
             guardedConverter === obj;
         const guardedSchema = inferSchema ? schemaFrom(propertyType || specifyType) : validationSchema;
-        return processValue(value, guardedConverter, allValidators, guardedSchema, guardedScopeLimit, context);
+        return processValue(
+            value,
+            guardedConverter,
+            allValidators,
+            guardedSchema,
+            guardedScopeLimit,
+            context,
+            configuration,
+        );
     };
     const propertyDecorator = (target: U, property: keyof U, descriptor: PropertyDescriptor) => {
         const options = getPropertyValidation(target, property);

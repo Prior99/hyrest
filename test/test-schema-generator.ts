@@ -186,3 +186,19 @@ test("throws an error if decorated incorrectly", () => {
         expect(await validateSchema(schemaFrom(Class1), input)).toMatchSnapshot();
     });
 });
+
+[
+    { id: "some string" },
+    { id: 10 },
+    { id: null }, // tslint:disable-line
+    { id: {} },
+    { id: undefined },
+].forEach((input, index) => {
+    test(`with a nullable data type ${index}`, async () => {
+        class Class1 {
+            @is(DataType.str, { nullable: true })
+            public id?: string;
+        }
+        expect(await validateSchema(schemaFrom(Class1), input)).toMatchSnapshot();
+    });
+});
